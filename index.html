@@ -1,16 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Handling Price Panel</title>
+<title>Ground Handling Price Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 
 /* Layout: ops-console — airport roster on the left, selected airport's handler comparison on the right; aircraft type is a global switch */
 :root{
-  --bg:#F6EFEF; --panel:#FFFFFF; --panel-2:#FBF6F6; --line:#E7D7D8; --line-soft:#F1E6E7;
+  --page:#64202B; --on-page:#FBF1EC; --on-page-2:#E9CFC4; --copper:#D7A988;
+  --bg:#FAF1F1; --panel:#FFFFFF; --panel-2:#FFF6F6; --line:#E9D3D5; --line-soft:#F4E6E7;
   --ink:#2B1719; --ink-2:#604749; --muted:#90787A;
   --accent:#A3414C; --accent-soft:#F6E3E5; --bar:#C26C74; --bar-track:#F3E6E7;
   --good:#1F7A4D; --good-soft:#DFF1E7; --warn:#A35F00; --warn-soft:#FBEBD2; --crit:#B03A2E;
@@ -32,12 +28,20 @@
   --good:#5CCB92; --good-soft:#163527; --warn:#E8A84A; --warn-soft:#3A2A12; --crit:#EE7B6E;
   --amber:#F0C040; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
+body{background:var(--page);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
 .wrap{max-width:1360px;margin:0 auto;padding-inline:20px;padding-block:20px 40px;display:flex;flex-direction:column;gap:18px}
 .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 
 header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
-.brand{display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-logo{width:60px;height:60px;border-radius:12px;flex:none;display:block;box-shadow:0 0 0 1px rgba(215,169,136,.35)}
+.brand-t{display:flex;flex-direction:column;gap:2px}
+header.top .brand h1{color:var(--on-page)}
+header.top .brand .eyebrow{color:var(--copper)}
+header.top .tabs{border-bottom-color:rgba(251,241,236,.25)}
+header.top .tabs button{color:var(--on-page-2)}
+header.top .tabs button:hover{color:var(--on-page)}
+header.top .tabs button[aria-selected="true"]{color:var(--on-page);border-bottom-color:var(--copper)}
 .brand .eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .brand h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:34px;letter-spacing:.01em;line-height:1}
 .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -60,12 +64,15 @@ button:focus-visible,input:focus-visible,.ap:focus-visible{outline:2px solid var
 .roster-head input{width:100%;font:15px var(--f-body);padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--panel-2);color:var(--ink)}
 .roster-head .hint{font-size:12px;color:var(--muted)}
 .list{overflow:auto;padding:6px}
-.vtick{display:inline-block;margin-left:4px;font-family:var(--f-body);font-weight:800;font-size:.75em;line-height:1;color:var(--ver);vertical-align:.12em}
-.ap-head .icao .vtick{margin-left:6px;font-size:.55em;vertical-align:.3em}
-.ap{display:grid;grid-template-columns:84px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;cursor:pointer;border:1px solid transparent}
+.vtick{display:inline-grid;place-items:center;box-sizing:border-box;width:13px;height:13px;margin-left:5px;border-radius:50%;background:var(--ver);color:#fff;font-family:var(--f-body);font-weight:700;font-size:8.5px;line-height:1;vertical-align:.35em;letter-spacing:0}
+.ap-head .icao .vtick{width:20px;height:20px;margin-left:8px;font-size:12px;vertical-align:.95em}
+.kpi .vtick{vertical-align:.05em;margin:0 2px}
+.kpi-ver{color:var(--ver);display:inline-flex;align-items:center;gap:6px}
+.kpi-ver .vtick{width:20px;height:20px;font-size:12px;margin:0}
+.ap{display:grid;grid-template-columns:90px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;cursor:pointer;border:1px solid transparent}
 .ap:hover{background:var(--panel-2)}
 .ap[aria-current="true"]{background:var(--accent-soft);border-color:var(--accent)}
-.ap .code{font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:.03em}
+.ap .code{font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:.03em;white-space:nowrap}
 .ap .code.ver,.ap-head .icao.ver{color:var(--ver);font-weight:800}
 :root{--ver:#0E9F52}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ver:#4ADE80}}
@@ -89,6 +96,11 @@ button:focus-visible,input:focus-visible,.ap:focus-visible{outline:2px solid var
 .ap-head{display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:18px}
 .ap-head .icao{font-family:var(--f-display);font-weight:700;font-size:56px;line-height:.9;letter-spacing:.02em}
 .ap-head .facts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ap-upd{margin-left:auto;display:flex;flex-direction:column;gap:3px;text-align:right;align-items:flex-end;padding-left:18px;border-left:1px solid var(--line-soft)}
+.ap-upd .k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.ap-upd .v{font:600 20px var(--f-display);display:flex;align-items:center}
+.ap-upd .s{font-size:13px;color:var(--ink-2)}
+@media (max-width:640px){.ap-upd{margin-left:0;text-align:left;align-items:flex-start;padding-left:0;border-left:0}}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2);white-space:nowrap}
 .chip b{color:var(--ink);font-weight:600}
 .chip.warn{background:var(--warn-soft);border-color:transparent;color:var(--warn)}
@@ -241,7 +253,7 @@ tr.subt td:first-child{color:var(--ink-2);font-weight:500}
 tr.disb td{border-top:12px solid var(--panel)}
 .svc-row{grid-template-columns:minmax(0,1fr) auto auto auto}
 .legend{margin-top:22px}
-#kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+#kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:640px){#kpis{grid-template-columns:minmax(0,1fr)}}
 .fuel-in{width:7ch;min-width:0;font:inherit;font-family:var(--f-mono);font-size:26px;font-weight:500;color:var(--ink);background:var(--panel-2);border:1px dashed var(--line);border-radius:7px;padding:2px 8px;text-align:right}
 .fuel-in:hover{border-color:var(--muted)}
@@ -339,6 +351,7 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .cal-d.sel{background:var(--accent);color:var(--panel);font-weight:600}
 .cal-d:focus-visible,.cal-h button:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
 .cal-f{margin-top:6px;font-size:11.5px;color:var(--muted);text-align:center}
+.lf-loc{padding-left:14px;border-left:1px solid var(--line)}
 .loc{box-sizing:border-box;height:46px;min-width:170px;display:flex;align-items:center;gap:10px;padding:0 18px 0 6px;border:1px solid var(--accent);border-radius:999px;background:var(--accent-soft);color:var(--ink)}
 .loc .lc-i{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--panel);display:grid;place-items:center}
 .loc .lc-i svg{width:18px;height:18px}
@@ -381,17 +394,15 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .pk-freecol{display:flex;flex-direction:column;gap:8px;max-width:220px}
 .pk-chk{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;color:var(--ink-2);line-height:1.35}
 .hnote{color:var(--warn);font-size:12px;cursor:help;margin-left:2px}
-.fx-box>.hint{font-size:12.5px;color:var(--muted);line-height:1.4} .fx-box .hint.ok{color:var(--good)} .fx-box .hint.err{color:var(--crit)}
+.upd-d{font-size:11px;color:var(--muted);font-family:var(--f-mono);cursor:help}
+.upd-prev{display:block;font-size:10.5px;color:var(--muted)}
 </style>
-</head>
-<body>
-
 
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <span class="eyebrow">Ground handling · price database</span>
-      <h1>Handling Price Panel</h1>
+      <img class="brand-logo" alt="" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCACQAJADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5rooorjP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKdFFJNMkMMbySOwRERSzMxOAAB1JPam19HfAb4bw6bYp8RPEcISUoZNOSUcQR45uGz0JGduei5buMZVqypR5mRUqKEbsf4R+DnhjwP4Nfxl8Uvs8s0SeY1nNlobXP3VKj/Wyk8beRngZ61wfxEh8K+JPh3Z+P8AwvoCaERqcmmT2qBVWVQu5JCqjaG45A9e+M1S+L/xLl8eeJvsunTSjQbFiLVDx57dDMw9+Qo7D3Jqbx8ieF/hL4T8Bsw/tAl9Z1FMcxPJkIh9wCfyrmpwlzRnN+8+nkYwjK6lJ6s8xoooruOkKKKKACiiigAooooAKKKKACiiigAooqzp2n3mratbaZp0DT3dzKsMMS9WZjgD/wCv2GaNgO9+Dnw9/wCE68bCXUIS2iacVmvPSY/wwj/exz/sg+or0n9oP4hpZWn/AAgOhShJJo1bUWTjyo+qwAfw54JH93A7111zLpPwM+CS28TRT3kYwo6G8vHHJPfaMfgqYr568N+GLrxfeX/jDxbqT2ehwymbUdUlPzTSE5McQ/ick4wOnHtXnJqrP2svhWxyR/eS53stiz8PtAsbSyuPiH4oQDRdLbNtA3W/uQfljUdwDgn3Hsa4/Xtbv/EniS81zUnDXN1IZGA6KOgUewAAH0rY8a+MG8T30FrY2o0/Q7BfK0/T06RJ03N6ue5/D1J5auynF355bv8AA6UurCiiitSgooooAKKKKACiiigAooooAKKKkit7idN8FvNKv96ONmH5gUAR19Bfs9+CUhhm8e6nFhsNBpwfgKvSSbP5oPbca8c8GeFrrxh43tNAtyYxI264kPHkxLy7H0OOB7kV9C/Ejx/bfDTw3p+heHrS2N68Xl28EvzJbwqNocqOvIwAepBJrixc3K1GG7MKzv7i6nLfEeW38T+JV8UeNbubTvCVnui0vT0O261Q5+aRE6ojkffOPlAx1zXlPi7xne+KZoLZLaLTdHshssdLtuIoF9T/AHnPdj74rI1fWdU1/VpdT1m+mvbuQ/NLKcnHoB0A9AOBVGtqVHkSv0/AuEOVahRRRW5oFFFHU4HWgAoqQwTqm9oJQo53FCB+dR0J3AKKKKACiiigAoooIyCD34oA90+Fvw10O28Kf8J740gjngETXMFrMMpHEoJ811/iJwdqnjGO545vWvjx4yurxx4bng0DTBxFb20CFtnbexBGcdlAAqrbfG3xxatbxxtpf2S3RY0tDZjZsUYCk53dB612mj+GvCXxJ1TS/G9nYRaeIZiNW0yMDZLKoDLgDgAnBJxyvvmuCV4Sc66uvyOdqzvNXO68Jalqtj8MT4q8dzWpvDA1xLOLSOKSODgojlQCzHAOD3YDtXjniAeDPiPr0+u2vjKXRdUnC5sdcixCuBgKkqcAcdD6mt346+NfNaHwbp82Y123F6QMZbqkf4feP/Aa8Row1FtOrs3+Q6dP7Wx19/8ADDxrZRefDpH9pW/UXGmSrcof++Tn9K5e4sb20crdWVzAw6iWJkx+Yp9hqepaVOJtM1C6snH8VvK0f8jXU2nxW8d2uFfWzeKP4byJZc/U4BP510/vV2f4f5mvvHFb0zjeufrU8FrdXL7La1nmb0ijZz+gr0AfGPxCUUS6PoblTnctsUJ/I1J/wufxAIykWkaTED/dD4H4bqlzrdIfiF5djB0z4ceL9Sf/AJBT2cY6yXn7rH/AT8x/Ku00/wAK+G/A0A1PXryOa7UfK8owFb/pnHySfc/pXJ6j8VPGeocDUIrMYx/okIRsf7xya5G4ubm8uWuLu4luJm6ySuXY/iazlSrVdJuy8g1On8X+NrnxG32O1V7fTUbKxtw0noWx29Frk6KK6adONOPLHYoKKKKsAooooAKKKKAHRxyTTJDCjSSOwVUXksScAD8a+pPCmiQ+B/ho8EcQlvLeB7u5P8Ms+wkrn0GAo9ga8i+D/hsah4kl8Q3cebXTMGLP8U5+7/3yPm+pWu51fxW2ofEa70a1m3Wuk6PeTTsP+WkrRAYP+6CB9Sa83FydSXs47LcxqO+iPBLy+udT1GfUbyQyXFy5mkc92bk1BSIMRr/uilr0l5GwUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAU5EeWVYokLu7BVUdWJOAPzptd18J9CbV/HIvXXMOmp9pJIyPMzhP1yf+A1FSahFyYm7I9Oikh+G/wn2vGgubWM5Gcia5fnB/E4+i15T4XuJofDfjDXp5d0r2X2Yux+Z3nfk/p+tb3xn8QNea9a6BEymK0Xzpdp+879AfcLz/AMCrn72MaT8GdOgOBPrN692w7+VENq/mea4qEHycz3kyIo4+iiivQNAooooAKKKKACiiigAooooAKKKKACiiigAr3v4TaObP4cf2izmBr+Z5TJ0BRfkUZ+qt+deCd6+g/hlrmlan8L4NBe/toriBHt5beWQK2CzEPgkZBDdR6GuLHXdOy7mdTY8WWK+8Y+O2SHc9zqNySCf4VJ6n2VRn8Ks+N9Ut9R8Um3sCDp+nxLY2uOhROC34nJ/Ktmc6T4C0O7srLUItR8TXSmB7i2bMVjEfvBW7yMPyz7c8GOBit6fvPm6LYqOuoUUUVsUFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFIQD1AP1paKADoMDgelFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/2Q==">
+      <div class="brand-t"><h1>Ground Handling Price Database</h1></div>
     </div>
     <div class="top-right">
       <div class="seg sect-seg" id="sectSeg" role="group" aria-label="Section">
@@ -427,7 +438,8 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
       <aside class="roster" aria-label="Airports">
         <div class="roster-head">
           <button type="button" class="btn primary" id="newAp">+ New airport</button>
-          <span class="hint">Select an airport to edit</span>
+          <input id="qa" type="search" placeholder="Search ICAO or handler…" autocomplete="off" aria-label="Search ICAO or handler">
+          <span class="hint" id="adminHint">Select an airport to edit</span>
         </div>
         <div class="list" id="adminList" role="list"></div>
         <div class="fx-box" id="fxBox"></div>
@@ -438,74 +450,6 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 </div>
 <div class="tip" id="tip" hidden></div>
 
-<script>
-/* Standalone data layer (GitHub Pages): replaces claude.ai's window.claude db/user.
-   Base data comes from data.json next to this page; edits made in the panel are kept
-   in this browser (localStorage "hfp-local") on top of it until exported and committed. */
-(function(){
-  const LKEY="hfp-local";
-  let base={airports:{},settings:{}}, baseVer="", local={}, ready=null;
-  const listeners=[]; // {kind:"col"|"doc", path, cb}
-  const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
-  function loadLocal(){ try{ const o=JSON.parse(localStorage.getItem(LKEY)||"{}"); local=o&&o.docs?o.docs:{}; }catch(e){ local={}; } }
-  function saveLocal(){ try{ localStorage.setItem(LKEY,JSON.stringify({docs:local,savedAt:new Date().toISOString()})); }catch(e){} }
-  function baseGet(path){ const [c,id]=path.split("/"); return base[c]&&Object.prototype.hasOwnProperty.call(base[c],id)?base[c][id]:undefined; }
-  function get(path){ if(Object.prototype.hasOwnProperty.call(local,path)) return local[path]; return baseGet(path); }
-  function colDocs(c){ const ids=new Set(Object.keys(base[c]||{})); Object.keys(local).forEach(p=>{ const [cc,id]=p.split("/"); if(cc===c) ids.add(id); });
-    return [...ids].sort().map(id=>({id,v:get(c+"/"+id)})).filter(x=>x.v!=null); }
-  function snapCol(c){ return {docs:colDocs(c).map(x=>({id:x.id,data:()=>clone(x.v)}))}; }
-  function snapDoc(p){ const v=get(p); return {id:p.split("/")[1],exists:v!=null,data:()=>clone(v)}; }
-  function emit(){ listeners.forEach(l=>{ try{ l.cb(l.kind==="col"?snapCol(l.path):snapDoc(l.path)); }catch(e){ console.error(e); } }); renderBox(); }
-  function write(path,val){ const b=baseGet(path); if(JSON.stringify(b===undefined?null:b)===JSON.stringify(val)) delete local[path]; else local[path]=clone(val); saveLocal(); setTimeout(emit,0); }
-  async function init(){
-    loadLocal();
-    try{ const r=await fetch("data.json",{cache:"no-store"}); if(!r.ok) throw new Error(r.status); const d=await r.json();
-      base={airports:d.airports||{},settings:d.settings||{}}; baseVer=d.version||""; }
-    catch(e){ console.warn("data.json could not be loaded",e); window.__hfpLoadErr="data.json could not be loaded. Open the page from a web server (GitHub Pages), not as a local file."; }
-    /* drop local entries that now match the published data */
-    Object.keys(local).forEach(p=>{ const b=baseGet(p); if(JSON.stringify(b===undefined?null:b)===JSON.stringify(local[p])) delete local[p]; }); saveLocal();
-  }
-  const db={
-    collection(c){ return { onSnapshot(cb,err){ ready.then(()=>{ if(window.__hfpLoadErr&&!colDocs(c).length){ err&&err(new Error(window.__hfpLoadErr)); return; } listeners.push({kind:"col",path:c,cb}); cb(snapCol(c)); renderBox(); }); return ()=>{}; } }; },
-    doc(p){ return {
-      onSnapshot(cb){ ready.then(()=>{ listeners.push({kind:"doc",path:p,cb}); cb(snapDoc(p)); }); return ()=>{}; },
-      async get(){ await ready; return snapDoc(p); },
-      async set(v){ await ready; write(p,v); },
-      async delete(){ await ready; write(p,null); } }; }
-  };
-  const user={ async can(){ return true; } };
-  window.claude={ use:async n=>{ if(!ready) ready=init(); await ready; return n==="db"?db:n==="user"?user:null; } };
-
-  /* data box in Manage: export / import / discard */
-  function fullData(){ const out={version:new Date().toISOString(),airports:{},settings:{}};
-    ["airports","settings"].forEach(c=>colDocs(c).forEach(x=>out[c][x.id]=clone(x.v))); return out; }
-  function download(){ const blob=new Blob([JSON.stringify(fullData(),null,1)],{type:"application/json"}); const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob); a.download="data.json"; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); }
-  function importFile(f){ const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||!d.airports) throw 0;
-      local={}; const all={airports:d.airports,settings:d.settings||{}};
-      ["airports","settings"].forEach(c=>{ const ids=new Set([...Object.keys(base[c]||{}),...Object.keys(all[c])]); ids.forEach(id=>{ const p=c+"/"+id, v=all[c][id]??null, b=baseGet(p);
-        if(JSON.stringify(b===undefined?null:b)!==JSON.stringify(v)) local[p]=v; }); });
-      saveLocal(); emit(); msg("Imported.","ok"); }catch(e){ msg("Not a valid data.json file.","err"); } }; r.readAsText(f); }
-  let note="", noteCls="", confirmDrop=false;
-  function msg(t,c){ note=t; noteCls=c||""; renderBox(); }
-  function renderBox(){ const el=document.getElementById("dataBox"); if(!el) return; const n=Object.keys(local).length;
-    const v=baseVer?new Date(baseVer):null;
-    el.innerHTML=`<div class="fx-h">Data file</div>
-      <div class="hint">Published data: ${v&&!isNaN(v)?v.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"—"}${n?` · <b>${n} change${n>1?"s":""} saved only in this browser</b>`:" · no local changes"}</div>
-      <div class="fx-act" style="flex-wrap:wrap"><button type="button" class="btn sm primary" id="dbExp">Export data.json</button>
-      <label class="btn sm" style="cursor:pointer">Import<input type="file" accept=".json,application/json" id="dbImp" hidden></label>
-      ${n?(confirmDrop?`<button type="button" class="btn sm danger" id="dbDropY">Discard ${n}?</button><button type="button" class="btn sm" id="dbDropN">Cancel</button>`:`<button type="button" class="btn sm" id="dbDrop">Discard local changes</button>`):""}</div>
-      <div class="hint">To share changes, export data.json and replace it in the GitHub repository.</div>
-      ${note?`<div class="hint ${noteCls}">${note}</div>`:""}`;
-    el.querySelector("#dbExp").onclick=()=>{ download(); msg("data.json downloaded.","ok"); };
-    el.querySelector("#dbImp").onchange=e=>{ const f=e.target.files&&e.target.files[0]; if(f) importFile(f); };
-    const d=el.querySelector("#dbDrop"); if(d) d.onclick=()=>{ confirmDrop=true; renderBox(); };
-    const y=el.querySelector("#dbDropY"); if(y) y.onclick=()=>{ local={}; saveLocal(); confirmDrop=false; emit(); msg("Local changes discarded.","ok"); };
-    const no=el.querySelector("#dbDropN"); if(no) no.onclick=()=>{ confirmDrop=false; renderBox(); };
-  }
-  document.addEventListener("DOMContentLoaded",()=>{ const fx=document.getElementById("fxBox"); if(fx&&!document.getElementById("dataBox")){ const b=document.createElement("div"); b.className="fx-box"; b.id="dataBox"; fx.after(b); } renderBox(); });
-})();
-</script>
 <script>
 const AC = ["GL7T","GLEX","GL5T","GLF4","E35L","CL60"];
 const AC_NAME = {GL7T:"Global 7500 · T7-AFZ",GLEX:"Global Express / Global 6000 · T7-ELL, A6-AFD, A6-AFA, A6-AFC",GL5T:"Global 5000 / Gulfstream V · T7-ALEX, T7-ALEX1, T7-AFP, A6-AFE",GLF4:"Gulfstream IV · A6-FLH",E35L:"Legacy 600/650 · P4-OWN, P4-BVY, A6-AFO",CL60:"Challenger 600 · T7-ALX1, T7-KBI"};
@@ -536,10 +480,15 @@ function utcToLocal(D,T,tz){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(D||""), t=
 const offTxt=m=>"UTC"+(m<0?"−":"+")+Math.floor(Math.abs(m)/60)+(Math.abs(m)%60?":"+pad2(Math.abs(m)%60):"");
 const utcMs=k=>{ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(state[k+"UD"]||""), t=/^(\d{1,2}):(\d{2})$/.exec(state[k+"UT"]||""); return m&&t?Date.UTC(+m[1],+m[2]-1,+m[3],+t[1],+t[2]):NaN; };
 const locKey=()=>[state.arrD,state.arrT,state.depD,state.depT].join("|");
+function localToUtc(D,T,tz){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(D||""), t=/^(\d{1,2}):(\d{2})$/.exec(T||""); if(!m||!t) return null;
+  const L=Date.UTC(+m[1],+m[2]-1,+m[3],+t[1],+t[2]); let u=L;
+  for(let i=0;i<3;i++){ const d=new Date(u), r=utcToLocal(dstr0(d),pad2(d.getUTCHours())+":"+pad2(d.getUTCMinutes()),tz); if(!r||r.none) break; u=L-r.off*6e4; }
+  const d=new Date(u); return {D:dstr0(d),T:pad2(d.getUTCHours())+":"+pad2(d.getUTCMinutes())}; }
+const dstr0=d=>d.getUTCFullYear()+"-"+pad2(d.getUTCMonth()+1)+"-"+pad2(d.getUTCDate());
 function syncLocal(a){ const tz=tzOf(a); ["arr","dep"].forEach(k=>{ const r=utcToLocal(state[k+"UD"],state[k+"UT"],tz); if(r){ state[k+"D"]=r.D; state[k+"T"]=r.T; state[k+"Off"]=r.off; state[k+"NoTz"]=!!r.none; } }); state._uk=locKey(); }
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-function locHtml(k){ const D=state[k+"D"], dw=D?new Date(D+"T12:00").getDay():null;
-  return `<span class="lc-i" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="lc-t"><b class="num">${isoToDmy(D)} ${esc(state[k+"T"]||"")}</b><small>${dw===null?"":DAYS[dw]+" · "}${state[k+"NoTz"]?"time zone unknown, UTC used":offTxt(state[k+"Off"]||0)}</small></span>`; }
+function locDateLbl(k){ const D=state[k+"D"], dw=D?new Date(D+"T12:00").getDay():null; return "Date (Local"+(dw===null?"":" · "+DAYS[dw])+")"; }
+function locTimeLbl(k){ return state[k+"NoTz"]?"Time (Local · tz ?)":"Time (Local · "+offTxt(state[k+"Off"]||0)+")"; }
 
 let ed={icao:null, isNew:false, draft:null, orig:null, h:0, msg:"", msgCls:"", confirmDel:false, saving:false};
 
@@ -557,6 +506,11 @@ function pkCost(v,H){
   const r=pkOf(v); if(!r) return null;
   H=Math.max(H,0); const free=r.free||0, bands=(r.bands||[]).filter(b=>isNum(b[0])&&isNum(b[1])).sort((x,y)=>x[0]-y[0]);
   if(H<=free+1e-9) return 0;
+  /* tiers + rate: kalış süresine göre çarpan (DIAL Delhi): ücretsiz saatten sonra faturalanan saatler kademeli; tiers=[[toplam kalış saati üst sınırı, çarpan],...]; wholeAfter: kalış bu saati aşarsa bütün faturalanan saatler son çarpanla */
+  if(isNum(r.rate)&&Array.isArray(r.tiers)&&r.tiers.length){ const b=Math.max(0,Math.ceil(H-free-1e-9)), T=r.tiers.slice().sort((x,y)=>x[0]-y[0]), lastM=T[T.length-1][1];
+    if(isNum(r.wholeAfter)&&H>r.wholeAfter+1e-9) return Math.round(b*lastM*r.rate*100)/100;
+    let s=0, prev=0; for(const [up,m] of T){ const cap=up-free; s+=Math.max(0,Math.min(b,cap)-prev)*m; prev=Math.max(prev,cap); if(b<=cap) break; }
+    if(b>prev) s+=(b-prev)*lastM; return Math.round(s*r.rate*100)/100; }
   /* price2 + after2: ücretsiz saatten sonra her başlayan saat "price"; faturalanan ilk after2 saatten sonrası "price2" (ör. Biggin Hill: ilk 24 saat 42, sonrası 33.60) */
   if(isNum(r.price2)&&isNum(r.after2)&&isNum(r.price)){ const b=Math.max(0,Math.ceil(H-free-1e-9)); if(isNum(r.price3)&&isNum(r.after3)) return Math.round((Math.min(b,r.after2)*r.price+Math.max(0,Math.min(b,r.after3)-r.after2)*r.price2+Math.max(0,b-r.after3)*r.price3)*100)/100; return Math.round((Math.min(b,r.after2)*r.price+Math.max(0,b-r.after2)*r.price2)*100)/100; }
   /* after + day24: kalış "after" saati aşarsa her başlayan 24 saat günlük (housing) ücret; aşmazsa ücretsiz saatten sonra saatlik (ör. Kahire: 5 saati aşan kalışta housing) */
@@ -649,7 +603,7 @@ function hFlags(h){
   return {nA,nD,wA,wD,nt:nA||nD,wk:wA||wD};
 }
 function hWinTxt(h,k){
-  if(k==="night"){ if(!h||(!isNum(h.nightFrom)&&!isNum(h.nightTo))) return ""; const [f,t]=hNight(h); return `${pad2(f)}:00–${pad2(t)}:00`; }
+  if(k==="night"){ if(!h||(!isNum(h.nightFrom)&&!isNum(h.nightTo))) return ""; const [f,t]=hNight(h), hm=x=>`${pad2(Math.floor(x))}:${pad2(Math.round((x%1)*60))}`; return `${hm(f)}–${hm(t)}`; }
   if(!h||!Array.isArray(h.wkDays)||!h.wkDays.length) return ""; return h.wkDays.map(x=>DAYN[x]).join(", ");
 }
 function applyTrip(){ const t=trip(); state.days=t.days; state.nt=t.nt; state.wk=t.wk; return t; }
@@ -707,13 +661,15 @@ function disbBaseAmt(a,p,h,all){ let s=0; p.items.forEach((v,i)=>{ if(!all&&!inC
 function baseTotal(a,p,h,all){
   let sum=0, dsum=0;
   p.items.forEach((v,i)=>{ if(!all&&!inCmpP(a,p,i)) return; const x=lineAmt(a,i,v); if(x!==null){ sum+=x; if(disbOn(h,a.services[i])) dsum+=x; }});
-  return Math.round((sum+(p.disb||0)*dsum)*100)/100;
+  return Math.round((sum+(p.disb||0)*dsum+(isNum(p.disbFlat)?p.disbFlat:0))*100)/100;
 }
 function handlingFee(a,p){ const i=handlingIdx(a); if(i<0) return 0; const n=a.services[i].name; if(p) for(let j=0;j<a.services.length;j++){ const s=a.services[j]; if(Array.isArray(s.replaces)&&s.replaces.includes(n)&&isTick(a,j)&&isNum(p.items[j])&&p.items[j]>0) return p.items[j]; } return isNum(p&&p.items[i])?p.items[i]:0; } /* tikle seçilen yerine geçen handling (ör. teknik iniş) surcharge tabanı olur */
 function isComplete(a,p){ return handlingFee(a,p)>0; }
 /* karşılaştırmaya girmeyen kalemlerde adet (oturum boyunca, meydan bazında) */
 const qtyKey=(a,i)=>a.icao+":"+i;
-const qtyOf=(a,i)=>{const q=state.qty&&state.qty[qtyKey(a,i)]; return isNum(q)?q:1;};
+/* qtyDef: adetin varsayılanı; sayı ya da uçak grubuna göre {tip: adet} (ör. LEMD crew security: standart crew × 2 hareket) */
+const qtyDefOf=s=>{const d=s&&s.qtyDef; return isNum(d)?d:(d&&isNum(d[state.ac])?d[state.ac]:1);};
+const qtyOf=(a,i)=>{const q=state.qty&&state.qty[qtyKey(a,i)]; return isNum(q)?q:qtyDefOf(a.services[i]);};
 /* qty: sepetteki satırda da adet girişi (ör. slot değişikliği, pax ramp movement) */
 /* ff: ilk kullanım handling'e dahil, sonrası ücretli; hücre {ff:1, price}; tutar = price × (adet − 1) */
 const isFf=v=>!!(v&&typeof v==="object"&&v.ff);
@@ -723,7 +679,7 @@ const lineAmt=(a,i,v)=>{ if(isFf(v)) return Math.round((v.price||0)*Math.max((is
 function fullTotal(a,p,h){
   let sum=0,dsum=0;
   p.items.forEach((v,i)=>{if(repOff(a,p,i)||isNs(a.services[i])) return; const x=lineAmt(a,i,v); if(x===null) return; sum+=x; if(disbOn(h,a.services[i])) dsum+=x;});
-  const t=sum+(p.disb||0)*dsum+scAmt(a,p,h)*(disbAll(h)?1+(p.disb||0):1);
+  const t=sum+(p.disb||0)*dsum+(isNum(p.disbFlat)?p.disbFlat:0)+scAmt(a,p,h)*(disbAll(h)?1+(p.disb||0):1);
   return Math.round(t*100)/100;
 }
 /* scOnce: gece ve hafta sonu aynı uçuşa denk gelirse ek ücret tek sefer (yüksek olan) alınır */
@@ -737,12 +693,15 @@ function scAmt(a,p,h){ const hf=handlingFee(a,p), f0=hFlags(h), off=ntMan(a)===f
   /* nightPerLeg: gece ek ücreti gece saatine düşen her hareket (geliş ve kalkış) için ayrı alınır (ör. UBBB ASG) */
   const nl=h&&h.nightPerLeg?(f.nA?1:0)+(f.nD?1:0):1;
   if(f.nt&&h&&h.night) n+=hf*h.night*nl; const nfl=nFlat(p,h); if(f.nt&&nfl) n+=nfl*nl;
-  w=wkAmt(a,p,h,n); return (h&&h.scOnce?Math.max(w,n):w+n)+holAmt(a,p,h)+ovAmt(a,p,h)+otAmt(a,p,h)+nsAmt(a,p,h)-ferAmt(a,p,h); }
+  w=wkAmt(a,p,h,n); return (h&&h.scOnce?Math.max(w,n):w+n)+holAmt(a,p,h)+ovAmt(a,p,h)+otAmt(a,p,h)+nsAmt(a,p,h)+xscAmt(a,p,h)-ferAmt(a,p,h); }
 /* yolcusuz uçuş (ferry) indirimi: handler'da ferryDisc (handling üzerinden oran); geliş ya da kalkış yolcusuz ise 'uygula' kutusu otomatik işaretli gelir, elle değiştirilebilir (aynı yolcu sayısı ve tarih/saat için geçerli). UDYZ CIS ve Euro Jet %30 */
 const ferKey=()=>state.arrPax+"|"+state.depPax+"|"+ntKey();
 const ferAuto=()=>state.arrPax===0||state.depPax===0;
 const ferMan=a=>{ const o=state.fer&&a&&state.fer[a.icao]; return o&&o.k===ferKey()?!!o.v:null; };
 const ferOn=a=>{ const m=ferMan(a); return m!==null?m:ferAuto(); };
+/* extraSc: handler'a bağlı, handling üzerinden yüzde ek ücret (ör. LIEO Sky Services Extra EU surcharge %14.68); Surcharge'da kendi satırı, 'apply' kutusu varsayılan boş, kaydedilmez */
+const xscOn=a=>!!(state.xsc&&a&&state.xsc[a.icao]);
+function xscAmt(a,p,h){ if(!h||!h.extraSc||!isNum(h.extraSc.rate)||!xscOn(a)) return 0; return Math.round(handlingFee(a,p)*h.extraSc.rate*100)/100; }
 function ferAmt(a,p,h){ if(!h||!h.ferryDisc||!ferAuto()||!ferOn(a)) return 0; return Math.round(handlingFee(a,p)*h.ferryDisc*100)/100; }
 /* nightSc: havalimanı/hizmet gece farkı satırları (ör. UDYZ landing %20, check-in %30) hizmet tablosunda görünmez; kendi nightOnly saatine göre Surcharge'daki 'Gece' satırına eklenir ve aynı 'uygula' kutusuyla kaldırılır. Handler disbursement'ı havalimanı ücretlerine uyguluyorsa bu tutara da uygulanır */
 /* gece farkı satırları Surcharge'da ayrı ayrı (aynı nsLabel'lı geliş/kalkış kalemleri tek satır); 'Gece' satırındaki uygula kutusuna bağlı */
@@ -845,10 +804,9 @@ function renderKpis(){
   const last=DATA.map(a=>a.updatedAt).filter(Boolean).sort().pop();
   const k=document.getElementById("kpis");
   /* Fuel kutusu bir kez kurulur, sonraki yenilemelerde yerinde kalır (yazarken odak kaybolmasın) */
-  if(!document.getElementById("kpiFuel")){ k.innerHTML=`<div class="kpi" id="kpiA"></div><div class="kpi" id="kpiB"></div>
+  if(!document.getElementById("kpiFuel")){ k.innerHTML=`<div class="kpi" id="kpiA"></div>
     <div class="kpi" id="kpiFuel"><label class="k" for="fuelIn">Fuel</label><span class="v"><input id="fuelIn" class="fuel-in num" type="text" inputmode="decimal" autocomplete="off" placeholder="0.000" aria-label="Fuel price, USD/USG"><span class="unit">USD/USG</span><span class="stale" id="fuelDot" hidden></span></span><span class="s" id="fuelSub"></span></div>`; bindFuel(); }
-  document.getElementById("kpiA").innerHTML=`<span class="k">Airports</span><span class="v num">${DATA.length}</span><span class="s">in the database · <b class="ver-t num">${DATA.filter(a=>a.verified&&a.tick!==false).length}</b> <span class="ver-t">✓</span> green ticked, verified against invoices</span>`;
-  document.getElementById("kpiB").innerHTML=`<span class="k">Last update</span><span class="v" style="font-size:20px;padding-top:6px;display:flex;align-items:center" title="${esc(ageInfo({updatedAt:last}).tip)}">${last?fmtDate(last):"—"}${last?ageInfo({updatedAt:last}).dot:""}</span><span class="s">${gaps?`<span style="color:var(--warn)">${gaps} incomplete quotes</span>`:"No incomplete quotes"}</span>`;
+  document.getElementById("kpiA").innerHTML=`<span class="k">Airports</span><span class="v num" style="display:flex;align-items:center;gap:18px">${DATA.length}<span class="kpi-ver" title="Green ticked: verified against invoices">${DATA.filter(a=>a.verified&&a.tick!==false).length}<span class="vtick" aria-label="verified against invoices">✓</span></span></span><span class="s">in the database</span>`;
   showFuel();
 }
 /* yakıt fiyatı (USD/USG): settings/fuel {price, updatedAt}; sadece düzenleme yetkisi olanlar değiştirir */
@@ -871,7 +829,9 @@ function bindFuel(){ const i=document.getElementById("fuelIn"); if(!i) return;
   i.onblur=save; }
 const matches=a=>!state.q||a.icao.toLowerCase().includes(state.q.toLowerCase())||a.handlers.some(h=>h.name.toLowerCase().includes(state.q.toLowerCase()));
 function renderList(){
-  const el=document.getElementById("list"), items=DATA.filter(matches);
+  /* yeşil tikli (faturayla doğrulanan) meydanlar üstte, sonra yeşil tiksiz, sonra diğerleri; her grup alfabetik */
+  const rank=a=>a.verified?(a.tick!==false?0:1):2;
+  const el=document.getElementById("list"), items=DATA.filter(matches).sort((x,y)=>rank(x)-rank(y)||x.icao.localeCompare(y.icao));
   document.getElementById("rosterHint").textContent=`${items.length} airports`;
   el.innerHTML=items.map(a=>{
     const s=summary(a,state.ac);
@@ -888,20 +848,32 @@ function selectAp(icao){
 }
 /* son güncelleme: 6 aydan eski turuncu, 1 yıldan eski kırmızı nokta */
 const MON_S=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+/* meydan kutusunda sağda: bu meydanın son güncellemesi + noktası, eksik teklif sayısı */
+function apUpd(a,ag){ let gaps=0; a.handlers.forEach(h=>Object.values(h.prices||{}).forEach(p=>{ if(quoteHasData(p)&&!isComplete(a,p)&&!isNoted(a,p)) gaps++; }));
+  return `<div class="ap-upd" title="${esc(ag.tip)}"><span class="k">Last update</span><span class="v">${esc(ag.long)}${ag.dot}</span><span class="s">${gaps?`<span style="color:var(--warn)">${gaps} incomplete quote${gaps>1?"s":""}</span>`:"No incomplete quotes"}</span></div>`; }
 function ageInfo(a){ const d=a&&a.updatedAt?new Date(a.updatedAt):null; if(!d||isNaN(d)) return {lvl:"r",dot:`<span class="stale r" aria-hidden="true"></span>`,short:"no date",long:"no date",tip:"No update date"};
   const days=(Date.now()-d.getTime())/864e5, lvl=days>365?"r":days>182.5?"o":"";
   const tip=lvl==="r"?"No data entered for over 1 year":lvl==="o"?"No data entered for over 6 months":"Updated within the last 6 months";
   return {lvl,tip,dot:`<span class="stale ${lvl||"g"}" aria-label="${tip}"></span>`,short:d.getDate()+" "+MON_S[d.getMonth()]+" "+String(d.getFullYear()).slice(2),long:d.getDate()+" "+MON_S[d.getMonth()]+" "+d.getFullYear()}; }
+/* son güncelleme: handler × grup × hizmet bazında belge tarihi (prices[grup].upd[hizmet adı] = {d:"YYYY-MM-DD", src:"belge no", a:1 yaklaşık, prev:önceki fiyat, pd:önceki tarih}); her rakamın altında gösterilir */
+const updDmy=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d||""); return m?m[3]+"."+m[2]+"."+m[1]:"";};
+function updCell(td,c,sv,v){
+  if(v===null||v===undefined||typeof td!=="string"||td.indexOf('class="na"')>=0) return td;
+  const u=c&&c.p&&c.p.upd&&c.p.upd[sv.name]; if(!u||!u.d) return td;
+  const pv=u.prev!==undefined&&u.prev!==null?(isNum(u.prev)?fmt(u.prev):String(u.prev)):null;
+  const tip=[u.a?"Approximate (latest source document of this handler)":"Price confirmed by document",u.src?"Source: "+u.src:"",pv?"Previous: "+pv+(u.pd?" ("+updDmy(u.pd)+")":""):""].filter(Boolean).join(" · ");
+  const tag=`<span class="usd upd-d" title="${esc(tip)}">${u.a?"≈ ":""}${updDmy(u.d)}${pv?`<span class="upd-prev">was ${esc(pv)}${u.pd?" · "+updDmy(u.pd):""}</span>`:""}</span>`;
+  const k=td.lastIndexOf("</td>"); return k<0?td:td.slice(0,k)+tag+td.slice(k);
+}
 function renderDetail(partial){
   const el=document.getElementById("detail"), a=DATA.find(x=>x.icao===state.ap);
   if(!a){ el.innerHTML=""; return; }
   const s=summary(a,state.ac), cur=a.currency, chips=[];
   chips.push(cur?`<span class="chip">Currency <b>${esc(cur)}</b></span>`:`<span class="chip warn"><b>!</b> No currency set</span>`);
-  chips.push(`<span class="chip">Handler <b class="num">${a.handlers.length}</b></span>`);
   const ag=ageInfo(a);
   if(a.handlingOnly) chips.push(`<span class="chip">Comparing <b>handling fee</b> only</span>`);
   const ctry=countryOf(a);
-  let html=`<section class="card"><div class="ap-head"><div class="ap-id"><span class="icao ${a.verified?"ver":""}" ${a.verified?`title="${esc(a.verified)}"`:""}>${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span>${ctry?`<span class="ctry">${esc(ctry)}</span>`:""}</div><div class="facts">${chips.join("")}</div></div></section>`;
+  let html=`<section class="card"><div class="ap-head"><div class="ap-id"><span class="icao ${a.verified?"ver":""}" ${a.verified?`title="${esc(a.verified)}"`:""}>${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span>${ctry?`<span class="ctry">${esc(ctry)}</span>`:""}</div><div class="facts">${chips.join("")}</div>${apUpd(a,ag)}</div></section>`;
   const qs=s.qs;
   const hasDay=a.services.some(s=>s.unit==="day");
   const wks=a.handlers.map(h=>h.weekend||0).filter(v=>v>0), nts=a.handlers.map(h=>h.night||0).filter(v=>v>0);
@@ -912,7 +884,8 @@ function renderDetail(partial){
   const leg=(k,l)=>`<div class="leg"><span class="leg-l">${l}</span>
       <label class="lf"><span class="flabel">Date (UTC)</span><input type="text" class="calc-in dt" id="${k}D" value="${isoToDmy(state[k+"UD"])}" inputmode="numeric" maxlength="10" placeholder="DD.MM.YYYY" autocomplete="off" aria-label="Date UTC (DD.MM.YYYY)"></label>
       <label class="lf"><span class="flabel">Time (UTC)</span><input type="text" class="calc-in tm" id="${k}T" value="${state[k+"UT"]}" inputmode="numeric" maxlength="5" placeholder="HH:MM" pattern="([01][0-9]|2[0-3]):[0-5][0-9]" autocomplete="off" aria-label="Time UTC (24 h, HH:MM)"></label>
-      <div class="lf"><span class="flabel">Local time · ${esc(a.icao)}</span><div class="loc" id="${k}Loc" aria-live="polite">${locHtml(k)}</div></div>
+      <label class="lf lf-loc"><span class="flabel" id="${k}LDl">${locDateLbl(k)}</span><input type="text" class="calc-in dt" id="${k}LD" value="${isoToDmy(state[k+"D"])}" inputmode="numeric" maxlength="10" placeholder="DD.MM.YYYY" autocomplete="off" aria-label="Local date at ${esc(a.icao)} (DD.MM.YYYY)"></label>
+      <label class="lf"><span class="flabel" id="${k}LTl">${locTimeLbl(k)}</span><input type="text" class="calc-in tm" id="${k}LT" value="${state[k+"T"]}" inputmode="numeric" maxlength="5" placeholder="HH:MM" pattern="([01][0-9]|2[0-3]):[0-5][0-9]" autocomplete="off" aria-label="Local time at ${esc(a.icao)} (24 h, HH:MM)"></label>
       <label class="lf"><span class="flabel">Pax</span><input type="number" class="calc-in num px" id="${k}Pax" min="0" max="99" step="1" inputmode="numeric" value="${state[k+"Pax"]}"></label>
       <label class="lf"><span class="flabel">Children</span><input type="number" class="calc-in num px" id="${k}Ch" min="0" max="99" step="1" inputmode="numeric" value="${state[k+"Ch"]}"></label></div>`;
   html+=`<section class="card ac-card"><span class="flabel" id="acLabel">Aircraft</span><div class="seg calc-seg" id="acSeg" role="group" aria-labelledby="acLabel"></div></section>
@@ -946,17 +919,17 @@ function renderDetail(partial){
     if(vals.every(v=>v===null||v===undefined)) return "";
     if(sv.unit==="day"){
       const am=vals.map(v=>(isNum(v)||isPk(v))?amt(sv,v):null), ns=am.filter(x=>x!==null&&x>0), mnp=ns.length>1?Math.min(...ns):null;
-      return `<tr><td>${esc(sv.name)}${inBasket(sv)?`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`} <span class="pill mute">${trip().ok?fmtStay(trip().hrs):"24 h"} stay</span></td>${vals.map((v,k)=>{
+      return `<tr><td>${esc(sv.name)}${inBasket(sv)?`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`} <span class="pill mute">${trip().ok?fmtStay(trip().hrs):"24 h"} stay</span></td>${vals.map((v,k)=>updCell(((v,k)=>{
         if(v===null||v===undefined) return `<td class="na">—</td>`;
         if(am[k]===null) return `<td class="txt">${esc(/^incl/i.test(v)?"Included":/^free/i.test(String(v).trim())?"Free":v)}</td>`;
-        return `<td class="num ${am[k]===mnp&&ns.some(n=>n!==mnp)?"min":""}">${am[k]===0?"0":fmt(am[k])}${PK_SHORT.includes(a.icao)?"":`<span class="usd pk-d">${esc(pkDesc(v))}</span>`}</td>`;}).join("")}</tr>`;
+        return `<td class="num ${am[k]===mnp&&ns.some(n=>n!==mnp)?"min":""}">${am[k]===0?"0":fmt(am[k])}${PK_SHORT.includes(a.icao)?"":`<span class="usd pk-d">${esc(pkDesc(v))}</span>`}</td>`;})(v,k),qs[k],sv,v)).join("")}</tr>`;
     }
     /* hücrede bu uçuşun tutarı (birim × yolcu / crew / saat / adet); birim fiyat altında küçük */
     const lt=v=>{const x=isNum(v)?lineAmt(a,i,v):null; return x===null?v:x;};
     const nums=vals.filter(v=>isNum(v)&&v>0).map(lt), mn=nums.length>1?Math.min(...nums):null;
     const qx=inBasket(sv)?(i===handlingIdx(a)?"":`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation (if not used)"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label>${sv.qty?`<label class="tick-l">qty<input class="qty-in num" type="number" min="0" max="99" step="1" data-qty="${i}" value="${qtyOf(a,i)}" aria-label="${esc(sv.name)} qty"></label>`:""}</span>`):sv.unit==="pct"?`<span class="tick-w"><label class="tick-l" title="Tick to add this percentage of the total as a cost"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total with its quantity"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label>${isTick(a,i)?`<label class="tick-l">qty<input class="qty-in num" type="number" min="0" max="99" step="1" data-qty="${i}" value="${qtyOf(a,i)}" aria-label="${esc(sv.name)} qty"></label>`:""}</span>`;
     const vcp=(RX_VIP.test(sv.name||"")||RX_CIP.test(sv.name||""))&&inCmp(a,i)&&vcBoth(a,qs)?` <span class="pill warn">VIP + CIP birlikte</span>`:"";
-    return `<tr><td>${esc(sv.name)}${vcp}${qx}${sv.unit==="pax"?` <span class="pill mute">× ${paxFor(sv)} ${paxLbl(sv)}</span>`:sv.unit==="paxt"?` <span class="pill mute">${paxFor(sv)} ${paxIsArr(sv)?"arr.":"dep."} pax · tiered</span>`:isGpu(sv)?`<span class="tick-w"><label class="tick-l" title="1 hour if left empty">hours<input class="qty-in num" type="number" min="0" max="48" step="1" inputmode="numeric" data-gpu="1" placeholder="1" value="${isNum(state.gpuH)?state.gpuH:""}" aria-label="GPU hours (1 if empty)"></label></span>`:sv.gt?` <span class="pill mute">${gtOk(sv)?"× 1":"× 0"} · ${sv.gt==="overnight"?"overnight":sv.gt==="lt24"?"stay "+(isNum(sv.gtHours)?sv.gtHours:2)+"–24 h":"stay over "+((isNum(sv.gtHours)?sv.gtHours:2)*60)+" min"}</span>`:Array.isArray(sv.nightOnly)?` <span class="pill mute">${litOk(sv)?"× 1":"× 0"} · ${pad2(sv.nightOnly[0])}:00–${pad2(sv.nightOnly[1])}:00 only</span>`:sv.unit==="leg"?` <span class="pill mute">${mult(sv)?"× 1":"× 0 · no "+(paxIsArr(sv)?"arrival":"departure")+" pax"}</span>`:sv.unit==="day"?` <span class="pill mute">× ${state.days} days</span>`:sv.unit==="crew"?` <span class="pill mute">× ${CREW} crew</span>`:""}</td>${vals.map((v,k)=>{
+    return `<tr><td>${esc(sv.name)}${vcp}${qx}${sv.unit==="pax"?` <span class="pill mute">× ${paxFor(sv)} ${paxLbl(sv)}</span>`:sv.unit==="paxt"?` <span class="pill mute">${paxFor(sv)} ${paxIsArr(sv)?"arr.":"dep."} pax · tiered</span>`:isGpu(sv)?`<span class="tick-w"><label class="tick-l" title="1 hour if left empty">hours<input class="qty-in num" type="number" min="0" max="48" step="1" inputmode="numeric" data-gpu="1" placeholder="1" value="${isNum(state.gpuH)?state.gpuH:""}" aria-label="GPU hours (1 if empty)"></label></span>`:sv.gt?` <span class="pill mute">${gtOk(sv)?"× 1":"× 0"} · ${sv.gt==="overnight"?"overnight":sv.gt==="lt24"?"stay "+(isNum(sv.gtHours)?sv.gtHours:2)+"–24 h":"stay over "+((isNum(sv.gtHours)?sv.gtHours:2)*60)+" min"}</span>`:Array.isArray(sv.nightOnly)?` <span class="pill mute">${litOk(sv)?"× 1":"× 0"} · ${pad2(sv.nightOnly[0])}:00–${pad2(sv.nightOnly[1])}:00 only</span>`:sv.unit==="leg"?` <span class="pill mute">${mult(sv)?"× 1":"× 0 · no "+(paxIsArr(sv)?"arrival":"departure")+" pax"}</span>`:sv.unit==="day"?` <span class="pill mute">× ${state.days} days</span>`:sv.unit==="crew"?` <span class="pill mute">× ${CREW} crew</span>`:""}</td>${vals.map((v,k)=>updCell(((v,k)=>{
       if(v===null||v===undefined) return `<td class="na">—</td>`;
       if(sv.unit==="paxt"){ const x=pxtTotal(sv,v); return x===null?`<td class="na">—</td>`:`<td class="num">${fmt(x)}<span class="usd">${v.exact&&v.exact[String(paxFor(sv))]!==undefined?"from tariff":"per pax "+fmt(v.def)}</span></td>`; }
       if(sv.unit==="pct"){ const r=pctVal(v); if(r===null) return `<td class="txt">${esc(v)}</td>`; const c=qs[k], x=inCmp(a,i)?pctAmt(a,c.p,c.h,i):0; return `<td class="num">%${Math.round(r*10000)/100}${x?`<span class="usd">+${fmt(x,cur)}</span>`:""}</td>`; }
@@ -965,7 +938,7 @@ function renderDetail(partial){
       if(v===0) return `<td class="txt">0</td>`;
       if(repOff(a,qs[k].p,i)) return `<td class="num" style="color:var(--muted)"><s>${fmt(v)}</s><span class="usd">replaced by Royal Terminal</span></td>`;
       const x=lt(v), dif=Math.abs(x-v)>1e-9;
-      return `<td class="num ${x===mn&&nums.some(n=>n!==mn)?"min":""}">${fmt(x)}${dif?`<span class="usd">unit ${fmt(v)}</span>`:""}</td>`;}).join("")}</tr>`;};
+      return `<td class="num ${x===mn&&nums.some(n=>n!==mn)?"min":""}">${fmt(x)}${dif?`<span class="usd">unit ${fmt(v)}</span>`:""}</td>`;})(v,k),qs[k],sv,v)).join("")}</tr>`;};
   const idx=a.services.map((_,i)=>i).filter(i=>!isNs(a.services[i])); /* gece farkı satırları Surcharge'da */
   const grpIdx={h:idx.filter(i=>!a.services[i].airport&&(inBasket(a.services[i])||a.services[i].opt)), ap:idx.filter(i=>a.services[i].airport), x:idx.filter(i=>!inBasket(a.services[i])&&!a.services[i].opt&&!a.services[i].airport)}; /* tikle eklenen havalimanı kalemleri Airport fees grubunda gösterilir */
   const sub=(c,ids)=>ids.reduce((s,i)=>{if(repOff(a,c.p,i)) return s; const x=lineAmt(a,i,c.p.items[i]);return x!==null?s+x:s;},0);
@@ -978,10 +951,11 @@ function renderDetail(partial){
   const tr=group("h","Handling services","g-h")+group("ap","Airport fees","g-ap")+group("x","Services outside the comparison","g-x");
   html+=`<section class="card matrix-card"><div class="card-h"><h3>Itemised prices · ${acLbl(state.ac)}</h3><span class="sub">${esc(cur||"Currency ?")} · green ▼ lowest price in the row</span></div>${vcBoth(a,qs)?`<div class="vc-warn" role="alert">⚠ ${VC_WARN}</div>`:""}
     <div class="tbl-wrap"><table><thead><tr><th>Service</th>${qs.map(c=>`<th>${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
-    ${tr}<tr class="disb"><td>Disbursement</td>${qs.map(c=>{const amt=(c.p.disb||0)*disbBaseAmt(a,c.p,c.h,!!a.handlingOnly);return `<td class="num">${isNum(c.p.disb)?Math.round(c.p.disb*1000)/10+"%"+(amt?` · ${fmt(amt,cur)}`:""):"—"}<span class="usd">${disbAll(c.h)?"on whole invoice":"on airport fees"}</span></td>`;}).join("")}</tr>
+    ${tr}<tr class="disb"><td>Disbursement</td>${qs.map(c=>{const amt=(c.p.disb||0)*disbBaseAmt(a,c.p,c.h,!!a.handlingOnly);const df=isNum(c.p.disbFlat)?c.p.disbFlat:0; return `<td class="num">${isNum(c.p.disb)||df?[isNum(c.p.disb)?Math.round(c.p.disb*1000)/10+"%"+(amt?` · ${fmt(amt,cur)}`:""):"",df?`fee ${fmt(df,cur)}`:""].filter(Boolean).join(" + "):"—"}<span class="usd">${isNum(c.p.disb)?(disbAll(c.h)?"on whole invoice":"on airport fees"):"flat fee"}</span></td>`;}).join("")}</tr>
     <tr class="subt"><td>Subtotal (excl. surcharge)</td>${qs.map(c=>`<td class="num">${c.total||c.complete?fmtT(c.total,cur):"—"}</td>`).join("")}</tr>
     <tr class="grp g-sc"><td colspan="${qs.length+1}">Surcharge <span class="pill mute" style="text-transform:none;letter-spacing:0">percentages on handling fee · flat amounts once</span></td></tr>
     ${qs.some(c=>c.h.holiday||c.h.holidayFlat)?`<tr class="sc-row"><td>Public holiday<span class="tick-w"><label class="tick-l" title="${holAuto(a)?"Automatic by date: ticked if arrival or departure is on the public holiday list; ticking on a non-listed date adds no charge, unticking on a holiday removes it":"Tick if the flight falls on a public holiday; not saved"}"><input type="checkbox" data-hol="1" ${holChk(a)?"checked":""} aria-label="Apply public holiday"> apply</label></span></td>${qs.map(c=>{const v=c.h.holiday||0, hfl=c.h.holidayFlat||0; if(!v&&!hfl) return `<td><span class="sc-chip none" style="float:right">None</span></td>`; const x=holAmt(a,c.p,c.h); return `<td class="num"><span class="sc-chip ${holOn(a)?"on":""}">Yes · ${v?`+${Math.round(v*100)}%`:""}${hfl?`+${fmt(hfl,cur)}${c.h.holPerLeg?" · her hareket":""}`:""}${Array.isArray(c.h.holidayOn)&&c.h.holidayOn.length?" · on "+c.h.holidayOn.length+" items":""}</span>${x?`<span class="usd">+${fmt(x,cur)}</span>`:""}</td>`;}).join("")}</tr>`:""}
+    ${qs.some(c=>c.h.extraSc)?`<tr class="sc-row"><td>${esc(qs.find(c=>c.h.extraSc).h.extraSc.label||"Extra surcharge")}<span class="tick-w"><label class="tick-l" title="Tick if this surcharge applies to the flight; not saved"><input type="checkbox" data-xsc="1" ${xscOn(a)?"checked":""} aria-label="Apply surcharge"> apply</label></span></td>${qs.map(c=>{ if(!c.h.extraSc) return `<td><span class="sc-chip none" style="float:right">None</span></td>`; const x=xscAmt(a,c.p,c.h); return `<td class="num"><span class="sc-chip ${x?"on":""}">Yes · handling +${Math.round((c.h.extraSc.rate||0)*10000)/100}%</span>${x?`<span class="usd">+${fmt(x,cur)}</span>`:""}</td>`;}).join("")}</tr>`:""}
     ${qs.some(c=>c.h.ferryDisc)?`<tr class="sc-row"><td>No-pax flight discount<span class="tick-w"><label class="tick-l" title="Ticked automatically if arrival or departure has no pax; you can untick it. Ticking adds no discount if both directions have pax"><input type="checkbox" data-fer="1" ${ferOn(a)?"checked":""} aria-label="Apply no-pax flight discount"> apply</label></span></td>${qs.map(c=>{ if(!c.h.ferryDisc) return `<td><span class="sc-chip none" style="float:right">None</span></td>`; const x=ferAmt(a,c.p,c.h); return `<td class="num"><span class="sc-chip ${x?"on":""}">Yes · handling −${Math.round(c.h.ferryDisc*100)}%</span>${x?`<span class="usd">−${fmt(x,cur)}</span>`:""}</td>`;}).join("")}</tr>`:""}
     ${otHasA(qs)?`<tr class="sc-row"><td>Handling Overtime Fee<span class="tick-w"><label class="tick-l" title="Calculated automatically from the time arrival and departure fall outside the handler's working hours (started hours); you can change it"><input type="number" min="0" max="48" data-otq="1" value="${otMan(a)??otAuto(qs.find(c=>c.h.otRate).h)}" style="width:48px" aria-label="Overtime hours"> hours</label></span></td>${qs.map(c=>{ if(!c.h.otRate) return `<td><span class="sc-chip none" style="float:right">None</span></td>`; const x=otAmt(a,c.p,c.h); return `<td class="num"><span class="sc-chip ${x?"on":""}">Yes · per hour ${fmt(c.h.otRate,cur)} · hours ${pad2(isNum(c.h.otFrom)?c.h.otFrom:8)}:00–${pad2(isNum(c.h.otTo)?c.h.otTo:17)}:00</span>${x?`<span class="usd">+${fmt(x,cur)} (${otHrs(a,c.h)} h)</span>`:""}</td>`;}).join("")}</tr>`:""}
     ${[["weekend","Weekend"],["night",a.services.some(isNs)?"Night · Handling":"Night"]].map(([k,l])=>`<tr class="sc-row"><td>${l}${k==="weekend"&&qs.some(c=>c.h.weekend||c.h.weekendFlat)?`<span class="tick-w"><label class="tick-l" title="Ticked automatically by date; you can change it"><input type="checkbox" data-wk="1" ${wkOnA(a,qs)?"checked":""} aria-label="Apply weekend"> apply</label></span>`:""}${k==="night"&&qs.some(c=>c.h.night||nFlat(c.p,c.h)||c.h.overnight||c.h.overnightFlat||nsLbl(a,c.p))?`<span class="tick-w"><label class="tick-l" title="Ticked automatically by night time or overnight stay; untick to remove the night/overnight charge"><input type="checkbox" data-nt="1" ${(ntMan(a)??qs.some(c=>hFlags(c.h).nt||(ovAuto()&&(c.h.overnight||c.h.overnightFlat))||nsAmt(a,c.p,c.h)>0))?"checked":""} aria-label="Apply night"> apply</label></span>`:""}</td>${qs.map(c=>{const on=k==="weekend"?wkAmt(a,c.p,c.h,0)>0:(hFlags(c.h).nt&&ntMan(a)!==false), win=hWinTxt(c.h,k), v=c.h[k]||0, f=k==="night"?nFlat(c.p,c.h):(c.h[k+"Flat"]||0), hf=handlingFee(a,c.p), ovr=k==="night"?(c.h.overnight||0):0, ovf=k==="night"?(c.h.overnightFlat||0):0, ovx=k==="night"?ovAmt(a,c.p,c.h):0, nsl=k==="night"?nsLbl(a,c.p):"", nsx=k==="night"?nsAmt(a,c.p,c.h):0;if(!v&&!f&&!ovr&&!ovf) return `<td><span class="sc-chip none" style="float:right">None</span></td>`;const lbl=[v?`+${Math.round(v*100)}%`:"",f?`+${fmt(f,cur)}`:""].filter(Boolean).join(" ")+(v||f?(win?` · ${win}`:""):"")+((ovr||ovf)?`${v||f?" · ":""}geceleme ${[ovr?`+${Math.round(ovr*100)}%`:"",ovf?`+${fmt(ovf,cur)}`:""].filter(Boolean).join(" ")}`:"");const fl=hFlags(c.h), nl=k==="night"&&c.h.nightPerLeg?(fl.nA?1:0)+(fl.nD?1:0):1; const amt=k==="weekend"?wkAmt(a,c.p,c.h,0):(on?((v&&hf?hf*v:0)+f)*nl:0)+ovx, onx=k==="weekend"?on:(on&&(v||f))||ovx>0;return `<td class="num"><span class="sc-chip ${onx?"on":""}">Yes · ${lbl}${k==="night"&&c.h.nightPerLeg?" · her hareket":""}${k==="weekend"&&c.h.wkPerLeg?" · her hareket":""}${k==="weekend"&&c.h.wkSunPm?` · ${c.h.wkSunPm.from?`Sun after ${pad2(c.h.wkSunPm.from)}:00`:"Sunday"} +${fmt(c.h.wkSunPm.flat,cur)}`:""}</span>${onx&&amt?`<span class="usd">+${fmt(amt,cur)}</span>`:""}</td>`;}).join("")}</tr>`).join("")}${nsRows(a,qs,cur)}
@@ -1002,6 +976,7 @@ function bindQty(){
   document.querySelectorAll("[data-gpu]").forEach(g=>{ g.onchange=()=>{ const v=g.value.trim().replace(",","."); if(v===""){ state.gpuH=null; laterRefresh(); return; } const n=Math.round(Number(v)); if(isNaN(n)||n<0) return; state.gpuH=Math.min(n,48); laterRefresh(); }; });
   document.querySelectorAll("[data-wk]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.wkov=state.wkov||{}; state.wkov[a.icao]={v:i.checked,k:holKey()}; laterRefresh();}; });
   document.querySelectorAll("[data-nt]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.ntov=state.ntov||{}; state.ntov[a.icao]={v:i.checked,k:ntKey()}; laterRefresh();}; });
+  document.querySelectorAll("[data-xsc]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.xsc=state.xsc||{}; state.xsc[a.icao]=i.checked; laterRefresh();}; });
   document.querySelectorAll("[data-fer]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.fer=state.fer||{}; state.fer[a.icao]={v:i.checked,k:ferKey()}; laterRefresh();}; });
   document.querySelectorAll("[data-otq]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; const n=parseInt(i.value,10); if(isNaN(n)||n<0) return; state.otq=state.otq||{}; state.otq[a.icao]={v:Math.min(n,48),k:ntKey()}; laterRefresh();}; });
   document.querySelectorAll("[data-hol]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.hol=state.hol||{}; state.hol[a.icao]={v:i.checked,k:holKey()}; laterRefresh();}; });
@@ -1012,17 +987,17 @@ function bindQty(){
 function bindCalc(){
   bindQty();
   /* tarih: GG.AA.YYYY; 25082026, 25/08/2026 ya da 25-08-2026 yazılınca 25.08.2026 olur */
-  ["arrD","depD"].forEach(k=>{const i=document.getElementById(k); if(!i) return;
-    const u=k.slice(0,3)+"U"+k[3];
-    i.onclick=()=>openCal(i,u); i.onfocus=()=>openCal(i,u);
-    i.oninput=()=>{ const t=dmyToIso(i.value); i.classList.toggle("bad",!t&&i.value.replace(/\D/g,"").length>=8); if(t){ state[u]=t; refreshTrip(); if(cal&&cal.u===u){ cal.m=t.slice(0,7); drawCal(); } } };
-    i.onblur=()=>{ const t=dmyToIso(i.value); if(t){ state[u]=t; refreshTrip(); } i.value=isoToDmy(state[u]); i.classList.remove("bad"); };});
-  /* saat: 24 saat biçimi (SS:DD); 1830 ya da 18.30 yazılınca 18:30 olur */
-  ["arrT","depT"].forEach(k=>{const i=document.getElementById(k); if(!i) return;
-    const norm=v=>{const d=v.replace(/\D/g,"").slice(0,4); if(d.length<3) return null; const hh=d.length===3?"0"+d[0]:d.slice(0,2), mm=d.length===3?d.slice(1):d.slice(2); return (+hh<24&&+mm<60)?hh+":"+mm:null;};
-    const u=k.slice(0,3)+"U"+k[3];
-    i.oninput=()=>{ const t=norm(i.value); i.classList.toggle("bad",!t&&i.value.replace(/\D/g,"").length>=3); if(t){ state[u]=t; refreshTrip(); } };
-    i.onblur=()=>{ const t=norm(i.value); if(t){ state[u]=t; refreshTrip(); } i.value=state[u]; i.classList.remove("bad"); };});
+  /* UTC ve yerel kutular birbirine bağlı: biri değişince diğeri meydanın saat dilimine göre güncellenir */
+  const normT=v=>{const d=v.replace(/\D/g,"").slice(0,4); if(d.length<3) return null; const hh=d.length===3?"0"+d[0]:d.slice(0,2), mm=d.length===3?d.slice(1):d.slice(2); return (+hh<24&&+mm<60)?hh+":"+mm:null;};
+  ["arr","dep"].forEach(k=>{
+    [[k+"D",k+"UD",0],[k+"LD",k+"D",1]].forEach(([id,u,loc])=>{ const i=document.getElementById(id); if(!i) return;
+      i.onclick=()=>openCal(i,u); i.onfocus=()=>openCal(i,u);
+      i.oninput=()=>{ const t=dmyToIso(i.value); i.classList.toggle("bad",!t&&i.value.replace(/\D/g,"").length>=8); if(t){ setTripVal(u,t); if(cal&&cal.u===u){ cal.m=t.slice(0,7); drawCal(); } } };
+      i.onblur=()=>{ const t=dmyToIso(i.value); if(t) setTripVal(u,t); i.value=isoToDmy(state[u]); i.classList.remove("bad"); }; });
+    [[k+"T",k+"UT"],[k+"LT",k+"T"]].forEach(([id,u])=>{ const i=document.getElementById(id); if(!i) return;
+      i.oninput=()=>{ const t=normT(i.value); i.classList.toggle("bad",!t&&i.value.replace(/\D/g,"").length>=3); if(t) setTripVal(u,t); };
+      i.onblur=()=>{ const t=normT(i.value); if(t) setTripVal(u,t); i.value=state[u]; i.classList.remove("bad"); }; });
+  });
   ["arrPax","depPax","arrCh","depCh"].forEach(k=>{const i=document.getElementById(k); if(!i) return;
     i.onblur=()=>{ if(i.value!==String(state[k])) i.value=state[k]; };
     i.oninput=()=>{const n=parseInt(i.value,10); if(isNaN(n)||n<0) return; state[k]=Math.min(n,99); refreshTrip();};});
@@ -1036,9 +1011,9 @@ function openCal(inp,u){ if(cal&&cal.u===u) return; closeCal(); const el=documen
 function drawCal(){ if(!cal) return; const [y,m]=cal.m.split("-").map(Number), start=(new Date(y,m-1,1).getDay()+6)%7, n=new Date(y,m,0).getDate(), sel=state[cal.u], td=dstr(new Date());
   let g=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(w=>`<span class="cal-w">${w}</span>`).join("")+"<span></span>".repeat(start);
   for(let d=1;d<=n;d++){ const iso=y+"-"+pad2(m)+"-"+pad2(d), wd=(start+d-1)%7; g+=`<button type="button" class="cal-d${wd>4?" we":""}${iso===td?" today":""}${iso===sel?" sel":""}" data-d="${iso}" aria-label="${d} ${MONTHS[m-1]} ${y}"${iso===sel?' aria-pressed="true"':""}>${d}</button>`; }
-  cal.el.innerHTML=`<div class="cal-h"><button type="button" data-mv="-1" aria-label="Previous month">‹</button><b>${MONTHS[m-1]} ${y}</b><button type="button" data-mv="1" aria-label="Next month">›</button></div><div class="cal-g">${g}</div><div class="cal-f">Date in UTC</div>`;
+  cal.el.innerHTML=`<div class="cal-h"><button type="button" data-mv="-1" aria-label="Previous month">‹</button><b>${MONTHS[m-1]} ${y}</b><button type="button" data-mv="1" aria-label="Next month">›</button></div><div class="cal-g">${g}</div><div class="cal-f">${cal.u[3]==="U"?"Date in UTC":"Local date"}</div>`;
   cal.el.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ const d=new Date(y,m-1+(+b.dataset.mv),1); cal.m=d.getFullYear()+"-"+pad2(d.getMonth()+1); drawCal(); });
-  cal.el.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{ state[cal.u]=b.dataset.d; cal.inp.value=isoToDmy(b.dataset.d); cal.inp.classList.remove("bad"); closeCal(); refreshTrip(); });
+  cal.el.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{ const u=cal.u, inp=cal.inp; inp.value=isoToDmy(b.dataset.d); inp.classList.remove("bad"); closeCal(); setTripVal(u,b.dataset.d); });
   const r=cal.inp.getBoundingClientRect(), w=cal.el.offsetWidth||272, h=cal.el.offsetHeight||300;
   cal.el.style.left=Math.max(8,Math.min(r.left,window.innerWidth-w-8))+"px";
   cal.el.style.top=(r.bottom+6+h>window.innerHeight&&r.top-6-h>0?r.top-6-h:r.bottom+6)+"px"; }
@@ -1046,9 +1021,17 @@ document.addEventListener("mousedown",e=>{ if(cal&&!cal.el.contains(e.target)&&e
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeCal(); });
 window.addEventListener("scroll",()=>{ if(cal) drawCal(); },true);
 window.addEventListener("resize",()=>{ if(cal) drawCal(); });
+/* u: arrUD/arrUT (UTC) ya da arrD/arrT (yerel); yerel girilirse UTC'ye çevrilip saklanır */
+function setTripVal(u,v){ const k=u.slice(0,3);
+  if(u[3]==="U"){ state[u]=v; }
+  else { const a=DATA.find(x=>x.icao===state.ap), D=u[3]==="D"?v:state[k+"D"], T=u[3]==="T"?v:state[k+"T"], r=localToUtc(D,T,tzOf(a));
+    if(r&&!(state[k+"NoTz"])){ state[k+"UD"]=r.D; state[k+"UT"]=r.T; } else { state[k+"UD"]=D; state[k+"UT"]=T; } }
+  refreshTrip(); }
 function refreshTrip(){
   const a=DATA.find(x=>x.icao===state.ap); if(a) syncLocal(a); applyTrip();
-  ["arr","dep"].forEach(k=>{ const e=document.getElementById(k+"Loc"); if(e) e.innerHTML=locHtml(k); });
+  const act=document.activeElement;
+  ["arr","dep"].forEach(k=>{ [[k+"D",isoToDmy(state[k+"UD"])],[k+"T",state[k+"UT"]],[k+"LD",isoToDmy(state[k+"D"])],[k+"LT",state[k+"T"]]].forEach(([id,v])=>{ const e=document.getElementById(id); if(e&&e!==act&&!(cal&&cal.inp===e&&act===e)) { e.value=v; e.classList.remove("bad"); } });
+    const l1=document.getElementById(k+"LDl"); if(l1) l1.textContent=locDateLbl(k); const l2=document.getElementById(k+"LTl"); if(l2) l2.textContent=locTimeLbl(k); });
   const el=document.getElementById("tripSum"); if(el&&a) el.innerHTML=tripSum(a);
   if(document.querySelector("#detail .cmp-body")) renderDetail(true);
 }
@@ -1079,6 +1062,7 @@ function renderPanel(){
   renderKpis(); renderList(); renderDetail(); renderOverview();
 }
 document.getElementById("q").oninput=e=>{state.q=e.target.value.trim();renderList();renderOverview();};
+document.getElementById("qa").oninput=e=>{state.qa=e.target.value.trim();renderAdminList();};
 
 /* =================== ADMIN =================== */
 function blankAirport(){
@@ -1110,9 +1094,11 @@ document.getElementById("newAp").onclick=startNew;
 function renderAdminList(){
   const el=document.getElementById("adminList");
   document.getElementById("newAp").disabled = canWrite===false;
-  const items=DATA.map(a=>`<div class="ap" role="listitem" tabindex="0" data-icao="${a.icao}" aria-current="${!ed.isNew&&ed.icao===a.icao}">
+  const qa=(state.qa||"").toLowerCase(), hit=a=>!qa||a.icao.toLowerCase().includes(qa)||a.handlers.some(h=>(h.name||"").toLowerCase().includes(qa));
+  const list=DATA.filter(hit); const hn=document.getElementById("adminHint"); if(hn) hn.textContent=qa?`${list.length} airports · select one to edit`:"Select an airport to edit";
+  const items=list.map(a=>`<div class="ap" role="listitem" tabindex="0" data-icao="${a.icao}" aria-current="${!ed.isNew&&ed.icao===a.icao}">
     <span class="code ${a.verified?"ver":""}">${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span><span class="meta">${a.handlers.length} handler · ${esc(a.currency||"?")}</span><span class="price upd">${a.updatedAt?fmtDate(a.updatedAt).split(" ").slice(0,2).join(" "):""}</span></div>`).join("");
-  el.innerHTML=(ed.isNew?`<div class="ap" aria-current="true"><span class="code">${esc(ed.draft.icao||"????")}</span><span class="meta">New airport · not saved</span><span></span></div>`:"")+(items||(ed.isNew?"":`<div class="empty">No airports yet.</div>`));
+  el.innerHTML=(ed.isNew?`<div class="ap" aria-current="true"><span class="code">${esc(ed.draft.icao||"????")}</span><span class="meta">New airport · not saved</span><span></span></div>`:"")+(items||(ed.isNew?"":`<div class="empty">${qa&&DATA.length?"No airport matches the search.":"No airports yet."}</div>`));
   el.querySelectorAll(".ap[data-icao]").forEach(r=>{r.onclick=()=>openAp(r.dataset.icao);r.onkeydown=e=>{if(e.key==="Enter"){openAp(r.dataset.icao);}};});
 }
 function fxNote(cur){
@@ -1315,8 +1301,8 @@ function cleanForSave(d){
   if(typeof o.verified==="string"&&o.verified.trim()) o.verified=o.verified.trim(); else delete o.verified;
   // drop services with empty names AND no values
   const keep=o.services.map((s,i)=>s.name.trim()!==""||o.handlers.some(h=>AC.some(c=>h.prices[c].items[i]!==null)));
-  o.services=o.services.filter((_,i)=>keep[i]).map(s=>({name:s.name.trim()||"Other",disb:!!s.airport,unit:UNITS[s.unit]?s.unit:"flight",airport:!!s.airport,...(s.info?{info:true}:{}),...(Array.isArray(s.nightOnly)?{nightOnly:s.nightOnly}:{}),...(s.nightAny?{nightAny:true}:{}),...(s.nightSc?{nightSc:true}:{}),...(s.nsLabel?{nsLabel:s.nsLabel}:{}),...(s.noDisb?{noDisb:true}:{}),...(s.pctNoSc?{pctNoSc:true}:{}),...(s.forceDisb?{forceDisb:true}:{}),...(s.opt?{opt:true}:{}),...(s.basket?{basket:true}:{}),...(s.tickDef?{tickDef:true}:{}),...(s.qty?{qty:true}:{}),...(Array.isArray(s.pctOn)&&s.pctOn.length?{pctOn:s.pctOn}:{}),...(Array.isArray(s.replaces)&&s.replaces.length?{replaces:s.replaces}:{}),...(s.gt?{gt:s.gt}:{}),...(isNum(s.gtHours)?{gtHours:s.gtHours}:{})}));
-  o.handlers=o.handlers.map(h=>{const prices={}; AC.forEach(c=>{const p=h.prices[c]; const items=p.items.filter((_,i)=>keep[i]); if(items.some(v=>v!==null)||isNum(p.disb)) prices[c]={disb:isNum(p.disb)?p.disb:null,items,...(isNum(p.nightFlat)?{nightFlat:p.nightFlat}:{})};}); return {name:h.name.trim()||"Unnamed handler",...(typeof h.note==="string"&&h.note.trim()?{note:h.note.trim()}:{}),weekend:h.weekend||0,night:h.night||0,weekendFlat:h.weekendFlat||0,nightFlat:h.nightFlat||0,disbBase:h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport",...(isNum(h.nightFrom)?{nightFrom:h.nightFrom}:{}),...(isNum(h.nightTo)?{nightTo:h.nightTo}:{}),...(Array.isArray(h.wkDays)&&h.wkDays.length?{wkDays:h.wkDays}:{}),...(h.nightLeg?{nightLeg:h.nightLeg}:{}),...(h.scOnce?{scOnce:true}:{}),...(h.wkOnNight?{wkOnNight:true}:{}),...(h.nightPerLeg?{nightPerLeg:true}:{}),...(h.wkPerLeg?{wkPerLeg:true}:{}),...(h.wkSunPm?{wkSunPm:h.wkSunPm}:{}),...(isNum(h.holidayFlat)?{holidayFlat:h.holidayFlat}:{}),...(h.holPerLeg?{holPerLeg:true}:{}),...(isNum(h.holiday)&&h.holiday>0?{holiday:h.holiday}:{}),...(isNum(h.overnight)&&h.overnight>0?{overnight:h.overnight}:{}),...(isNum(h.overnightFlat)&&h.overnightFlat>0?{overnightFlat:h.overnightFlat}:{}),...(Array.isArray(h.holidayOn)&&h.holidayOn.length?{holidayOn:h.holidayOn}:{}),...(isNum(h.otRate)&&h.otRate>0?{otRate:h.otRate}:{}),...(isNum(h.otFrom)?{otFrom:h.otFrom}:{}),...(isNum(h.otTo)?{otTo:h.otTo}:{}),...(isNum(h.ferryDisc)&&h.ferryDisc>0?{ferryDisc:h.ferryDisc}:{}),prices};});
+  o.services=o.services.filter((_,i)=>keep[i]).map(s=>({name:s.name.trim()||"Other",disb:!!s.airport,unit:UNITS[s.unit]?s.unit:"flight",airport:!!s.airport,...(s.info?{info:true}:{}),...(Array.isArray(s.nightOnly)?{nightOnly:s.nightOnly}:{}),...(s.nightAny?{nightAny:true}:{}),...(s.nightSc?{nightSc:true}:{}),...(s.nsLabel?{nsLabel:s.nsLabel}:{}),...(s.noDisb?{noDisb:true}:{}),...(s.pctNoSc?{pctNoSc:true}:{}),...(s.forceDisb?{forceDisb:true}:{}),...(s.opt?{opt:true}:{}),...(s.basket?{basket:true}:{}),...(s.tickDef?{tickDef:true}:{}),...(s.qty?{qty:true}:{}),...(s.qtyDef!==undefined?{qtyDef:s.qtyDef}:{}),...(Array.isArray(s.pctOn)&&s.pctOn.length?{pctOn:s.pctOn}:{}),...(Array.isArray(s.replaces)&&s.replaces.length?{replaces:s.replaces}:{}),...(s.gt?{gt:s.gt}:{}),...(isNum(s.gtHours)?{gtHours:s.gtHours}:{})}));
+  o.handlers=o.handlers.map(h=>{const prices={}; AC.forEach(c=>{const p=h.prices[c]; const items=p.items.filter((_,i)=>keep[i]); if(items.some(v=>v!==null)||isNum(p.disb)) prices[c]={disb:isNum(p.disb)?p.disb:null,items,...(isNum(p.nightFlat)?{nightFlat:p.nightFlat}:{}),...(isNum(p.disbFlat)?{disbFlat:p.disbFlat}:{}),...(p.upd&&typeof p.upd==="object"?{upd:p.upd}:{})};}); return {name:h.name.trim()||"Unnamed handler",...(typeof h.note==="string"&&h.note.trim()?{note:h.note.trim()}:{}),weekend:h.weekend||0,night:h.night||0,weekendFlat:h.weekendFlat||0,nightFlat:h.nightFlat||0,disbBase:h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport",...(isNum(h.nightFrom)?{nightFrom:h.nightFrom}:{}),...(isNum(h.nightTo)?{nightTo:h.nightTo}:{}),...(Array.isArray(h.wkDays)&&h.wkDays.length?{wkDays:h.wkDays}:{}),...(h.nightLeg?{nightLeg:h.nightLeg}:{}),...(h.scOnce?{scOnce:true}:{}),...(h.wkOnNight?{wkOnNight:true}:{}),...(h.nightPerLeg?{nightPerLeg:true}:{}),...(h.wkPerLeg?{wkPerLeg:true}:{}),...(h.wkSunPm?{wkSunPm:h.wkSunPm}:{}),...(isNum(h.holidayFlat)?{holidayFlat:h.holidayFlat}:{}),...(h.holPerLeg?{holPerLeg:true}:{}),...(isNum(h.holiday)&&h.holiday>0?{holiday:h.holiday}:{}),...(isNum(h.overnight)&&h.overnight>0?{overnight:h.overnight}:{}),...(isNum(h.overnightFlat)&&h.overnightFlat>0?{overnightFlat:h.overnightFlat}:{}),...(Array.isArray(h.holidayOn)&&h.holidayOn.length?{holidayOn:h.holidayOn}:{}),...(isNum(h.otRate)&&h.otRate>0?{otRate:h.otRate}:{}),...(isNum(h.otFrom)?{otFrom:h.otFrom}:{}),...(isNum(h.otTo)?{otTo:h.otTo}:{}),...(isNum(h.ferryDisc)&&h.ferryDisc>0?{ferryDisc:h.ferryDisc}:{}),...(h.extraSc&&isNum(h.extraSc.rate)?{extraSc:h.extraSc}:{}),prices};});
   delete o.weekend; delete o.night;
   o.updatedAt=new Date().toISOString();
   return o;
@@ -1372,7 +1358,7 @@ setTab(state.tab);
     if(state.tab==="admin"&&!ed.draft) renderEditor();
     if(state.tab==="admin"&&ed.isNew) refreshSavebar && document.getElementById("save") && refreshSavebar();
     if(state.tab==="admin") renderFx();
-  },err=>{ loadErr=(window.__hfpLoadErr||"Database connection lost. Reload the page."); renderPanel(); });
+  },err=>{ loadErr="Database connection lost. Reload the page."; renderPanel(); });
   DB.doc("settings/fuel").onSnapshot(s=>{ FUEL=s.exists?(s.data()||{}):{price:null,updatedAt:null}; if(!isNum(FUEL.price)) FUEL.price=null; showFuel(); },()=>{});
   DB.doc("settings/fx").onSnapshot(s=>{
     FX=s.exists?(s.data()||{rates:{}}):{rates:{}}; if(!FX.rates) FX.rates={};
@@ -1380,5 +1366,3 @@ setTab(state.tab);
   },()=>{});
 })();
 </script>
-</body>
-</html>
