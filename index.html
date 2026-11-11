@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ground Handling Price Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -375,7 +378,7 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .pk-btn{width:100%;min-width:150px;text-align:left;font:inherit;font-size:12.5px;line-height:1.35;padding:7px 9px;border-radius:8px;border:1px dashed var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .pk-btn:hover,.pk-btn.on{border-style:solid;border-color:var(--muted)}
 .pk-btn:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
-.pk-d{display:block;white-space:normal;max-width:220px;margin-left:auto;font-size:11px}
+.pk-d{display:block;white-space:normal;max-width:170px;margin-left:auto;font-size:10.5px;line-height:1.3;overflow-wrap:anywhere}
 .pk-ed{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;background:var(--bg)}
 .pk-h{font-size:14px;color:var(--muted)}
 .pk-h b{color:var(--ink)}
@@ -400,7 +403,11 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .cfm-box{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.25);max-width:420px;width:100%;padding:18px 18px 14px}
 .cfm-t{font-size:14px;line-height:1.45;margin-bottom:14px}
 .cfm-a{display:flex;justify-content:flex-end;gap:8px}
-.upd-calc{font-size:11px;color:var(--muted);font-family:var(--f-mono);margin-left:6px;white-space:nowrap}
+.upd-calc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:10.5px;line-height:1.3;color:var(--muted);font-family:var(--f-mono);white-space:normal;max-width:150px;margin:2px 0 0 auto;text-align:right;overflow-wrap:anywhere;cursor:help}
+.matrix-card td:first-child{white-space:normal;min-width:150px;max-width:260px}
+.matrix-card .pk-d{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;cursor:help}
+.matrix-card td{vertical-align:top}
+.matrix-card .sc-chip{white-space:normal;display:inline-block;max-width:170px;text-align:right;line-height:1.35}
 .svc-nm{display:inline-flex;flex-direction:column;vertical-align:middle;line-height:1.25}
 .svc-nm small{font-size:12px;color:var(--muted)}
 </style>
@@ -478,7 +485,7 @@ const _today=new Date(), _tomorrow=new Date(_today.getTime()+864e5);
 let state={ac:"GLEX", ap:null, q:"", wk:false, nt:false, tab:"panel", arrD:dstr(_today), arrT:"10:00", depD:dstr(_tomorrow), depT:"10:00", arrPax:5, depPax:5, arrCh:0, depCh:0, gpuH:null, days:1};
 /* geliş/kalkış UTC girilir (arrUD/arrUT, depUD/depUT); meydanın saat dilimiyle (yaz/kış saati dahil) yerel saate çevrilip arrD/arrT, depD/depT'ye yazılır. Gece, hafta sonu, tatil ve parking hesapları yerel saatle çalışır. Saat dilimi: meydan verisinde tz alanı, yoksa aşağıdaki ICAO listesi */
 state.arrUD=state.arrD; state.arrUT=state.arrT; state.depUD=state.depD; state.depUT=state.depT;
-const TZ={"BIKF":"Atlantic/Reykjavik","DGAA":"Africa/Accra","DNAA":"Africa/Lagos","DNMM":"Africa/Lagos","EBBR":"Europe/Brussels","EDDB":"Europe/Berlin","EDSB":"Europe/Berlin","EETN":"Europe/Tallinn","EGGW":"Europe/London","EGKB":"Europe/London","EGLF":"Europe/London","EGSS":"Europe/London","EHGG":"Europe/Amsterdam","EINN":"Europe/Dublin","EPWA":"Europe/Warsaw","EYVI":"Europe/Vilnius","FACT":"Africa/Johannesburg","FCBB":"Africa/Brazzaville","FIMP":"Indian/Mauritius","FPST":"Africa/Sao_Tome","FSIA":"Indian/Mahe","FYWH":"Africa/Windhoek","GMME":"Africa/Casablanca","GMMN":"Africa/Casablanca","GMTN":"Africa/Casablanca","GOBD":"Africa/Dakar","HAAB":"Africa/Addis_Ababa","HBBA":"Africa/Bujumbura","HECA":"Africa/Cairo","HLLB":"Africa/Tripoli","HRYR":"Africa/Kigali","KEWR":"America/New_York","KFOK":"America/New_York","KIAD":"America/New_York","KJFK":"America/New_York","KOPF":"America/New_York","KTEB":"America/New_York","LCLK":"Asia/Nicosia","LEBL":"Europe/Madrid","LEIB":"Europe/Madrid","LEMD":"Europe/Madrid","LEMG":"Europe/Madrid","LEPA":"Europe/Madrid","LFBO":"Europe/Paris","LFLL":"Europe/Paris","LFMN":"Europe/Paris","LFOK":"Europe/Paris","LFPB":"Europe/Paris","LGAV":"Europe/Athens","LGMK":"Europe/Athens","LIBD":"Europe/Rome","LIMJ":"Europe/Rome","LIML":"Europe/Rome","LIRA":"Europe/Rome","LIRN":"Europe/Rome","LLBG":"Asia/Jerusalem","LOWW":"Europe/Vienna","LSGG":"Europe/Zurich","LSZH":"Europe/Zurich","LTAI":"Europe/Istanbul","LTBA":"Europe/Istanbul","LTBS":"Europe/Istanbul","LTFE":"Europe/Istanbul","LTFM":"Europe/Istanbul","LUKK":"Europe/Chisinau","LYBE":"Europe/Belgrade","OBBI":"Asia/Bahrain","OEJN":"Asia/Riyadh","OERK":"Asia/Riyadh","OJAM":"Asia/Amman","OKKK":"Asia/Kuwait","OLBA":"Asia/Beirut","OOMS":"Asia/Muscat","ORBI":"Asia/Baghdad","ORER":"Asia/Baghdad","OSDI":"Asia/Damascus","OTBD":"Asia/Qatar","RJBB":"Asia/Tokyo","RJGG":"Asia/Tokyo","RKSS":"Asia/Seoul","SAEZ":"America/Argentina/Buenos_Aires","SBGL":"America/Sao_Paulo","SGAS":"America/Asuncion","SKBO":"America/Bogota","SKCL":"America/Bogota","TDPD":"America/Dominica","TGPY":"America/Grenada","TNCC":"America/Curacao","UAAA":"Asia/Almaty","UACC":"Asia/Almaty","UBBB":"Asia/Baku","UCFM":"Asia/Bishkek","UDYZ":"Asia/Yerevan","UGSB":"Asia/Tbilisi","UTAA":"Asia/Ashgabat","UTAM":"Asia/Ashgabat","UTDD":"Asia/Dushanbe","UTDL":"Asia/Dushanbe","UTTT":"Asia/Tashkent","VRDA":"Indian/Maldives","VRMM":"Indian/Maldives","VTBD":"Asia/Bangkok","VTBU":"Asia/Bangkok","VVCR":"Asia/Ho_Chi_Minh","VVTS":"Asia/Ho_Chi_Minh","ZMCK":"Asia/Ulaanbaatar","ZSPD":"Asia/Shanghai"};
+const TZ={"BIKF":"Atlantic/Reykjavik","DGAA":"Africa/Accra","DNAA":"Africa/Lagos","DNMM":"Africa/Lagos","EBBR":"Europe/Brussels","EDDB":"Europe/Berlin","EDSB":"Europe/Berlin","EETN":"Europe/Tallinn","EGGW":"Europe/London","EGKB":"Europe/London","EGLF":"Europe/London","EGSS":"Europe/London","EHGG":"Europe/Amsterdam","EINN":"Europe/Dublin","EPWA":"Europe/Warsaw","EYVI":"Europe/Vilnius","FACT":"Africa/Johannesburg","FCBB":"Africa/Brazzaville","FIMP":"Indian/Mauritius","FPST":"Africa/Sao_Tome","FSIA":"Indian/Mahe","FYWH":"Africa/Windhoek","GMME":"Africa/Casablanca","GMMN":"Africa/Casablanca","GMTN":"Africa/Casablanca","GOBD":"Africa/Dakar","HAAB":"Africa/Addis_Ababa","HBBA":"Africa/Bujumbura","HECA":"Africa/Cairo","HLLB":"Africa/Tripoli","HRYR":"Africa/Kigali","KEWR":"America/New_York","KFOK":"America/New_York","KIAD":"America/New_York","KJFK":"America/New_York","KOPF":"America/New_York","KTEB":"America/New_York","LCLK":"Asia/Nicosia","LEBL":"Europe/Madrid","LEIB":"Europe/Madrid","LEMD":"Europe/Madrid","LEMG":"Europe/Madrid","LEPA":"Europe/Madrid","LFBO":"Europe/Paris","LFLL":"Europe/Paris","LFMN":"Europe/Paris","LFOK":"Europe/Paris","LFPB":"Europe/Paris","LGAV":"Europe/Athens","LGMK":"Europe/Athens","LIBD":"Europe/Rome","LIMJ":"Europe/Rome","LIML":"Europe/Rome","LIRA":"Europe/Rome","LIRN":"Europe/Rome","LLBG":"Asia/Jerusalem","LOWW":"Europe/Vienna","LSGG":"Europe/Zurich","LSZH":"Europe/Zurich","LTAI":"Europe/Istanbul","LTBA":"Europe/Istanbul","LTBS":"Europe/Istanbul","LTFE":"Europe/Istanbul","LTFM":"Europe/Istanbul","LUKK":"Europe/Chisinau","LYBE":"Europe/Belgrade","OBBI":"Asia/Bahrain","OEJN":"Asia/Riyadh","OERK":"Asia/Riyadh","OJAM":"Asia/Amman","OKKK":"Asia/Kuwait","OLBA":"Asia/Beirut","OOMS":"Asia/Muscat","ORBI":"Asia/Baghdad","ORER":"Asia/Baghdad","OSDI":"Asia/Damascus","OTBD":"Asia/Qatar","RJBB":"Asia/Tokyo","RJGG":"Asia/Tokyo","RKSS":"Asia/Seoul","SAEZ":"America/Argentina/Buenos_Aires","SBGL":"America/Sao_Paulo","SGAS":"America/Asuncion","SKBO":"America/Bogota","SKCL":"America/Bogota","TDPD":"America/Dominica","TGPY":"America/Grenada","TNCC":"America/Curacao","UAAA":"Asia/Almaty","UACC":"Asia/Almaty","UBBB":"Asia/Baku","UCFM":"Asia/Bishkek","UDYZ":"Asia/Yerevan","UGSB":"Asia/Tbilisi","UTAA":"Asia/Ashgabat","UTAM":"Asia/Ashgabat","UTDD":"Asia/Dushanbe","UTDL":"Asia/Dushanbe","UTTT":"Asia/Tashkent","VRDA":"Indian/Maldives","VRMM":"Indian/Maldives","VDTI":"Asia/Phnom_Penh","VTBD":"Asia/Bangkok","VTBU":"Asia/Bangkok","VVCR":"Asia/Ho_Chi_Minh","VVTS":"Asia/Ho_Chi_Minh","ZMCK":"Asia/Ulaanbaatar","ZSPD":"Asia/Shanghai"};
 const tzOf=a=>(a&&a.tz)||TZ[String(a&&a.icao||"").toUpperCase()]||null;
 function utcToLocal(D,T,tz){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(D||""), t=/^(\d{1,2}):(\d{2})$/.exec(T||""); if(!m||!t) return null;
   const ms=Date.UTC(+m[1],+m[2]-1,+m[3],+t[1],+t[2]); if(!tz) return {D,T,off:0,none:true};
@@ -557,13 +564,20 @@ function pkDesc(v,cur){
 /* paxt: {pxt:1, exact:{"2":975,"7":2435}, def:430} — tabloda olan yolcu sayısında o toplam, yoksa yolcu başı def */
 const pxtTotal=(s,v)=>{ if(!v||typeof v!=="object"||!v.pxt) return null; const n=paxFor(s); if(!n) return isNum(v.exact&&v.exact["0"])?v.exact["0"]:0; const e=v.exact&&v.exact[String(n)]; return isNum(e)?e:(isNum(v.def)?v.def*n:null); };
 /* nightFree:[başlangıç,bitiş] — parking kuralında her gece bu yerel saatler ücretsiz; ücretli süre = kalış − bu aralıklarla çakışan süre (ör. LGAV Jetset 00:00–05:00) */
-function pkHours(v){ const t=trip(); if(!t.ok) return 24; if(!isPk(v)||!Array.isArray(v.nightFree)) return t.hrs;
+/* hrWin {from,to,part}: parking split by local time of day (e.g. VDTI day 06:00–03:00 / night 03:00–06:00). Billed hours = started hours of the stay; "out" (day) row = whole hours outside the window, "in" (night) row = the rest */
+function winHrs(f,to){ const a=new Date(state.arrD+"T"+(state.arrT||"00:00")), d=new Date(state.depD+"T"+(state.depT||"00:00")); let x=0; const day=new Date(a); day.setHours(0,0,0,0); day.setDate(day.getDate()-1);
+  while(day<d){ const ws=new Date(day), we=new Date(day); ws.setHours(f,0,0,0); we.setHours(to,0,0,0); if(we<=ws) we.setDate(we.getDate()+1); const s=Math.max(ws,a), e=Math.min(we,d); if(e>s) x+=(e-s)/36e5; day.setDate(day.getDate()+1); } return x; }
+function pkHours(v){ const t=trip(); if(!t.ok) return 24;
+  if(isPk(v)&&v.hrWin&&isNum(v.hrWin.from)&&isNum(v.hrWin.to)){ const out=Math.floor(Math.max(0,t.hrs-winHrs(v.hrWin.from,v.hrWin.to))+1e-9), tot=Math.ceil(t.hrs-1e-9); return v.hrWin.part==="in"?Math.max(0,tot-out):out; }
+  if(!isPk(v)||!Array.isArray(v.nightFree)) return t.hrs;
   const a=new Date(state.arrD+"T"+(state.arrT||"00:00")), d=new Date(state.depD+"T"+(state.depT||"00:00")), f=v.nightFree[0], to=v.nightFree[1];
   let free=0; const day=new Date(a); day.setHours(0,0,0,0); day.setDate(day.getDate()-1);
   while(day<d){ const ws=new Date(day), we=new Date(day); ws.setHours(f,0,0,0); we.setHours(to,0,0,0); if(we<=ws) we.setDate(we.getDate()+1);
     const s=Math.max(ws,a), e=Math.min(we,d); if(e>s) free+=(e-s)/36e5; day.setDate(day.getDate()+1); }
   return Math.max(0,t.hrs-free); }
-function amt(s,v){ if(s&&s.unit==="pct") return null; if(s&&s.unit==="paxt") return pxtTotal(s,v); if(s&&s.unit==="day") return pkCost(v,pkHours(v)); return isNum(v)?v*mult(s):null; }
+/* hrWin.price: two hourly rates in one parking row (e.g. VDTI AFS day 16.3632 / night 03:00–06:00 8.39125) */
+function pkWin2(v){ const t=trip(); if(!t.ok) return Math.round(24*v.price*100)/100; const out=Math.floor(Math.max(0,t.hrs-winHrs(v.hrWin.from,v.hrWin.to))+1e-9), tot=Math.ceil(t.hrs-1e-9); return Math.round((out*(v.price||0)+Math.max(0,tot-out)*v.hrWin.price)*100)/100; }
+function amt(s,v){ if(s&&s.unit==="pct") return null; if(s&&s.unit==="paxt") return pxtTotal(s,v); if(s&&s.unit==="day"&&isPk(v)&&v.hrWin&&isNum(v.hrWin.price)) return pkWin2(v); if(s&&s.unit==="day") return pkCost(v,pkHours(v)); return isNum(v)?v*mult(s):null; }
 const paxIsArr=s=>/arriv|inbound|disembark|incoming/i.test(s&&s.name||"");
 /* çocuk/yetişkin: adında child geçen kalem çocuk sayısıyla, adult geçen kalem (toplam − çocuk) ile; diğerleri toplam yolcuyla */
 const paxKind=s=>/\bchild|\binfant|çocuk/i.test(s&&s.name||"")?"ch":/\badult|yetişkin/i.test(s&&s.name||"")?"ad":"";
@@ -644,8 +658,8 @@ function handlingIdx(a){ return a.services.findIndex(s=>/handling (fee|service c
 function quoteHasData(p){ return p && p.items && p.items.some(v=>(isNum(v)&&v>0)||isPk(v)||(typeof v==="string"&&v.trim()!=="")); }
 function isNoted(a,p){ const i=handlingIdx(a); return i>=0&&p&&typeof p.items[i]==="string"&&p.items[i].trim()!==""; }
 const disbAll=h=>!!(h&&(h.disbBase==="all"||h.disbBase==="allxs"));
-/* disbursement bu kaleme uygulanır mı (allxs: supervision hariç tüm fatura) */
-const disbOn=(h,s)=>!!s&&!s.noDisb&&(!!s.airport||!!s.forceDisb||(disbAll(h)&&!(h.disbBase==="allxs"&&/supervision/i.test(s.name||""))));
+/* disbursement bu kaleme uygulanır mı (allxs: supervision hariç tüm fatura; handler noDisbOn: bu handler için disbursement uygulanmayan kalemler, ör. LEMD AviaVIP security filter; disbAlsoOn: bu handler için disbursement uygulanan handling kalemleri, ör. LEMD Universal / United / MadSupport FBO management) */
+const disbOn=(h,s)=>!!s&&!s.noDisb&&!(h&&Array.isArray(h.noDisbOn)&&h.noDisbOn.includes(s.name))&&(!!s.airport||!!s.forceDisb||!!(h&&Array.isArray(h.disbAlsoOn)&&h.disbAlsoOn.includes(s.name))||(disbAll(h)&&!(h.disbBase==="allxs"&&/supervision/i.test(s.name||""))));
 /* karşılaştırma sepeti: VIP/CIP içeren tüm hizmetler, handling fee, supervision, pushback/towing, GPU, tuvalet, su, çöp, slot/PPR, belt, ASU, ACU, VIP lounge/terminal + tüm airport fees */
 const BASKET=/\bvip\b|\bcip\b|handling|supervision|admin|permit|arrangement|fbo|push ?back|gpu|ground power|toilet|lav|water|trash|waste|garbage|litter|slot|ppr|conveyor|belt|\basu\b|air start|\bacu\b|air cond|lounge|terminal/i;
 const AIRPORTLIKE=/follow.?me|parking|security|landing(?!\s*permit)|navigation|\batc\b|passenger (fee|tax)|pax tax|airport (fee|charge|tax)|infrastructure|noise|lighting/i;
@@ -716,12 +730,17 @@ function xscAmt(a,p,h){ if(!h||!h.extraSc||!isNum(h.extraSc.rate)||!xscOn(a)) re
 function ferAmt(a,p,h){ if(!h||!h.ferryDisc||!ferAuto()||!ferOn(a)) return 0; return Math.round(handlingFee(a,p)*h.ferryDisc*100)/100; }
 /* nightSc: havalimanı/hizmet gece farkı satırları (ör. UDYZ landing %20, check-in %30) hizmet tablosunda görünmez; kendi nightOnly saatine göre Surcharge'daki 'Gece' satırına eklenir ve aynı 'uygula' kutusuyla kaldırılır. Handler disbursement'ı havalimanı ücretlerine uyguluyorsa bu tutara da uygulanır */
 /* gece farkı satırları Surcharge'da ayrı ayrı (aynı nsLabel'lı geliş/kalkış kalemleri tek satır); 'Gece' satırındaki uygula kutusuna bağlı */
-function nsRows(a,qs,cur){ const labs=[...new Set(a.services.filter(isNs).map(s=>s.nsLabel||s.name))]; const off=ntMan(a)===false;
+/* each night row (Lighting, Supervision …) has its own tick: automatic when the time condition is met for any handler, can be changed; kept for the same date/time */
+const nsLab=s=>s.nsLabel||s.name;
+const nsMan=(a,L)=>{ const o=state.nso&&a&&state.nso[a.icao+"|"+L]; return o&&o.k===ntKey()?!!o.v:null; };
+const nsOn=(a,L)=>nsMan(a,L)!==false;
+const nsAuto=(a,qs,L)=>qs.some(c=>c.p&&a.services.some((s,i)=>isNs(s)&&nsLab(s)===L&&(lineAmt(a,i,c.p.items[i])||0)>0));
+function nsRows(a,qs,cur){ const labs=[...new Set(a.services.filter(isNs).map(s=>s.nsLabel||s.name))]; const off0=ntMan(a)===false;
   return labs.map(L=>{ const ids=a.services.map((s,i)=>i).filter(i=>isNs(a.services[i])&&(a.services[i].nsLabel||a.services[i].name)===L), s0=a.services[ids[0]], win=Array.isArray(s0.nightOnly)?`${pad2(s0.nightOnly[0])}:00–${pad2(s0.nightOnly[1])}:00`:"";
-    return `<tr class="sc-row"><td>Night · ${esc(L)}</td>${qs.map(c=>{ const has=ids.some(i=>c.p&&isNum(c.p.items[i])&&c.p.items[i]>0); if(!has) return `<td><span class="sc-chip none" style="float:right">None</span></td>`;
+    const off=off0||!nsOn(a,L), au=nsAuto(a,qs,L); return `<tr class="sc-row"><td>Night · ${esc(L)}<span class="tick-w"><label class="tick-l" title="Ticked automatically when the time condition is met; you can change it"><input type="checkbox" data-ns="${esc(L)}" ${au&&!off?"checked":""} aria-label="Apply ${esc(L)}"> apply</label></span></td>${qs.map(c=>{ const has=ids.some(i=>c.p&&isNum(c.p.items[i])&&c.p.items[i]>0); if(!has) return `<td><span class="sc-chip none" style="float:right">None</span></td>`;
       let x=0; if(!off) ids.forEach(i=>{ const v=lineAmt(a,i,c.p.items[i]); if(v!==null) x+=v*(!disbAll(c.h)&&disbOn(c.h,a.services[i])?1+(c.p.disb||0):1); });
-      return `<td class="num"><span class="sc-chip ${x>0?"on":""}">Yes · ${win}${a.services[ids[0]].unit==="pax"?" · per pax":" · per night movement"}</span>${x>0?`<span class="usd">+${fmt(Math.round(x*100)/100,cur)}</span>`:""}</td>`; }).join("")}</tr>`; }).join(""); }
-function nsAmt(a,p,h){ if(!p||ntMan(a)===false) return 0; let x=0; a.services.forEach((s,i)=>{ if(!isNs(s)) return; const v=lineAmt(a,i,p.items[i]); if(v===null) return; x+=v*(!disbAll(h)&&disbOn(h,s)?1+(p.disb||0):1); }); return Math.round(x*100)/100; }
+      return `<td class="num"><span class="sc-chip ${x>0?"on":""}">Yes · ${win}${a.services[ids[0]].unit==="pax"?" · per pax":a.services[ids[0]].nightAny?" · once per flight":" · per night movement"}</span>${x>0?`<span class="usd">+${fmt(Math.round(x*100)/100,cur)}</span>`:""}</td>`; }).join("")}</tr>`; }).join(""); }
+function nsAmt(a,p,h){ if(!p||ntMan(a)===false) return 0; let x=0; a.services.forEach((s,i)=>{ if(!isNs(s)||!nsOn(a,nsLab(s))) return; const v=lineAmt(a,i,p.items[i]); if(v===null) return; x+=v*(!disbAll(h)&&disbOn(h,s)?1+(p.disb||0):1); }); return Math.round(x*100)/100; }
 const nsLbl=(a,p)=>a.services.filter((s,i)=>isNs(s)&&p&&isNum(p.items[i])&&p.items[i]>0).map(s=>s.nsLabel||s.name).join(" · ");
 /* mesai dışı (overtime): handler'da otRate (saat başı) ve mesai saatleri otFrom–otTo; geliş ve kalkışın mesai dışında kalan süresi, her hareket ayrı, başlayan saat yukarı yuvarlanır (ör. TDPD 05:05 geliş, mesai 08:00 → 3 saat). Saat kutusu elle değiştirilebilir; aynı tarih/saat için geçerli kalır */
 const otHasA=(qs)=>qs.some(c=>c.h&&c.h.otRate);
@@ -873,7 +892,7 @@ const updDmy=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d||""); return m?m[3]+"
 function updCell(td,c,sv,v){
   if(v===null||v===undefined||typeof td!=="string"||td.indexOf('class="na"')>=0) return td;
   const u=c&&c.p&&c.p.upd&&c.p.upd[sv.name]; if(!u) return td;
-  if(u.calc){ const o=td.indexOf(">"), e=o<0?-1:td.indexOf("<",o+1); if(e>0) td=td.slice(0,e)+`<span class="upd-calc">${esc(u.calc)}</span>`+td.slice(e); }
+  if(u.calc){ const o=td.indexOf(">"), e=o<0?-1:td.indexOf("<",o+1); if(e>0) td=td.slice(0,e)+`<span class="upd-calc" title="${esc(u.calc)}">${esc(u.calc)}</span>`+td.slice(e); }
   if(!u.d) return td;
   const pv=u.prev!==undefined&&u.prev!==null?(isNum(u.prev)?fmt(u.prev):String(u.prev)):null;
   const tip=[u.a?"Approximate (latest source document of this handler)":"Price confirmed by document",u.src?"Source: "+u.src:"",pv?"Previous: "+pv+(u.pd?" ("+updDmy(u.pd)+")":""):""].filter(Boolean).join(" · ");
@@ -936,8 +955,8 @@ function renderDetail(partial){
       const am=vals.map(v=>(isNum(v)||isPk(v))?amt(sv,v):null), ns=am.filter(x=>x!==null&&x>0), mnp=ns.length>1?Math.min(...ns):null;
       return `<tr><td>${sv.sub?`<span class="svc-nm">${esc(sv.name)}<small>${esc(sv.sub)}</small></span>`:esc(sv.name)}${inBasket(sv)?`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`} <span class="pill mute">${trip().ok?fmtStay(trip().hrs):"24 h"} stay</span></td>${vals.map((v,k)=>updCell(((v,k)=>{
         if(v===null||v===undefined) return `<td class="na">—</td>`;
-        if(am[k]===null) return `<td class="txt">${esc(/^incl/i.test(v)?"Included":/^free/i.test(String(v).trim())?"Free":v)}</td>`;
-        return `<td class="num ${am[k]===mnp&&ns.some(n=>n!==mnp)?"min":""}">${am[k]===0?"0":fmt(am[k])}${PK_SHORT.includes(a.icao)?"":`<span class="usd pk-d">${esc(pkDesc(v))}</span>`}</td>`;})(v,k),qs[k],sv,v)).join("")}</tr>`;
+        if(am[k]===null) return `<td class="txt">${esc(/^incl/i.test(v)||/^free/i.test(String(v).trim())?"Included":v)}</td>`;
+        return `<td class="num ${am[k]===mnp&&ns.some(n=>n!==mnp)?"min":""}">${am[k]===0?"0":fmt(am[k])}${PK_SHORT.includes(a.icao)?"":`<span class="usd pk-d" title="${esc(pkDesc(v))}">${esc(pkDesc(v))}</span>`}</td>`;})(v,k),qs[k],sv,v)).join("")}</tr>`;
     }
     /* hücrede bu uçuşun tutarı (birim × yolcu / crew / saat / adet); birim fiyat altında küçük */
     const lt=v=>{const x=isNum(v)?lineAmt(a,i,v):null; return x===null?v:x;};
@@ -949,7 +968,7 @@ function renderDetail(partial){
       if(sv.unit==="paxt"){ const x=pxtTotal(sv,v); return x===null?`<td class="na">—</td>`:`<td class="num">${fmt(x)}<span class="usd">${v.exact&&v.exact[String(paxFor(sv))]!==undefined?"from tariff":"per pax "+fmt(v.def)}</span></td>`; }
       if(sv.unit==="pct"){ const r=pctVal(v); if(r===null) return `<td class="txt">${esc(v)}</td>`; const c=qs[k], x=inCmp(a,i)?pctAmt(a,c.p,c.h,i):0; return `<td class="num">%${Math.round(r*10000)/100}${x?`<span class="usd">+${fmt(x,cur)}</span>`:""}</td>`; }
       if(isFf(v)){ const x=lineAmt(a,i,v); return x>0?`<td class="num">${fmt(x)}<span class="usd">${isGpu(sv)?"first hour included · next hour "+fmt(v.price):"first included · extra unit "+fmt(v.price)}</span></td>`:`<td class="txt">Included<span class="usd">${isGpu(sv)?"first hour included · next hour "+fmt(v.price):"extra: unit "+fmt(v.price)}</span></td>`; }
-      if(!isNum(v)) return `<td class="txt">${esc(/^incl/i.test(v)?"Included":/^free/i.test(v.trim())?"Free":v)}</td>`;
+      if(!isNum(v)) return `<td class="txt">${esc(/^incl/i.test(v)||/^free/i.test(v.trim())?"Included":v)}</td>`;
       if(v===0) return `<td class="txt">0</td>`;
       if(repOff(a,qs[k].p,i)) return `<td class="num" style="color:var(--muted)"><s>${fmt(v)}</s><span class="usd">replaced by Royal Terminal</span></td>`;
       const x=lt(v), dif=Math.abs(x-v)>1e-9;
@@ -994,6 +1013,7 @@ function bindQty(){
   document.querySelectorAll("[data-xsc]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.xsc=state.xsc||{}; state.xsc[a.icao]=i.checked; laterRefresh();}; });
   document.querySelectorAll("[data-fer]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.fer=state.fer||{}; state.fer[a.icao]={v:i.checked,k:ferKey()}; laterRefresh();}; });
   document.querySelectorAll("[data-otq]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; const n=parseInt(i.value,10); if(isNaN(n)||n<0) return; state.otq=state.otq||{}; state.otq[a.icao]={v:Math.min(n,48),k:ntKey()}; laterRefresh();}; });
+  document.querySelectorAll("[data-ns]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.nso=state.nso||{}; state.nso[a.icao+"|"+i.dataset.ns]={v:i.checked,k:ntKey()}; laterRefresh();}; });
   document.querySelectorAll("[data-hol]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.hol=state.hol||{}; state.hol[a.icao]={v:i.checked,k:holKey()}; laterRefresh();}; });
   document.querySelectorAll("[data-off]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.off=state.off||{}; const k=a.icao+":"+i.dataset.off; if(i.checked) delete state.off[k]; else state.off[k]=true; laterRefresh();}; });
   document.querySelectorAll("[data-tick]").forEach(i=>{ i.onchange=()=>{const a=DATA.find(x=>x.icao===state.ap); if(!a) return; state.tick=state.tick||{}; const k=a.icao+":"+i.dataset.tick; state.tick[k]=i.checked; laterRefresh();}; });
@@ -1198,7 +1218,7 @@ function renderEditor(){
           ${d.services.map((s,i)=>`<tr><td>${esc(s.name||"(unnamed item)")}${s.unit==="pax"?` <span class="pill mute">per pax</span>`:s.unit==="day"?` <span class="pill mute">by length of stay</span>`:s.unit==="crew"?` <span class="pill mute">per crew ×${CREW}</span>`:""}${s.airport?` <span class="pill warn">airport fee</span>`:""}</td>${AC.map(c=>{const v=h.prices[c].items[i];if(s.unit==="day"&&(v===null||isNum(v)||isPk(v))) return `<td><button type="button" class="pk-btn ${ed.pk&&ed.pk.c===c&&ed.pk.i===i?"on":""}" id="pk-${c}-${i}" data-pkc="${c}" data-pki="${i}" aria-label="Edit rule ${esc(s.name)} ${c}">${v===null?"+ Enter rule":esc(PK_SHORT.includes(d.icao)?pkShort(v,d.currency):pkDesc(v,d.currency))}</button></td>`;return `<td><input class="cell-in ${v!==null&&!isNum(v)?"txtv":""}" id="c-${c}-${i}" data-c="${c}" data-i="${i}" value="${esc(cellStr(v))}" placeholder="—" aria-label="${esc(s.name)} ${c}"></td>`;}).join("")}</tr>`).join("")}
           <tr class="sum"><td>Total (normal hours)</td>${AC.map(c=>`<td class="num" id="tot-${c}">${totCell(d,h.prices[c],h)}</td>`).join("")}</tr>
         </tbody></table></div>
-        <div class="foot" style="padding:0">Enter a number, or a note such as “Included” or “Free”. A type left empty counts as no quote. For per-pax items enter the price per person. For per-crew items enter the price per person (always counted as 3 crew). Click a parking cell to enter its rule. The total uses the arrival and departure entered in the Panel tab (now ${state.arrPax} arrival and ${state.depPax} departure pax, ${trip().ok?fmtStay(trip().hrs):"24 h"} stay).</div>${pkEditor(d,h)}`:""}
+        <div class="foot" style="padding:0">Enter a number, or “Included” (included in the price or free of charge). A type left empty (—) means no price shared. For per-pax items enter the price per person. For per-crew items enter the price per person (always counted as 3 crew). Click a parking cell to enter its rule. The total uses the arrival and departure entered in the Panel tab (now ${state.arrPax} arrival and ${state.depPax} departure pax, ${trip().ok?fmtStay(trip().hrs):"24 h"} stay).</div>${pkEditor(d,h)}`:""}
     </div></section>`;
 
   const isDirty=dirty(), canSave=isDirty&&!ed.saving&&(!ed.isNew||(/^[A-Z]{4}$/.test(d.icao)&&!icaoBad));
@@ -1379,7 +1399,14 @@ setTab(state.tab);
     [DB,USER]=await Promise.all([window.claude?.use?.("db")??null, window.claude?.use?.("user")??null]);
   }catch(e){ DB=null; }
   if(USER){ try{ const c=await USER.can("data.write"); canWrite = c===null||c===undefined ? null : !!c; }catch(e){} }
-  if(!DB){ loadErr="The database is not available in this view. Open the page on claude.ai while signed in."; renderPanel(); if(state.tab==="admin") renderAdmin(); return; }
+  if(!DB){
+    /* standalone copy (e.g. GitHub Pages): read-only data from handling-database.json next to this page */
+    try{ const r=await fetch("handling-database.json",{cache:"no-store"}); if(!r.ok) throw new Error(r.status); const j=await r.json();
+      const ap=j.airports||{}; DATA=(Array.isArray(ap)?ap:Object.values(ap)).filter(a=>a&&a.icao).map(a=>({...a,handlers:a.handlers||[],services:a.services||[]})).sort((x,y)=>x.icao.localeCompare(y.icao));
+      const st=j.settings||{}; FX=st.fx||{rates:{}}; if(!FX.rates) FX.rates={}; FUEL=st.fuel||{price:null,updatedAt:null}; if(!isNum(FUEL.price)) FUEL.price=null;
+      canWrite=false; loaded=true; loadErr=null; renderPanel(); showFuel(); if(state.tab==="admin") renderAdmin(); return;
+    }catch(e){}
+    loadErr="The database is not available in this view. Open the page on claude.ai while signed in, or put handling-database.json next to this page and open it from a web server."; renderPanel(); if(state.tab==="admin") renderAdmin(); return; }
   DB.collection("airports").onSnapshot(snap=>{
     DATA=snap.docs.map(d=>d.data()).filter(a=>a&&a.icao).map(a=>({...a,handlers:a.handlers||[],services:a.services||[]})).sort((x,y)=>x.icao.localeCompare(y.icao));
     loaded=true; loadErr=null;
