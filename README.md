@@ -1,22 +1,44 @@
-# Ground Handling Price Database (GitHub Pages kopyası)
+# Ground Handling Price Database (GitHub Pages)
 
-Bu repoda her zaman yalnızca şu iki dosya bulunur. Yeni sürüm geldiğinde **ikisinin de üzerine yazılır**, yeni dosya veya klasör açılmaz:
+Site: https://sacredriches.github.io/handling/
+
+Panel sekmesi görüntüleme, Manage sekmesi düzenleme içindir. Veri Firebase'de (Firestore) tutulur: bir kişinin kaydı herkesin ekranına anında gelir. Kayıt için sağ alttan **Sign in to edit** ile Google hesabıyla giriş yapılır; sadece düzenleyici listesindeki hesaplar kayıt yapabilir.
+
+## Dosyalar
 
 | Dosya | Ne |
 |---|---|
-| `index.html` | Panel sayfası. Aktarım md dosyasının **Bölüm 8** kod bloğu, başına `<!DOCTYPE html>`, `<meta charset="utf-8">` ve viewport satırı eklenmiş hali. |
-| `handling-database.json` | Veri. Aktarım md dosyasının **Bölüm 9** JSON bloğu, biçimi `{"airports": {ICAO: {...}}, "settings": {"fuel": {...}, "fx": {...}}}`. |
+| `index.html` | Panel sayfası. Aktarım md dosyasının **Bölüm 8** kod bloğu; başına doctype/charset/viewport, ilk `<script>` etiketinden hemen önce de Firebase'in iki satırı eklenmiş hali (aşağıda). |
+| `firebase-config.js` | Firebase proje ayarları. Boşsa site `handling-database.json`'dan salt okunur açılır. |
+| `firebase-db.js` | Paneli Firebase'e bağlayan katman (giriş/çıkış, Download JSON, ilk yükleme). |
+| `firestore.rules` | Firebase güvenlik kuralları (konsola yapıştırılır). |
+| `handling-database.json` | Yedek / ilk yükleme verisi. Firebase kurulduktan sonra güncel veri Firebase'dedir. |
 
-## Güncelleme (yeni aktarım md dosyası geldiğinde)
+## Firebase kurulumu (bir kez)
 
-Claude'a şunu söyleyin:
+1. https://console.firebase.google.com → **Add project** (ör. `handling-panel`; Google Analytics gerekmez).
+2. **Build → Firestore Database → Create database** → konum `eur3` (veya yakın bir bölge) → *production mode*.
+3. **Rules** sekmesi → `firestore.rules` içeriğini yapıştır → **Publish**.
+4. **Build → Authentication → Get started → Sign-in method → Google** → Enable → Save.
+   **Settings → Authorized domains → Add domain** → `sacredriches.github.io`.
+5. **Firestore → Data → Start collection** → Collection ID `editors` → Document ID = düzenleyicinin Google e-postası (küçük harf), alan ekleme gerekmez (ör. `name` / `Deniz`). Her düzenleyici için bir doküman.
+6. **Project settings (çark) → Your apps → Web (</>)** → uygulama adı ver → çıkan `firebaseConfig` içindeki `apiKey`, `authDomain`, `projectId`, `appId` değerlerini `firebase-config.js`'e yaz ve repoya yükle.
+7. Siteyi aç → **Sign in to edit** → düzenleyici hesabıyla gir → **Import data** (veritabanı boşken bir kez görünür; `handling-database.json`'daki bütün meydanları Firebase'e yazar).
 
-> "Bu md dosyasından GitHub kopyasını çıkar: Bölüm 8 → `index.html` (başına doctype/charset/viewport ekle), Bölüm 9 → `handling-database.json` (`sort_keys`, tek satır). Artifact'tan veya eski panelden değil, md'den çıkar."
+Düzenleyici eklemek/çıkarmak: Firestore'da `editors` koleksiyonuna doküman ekle/sil. Kod değişmez.
 
-Sonra iki dosyayı repoya yükleyip mevcutların üzerine yazın.
+## Yeni aktarım md dosyası geldiğinde (sayfa kodu güncellemesi)
+
+Veri artık Firebase'de güncellendiği için normalde sadece **sayfa kodu** değişir. Claude'a şunu söyleyin:
+
+> "Bu md dosyasının Bölüm 8'inden `index.html` çıkar: başına `<!DOCTYPE html>`, `<meta charset="utf-8">`, viewport ekle; ilk `<script>` etiketinden hemen önce `<script src="firebase-config.js"></script>` ve `<script src="firebase-db.js"></script>` satırlarını ekle. Artifact'tan veya eski panelden değil, md'den çıkar."
+
+Sonra yalnızca `index.html`'in üzerine yazın. Diğer dosyalara dokunulmaz.
+
+Claude'la yeni bir aktarım md dosyası hazırlarken güncel veriyi vermek için sitede **Download JSON**'a basın; inen `handling-database.json` md'nin Bölüm 9'uyla aynı biçimdedir.
 
 ## Yaygın hatalar
 
-- **"The database is not available in this view"**: Sayfa, claude.ai'deki artifact'tan alınmış eski koddan çıkmış demektir; JSON'dan okuma kısmı yoktur. Sayfayı md'nin Bölüm 8'inden yeniden çıkarın.
-- **Veri gelmiyor**: JSON dosyasının adı tam olarak `handling-database.json` olmalı (ör. `data.json` olmaz) ve `airports` bir liste değil, ICAO anahtarlı bir nesne olmalı.
-- Sayfa salt okunurdur; fiyat girişi claude.ai'deki panelde yapılır, sonra yeni md ile buraya taşınır.
+- **"The database is not available in this view"**: `index.html` md'den değil eski panelden çıkmış; yeniden md'den çıkarın.
+- **"You do not have edit permission"**: Giriş yapılmamış ya da e-posta `editors` koleksiyonunda yok.
+- **Google girişi açılmıyor**: Authentication → Authorized domains'e `sacredriches.github.io` eklenmemiş.
