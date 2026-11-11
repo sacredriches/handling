@@ -396,6 +396,13 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .hnote{color:var(--warn);font-size:12px;cursor:help;margin-left:2px}
 .upd-d{font-size:11px;color:var(--muted);font-family:var(--f-mono);cursor:help}
 .upd-prev{display:block;font-size:10.5px;color:var(--muted)}
+.cfm-ov{position:fixed;inset:0;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.cfm-box{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.25);max-width:420px;width:100%;padding:18px 18px 14px}
+.cfm-t{font-size:14px;line-height:1.45;margin-bottom:14px}
+.cfm-a{display:flex;justify-content:flex-end;gap:8px}
+.upd-calc{font-size:11px;color:var(--muted);font-family:var(--f-mono);margin-left:6px;white-space:nowrap}
+.svc-nm{display:inline-flex;flex-direction:column;vertical-align:middle;line-height:1.25}
+.svc-nm small{font-size:12px;color:var(--muted)}
 </style>
 
 <div class="wrap">
@@ -658,10 +665,14 @@ const vcAmt=(a,p,re)=>a.services.reduce((s,sv,i)=>s+((re.test(sv.name||"")&&inCm
 const vcBoth=(a,qs)=>!!(a&&a.vipCipWarn)&&qs.some(c=>c.p&&vcAmt(a,c.p,RX_VIP)>0&&vcAmt(a,c.p,RX_CIP)>0);
 const VC_WARN=`VIP and CIP are both in the total. Invoices usually include only one of them; untick “in total” for the one not used.`;
 function disbBaseAmt(a,p,h,all){ let s=0; p.items.forEach((v,i)=>{ if(!all&&!inCmpP(a,p,i)) return; const x=lineAmt(a,i,v); if(x!==null&&disbOn(h,a.services[i])) s+=x; }); return s; }
+/* disbRound "unit": disbursement each line rounded to the cent per unit (as some handlers invoice, e.g. AviaVip LIRP: 1.48 × 18% = 0.27 per pax) */
+function disbAmtOf(a,p,h,all){ const r=p.disb||0; if(!r) return 0; if(!(h&&h.disbRound==="unit")) return r*disbBaseAmt(a,p,h,all);
+  let s=0; p.items.forEach((v,i)=>{ if(!all&&!inCmpP(a,p,i)) return; if(!disbOn(h,a.services[i])) return; const x=lineAmt(a,i,v); if(x===null) return;
+    if(isNum(v)&&v!==0){ s+=Math.round(v*r*100)/100*(x/v); } else s+=Math.round(x*r*100)/100; }); return s; }
 function baseTotal(a,p,h,all){
-  let sum=0, dsum=0;
-  p.items.forEach((v,i)=>{ if(!all&&!inCmpP(a,p,i)) return; const x=lineAmt(a,i,v); if(x!==null){ sum+=x; if(disbOn(h,a.services[i])) dsum+=x; }});
-  return Math.round((sum+(p.disb||0)*dsum+(isNum(p.disbFlat)?p.disbFlat:0))*100)/100;
+  let sum=0;
+  p.items.forEach((v,i)=>{ if(!all&&!inCmpP(a,p,i)) return; const x=lineAmt(a,i,v); if(x!==null){ sum+=x; }});
+  return Math.round((sum+disbAmtOf(a,p,h,all)+(isNum(p.disbFlat)?p.disbFlat:0))*100)/100;
 }
 function handlingFee(a,p){ const i=handlingIdx(a); if(i<0) return 0; const n=a.services[i].name; if(p) for(let j=0;j<a.services.length;j++){ const s=a.services[j]; if(Array.isArray(s.replaces)&&s.replaces.includes(n)&&isTick(a,j)&&isNum(p.items[j])&&p.items[j]>0) return p.items[j]; } return isNum(p&&p.items[i])?p.items[i]:0; } /* tikle seçilen yerine geçen handling (ör. teknik iniş) surcharge tabanı olur */
 function isComplete(a,p){ return handlingFee(a,p)>0; }
@@ -722,7 +733,9 @@ function otAmt(a,p,h){ if(!h||!h.otRate||!(handlingFee(a,p)>0)) return 0; return
 const ovAuto=()=>{ const t=trip(); return t.ok&&state.depD>state.arrD; };
 function ovAmt(a,p,h){ if(!h||!(h.overnight||h.overnightFlat)||!ovAuto()||ntMan(a)===false) return 0; return Math.round((handlingFee(a,p)*(h.overnight||0)+(h.overnightFlat||0))*100)/100; }
 /* wkPerLeg: hafta sonu sabit ücreti hafta sonuna düşen her hareket için ayrı; wkSunPm {from, flat}: Pazar o saatten sonraki hareket için farklı sabit tutar (ör. EGLF 935 / Paz 13:00 sonrası 1,120) */
-function wkLeg(h,D,T){ const d=new Date(D+"T"+(T||"00:00")); if(isNaN(d)||!hWk(h).includes(d.getDay())) return 0; const s=h.wkSunPm, x=hhOf(T); if(s&&d.getDay()===0&&x!==null&&x>=s.from-1e-9) return s.flat||0; return h.weekendFlat||0; }
+/* wkSkipNight: a weekend leg that already falls in the night window is charged once (night per leg), not again as weekend (e.g. ZSSS UAC overtime per leg) */
+const isNtH=(h,T)=>{ const [nf,nto]=hNight(h), x=hhOf(T); if(x===null) return false; return nf>nto?(x>=nf||x<nto):(x>=nf&&x<nto); };
+function wkLeg(h,D,T){ const d=new Date(D+"T"+(T||"00:00")); if(isNaN(d)||!hWk(h).includes(d.getDay())) return 0; if(h.wkSkipNight&&isNtH(h,T)) return 0; const s=h.wkSunPm, x=hhOf(T); if(s&&d.getDay()===0&&x!==null&&x>=s.from-1e-9) return s.flat||0; return h.weekendFlat||0; }
 /* hafta sonu kutusu: tarihlere göre otomatik; elle değiştirilen işaret aynı tarihler için geçerli (kapalı = hafta sonu ücreti yok, açık ama tarih hafta sonu değilse güvenli tarafta iki hareket) */
 const wkOv=a=>{ const o=state.wkov&&state.wkov[a.icao]; return o&&o.k===holKey()?!!o.v:null; };
 function wkAuto(a,p,h,n){ if(!h) return 0; const f=hFlags(h), hf=handlingFee(a,p); if(h.wkPerLeg) return wkLeg(h,state.arrD,state.arrT)+wkLeg(h,state.depD,state.depT); let w=0; if(f.wk&&h.weekend) w+=(h.wkOnNight?hf+(n||0):hf)*h.weekend; if(f.wk&&h.weekendFlat) w+=h.weekendFlat; return w; }
@@ -859,7 +872,9 @@ function ageInfo(a){ const d=a&&a.updatedAt?new Date(a.updatedAt):null; if(!d||i
 const updDmy=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d||""); return m?m[3]+"."+m[2]+"."+m[1]:"";};
 function updCell(td,c,sv,v){
   if(v===null||v===undefined||typeof td!=="string"||td.indexOf('class="na"')>=0) return td;
-  const u=c&&c.p&&c.p.upd&&c.p.upd[sv.name]; if(!u||!u.d) return td;
+  const u=c&&c.p&&c.p.upd&&c.p.upd[sv.name]; if(!u) return td;
+  if(u.calc){ const o=td.indexOf(">"), e=o<0?-1:td.indexOf("<",o+1); if(e>0) td=td.slice(0,e)+`<span class="upd-calc">${esc(u.calc)}</span>`+td.slice(e); }
+  if(!u.d) return td;
   const pv=u.prev!==undefined&&u.prev!==null?(isNum(u.prev)?fmt(u.prev):String(u.prev)):null;
   const tip=[u.a?"Approximate (latest source document of this handler)":"Price confirmed by document",u.src?"Source: "+u.src:"",pv?"Previous: "+pv+(u.pd?" ("+updDmy(u.pd)+")":""):""].filter(Boolean).join(" · ");
   const tag=`<span class="usd upd-d" title="${esc(tip)}">${u.a?"≈ ":""}${updDmy(u.d)}${pv?`<span class="upd-prev">was ${esc(pv)}${u.pd?" · "+updDmy(u.pd):""}</span>`:""}</span>`;
@@ -919,7 +934,7 @@ function renderDetail(partial){
     if(vals.every(v=>v===null||v===undefined)) return "";
     if(sv.unit==="day"){
       const am=vals.map(v=>(isNum(v)||isPk(v))?amt(sv,v):null), ns=am.filter(x=>x!==null&&x>0), mnp=ns.length>1?Math.min(...ns):null;
-      return `<tr><td>${esc(sv.name)}${inBasket(sv)?`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`} <span class="pill mute">${trip().ok?fmtStay(trip().hrs):"24 h"} stay</span></td>${vals.map((v,k)=>updCell(((v,k)=>{
+      return `<tr><td>${sv.sub?`<span class="svc-nm">${esc(sv.name)}<small>${esc(sv.sub)}</small></span>`:esc(sv.name)}${inBasket(sv)?`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`} <span class="pill mute">${trip().ok?fmtStay(trip().hrs):"24 h"} stay</span></td>${vals.map((v,k)=>updCell(((v,k)=>{
         if(v===null||v===undefined) return `<td class="na">—</td>`;
         if(am[k]===null) return `<td class="txt">${esc(/^incl/i.test(v)?"Included":/^free/i.test(String(v).trim())?"Free":v)}</td>`;
         return `<td class="num ${am[k]===mnp&&ns.some(n=>n!==mnp)?"min":""}">${am[k]===0?"0":fmt(am[k])}${PK_SHORT.includes(a.icao)?"":`<span class="usd pk-d">${esc(pkDesc(v))}</span>`}</td>`;})(v,k),qs[k],sv,v)).join("")}</tr>`;
@@ -929,7 +944,7 @@ function renderDetail(partial){
     const nums=vals.filter(v=>isNum(v)&&v>0).map(lt), mn=nums.length>1?Math.min(...nums):null;
     const qx=inBasket(sv)?(i===handlingIdx(a)?"":`<span class="tick-w"><label class="tick-l" title="Untick to remove this service from this calculation (if not used)"><input type="checkbox" data-off="${i}" ${isOff(a,i)?"":"checked"} aria-label="${esc(sv.name)} in total"> in total</label>${sv.qty?`<label class="tick-l">qty<input class="qty-in num" type="number" min="0" max="99" step="1" data-qty="${i}" value="${qtyOf(a,i)}" aria-label="${esc(sv.name)} qty"></label>`:""}</span>`):sv.unit==="pct"?`<span class="tick-w"><label class="tick-l" title="Tick to add this percentage of the total as a cost"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label></span>`:`<span class="tick-w"><label class="tick-l" title="Tick to add this service to the total with its quantity"><input type="checkbox" data-tick="${i}" ${isTick(a,i)?"checked":""} aria-label="${esc(sv.name)} add to total"> add to total</label>${isTick(a,i)?`<label class="tick-l">qty<input class="qty-in num" type="number" min="0" max="99" step="1" data-qty="${i}" value="${qtyOf(a,i)}" aria-label="${esc(sv.name)} qty"></label>`:""}</span>`;
     const vcp=(RX_VIP.test(sv.name||"")||RX_CIP.test(sv.name||""))&&inCmp(a,i)&&vcBoth(a,qs)?` <span class="pill warn">VIP + CIP birlikte</span>`:"";
-    return `<tr><td>${esc(sv.name)}${vcp}${qx}${sv.unit==="pax"?` <span class="pill mute">× ${paxFor(sv)} ${paxLbl(sv)}</span>`:sv.unit==="paxt"?` <span class="pill mute">${paxFor(sv)} ${paxIsArr(sv)?"arr.":"dep."} pax · tiered</span>`:isGpu(sv)?`<span class="tick-w"><label class="tick-l" title="1 hour if left empty">hours<input class="qty-in num" type="number" min="0" max="48" step="1" inputmode="numeric" data-gpu="1" placeholder="1" value="${isNum(state.gpuH)?state.gpuH:""}" aria-label="GPU hours (1 if empty)"></label></span>`:sv.gt?` <span class="pill mute">${gtOk(sv)?"× 1":"× 0"} · ${sv.gt==="overnight"?"overnight":sv.gt==="lt24"?"stay "+(isNum(sv.gtHours)?sv.gtHours:2)+"–24 h":"stay over "+((isNum(sv.gtHours)?sv.gtHours:2)*60)+" min"}</span>`:Array.isArray(sv.nightOnly)?` <span class="pill mute">${litOk(sv)?"× 1":"× 0"} · ${pad2(sv.nightOnly[0])}:00–${pad2(sv.nightOnly[1])}:00 only</span>`:sv.unit==="leg"?` <span class="pill mute">${mult(sv)?"× 1":"× 0 · no "+(paxIsArr(sv)?"arrival":"departure")+" pax"}</span>`:sv.unit==="day"?` <span class="pill mute">× ${state.days} days</span>`:sv.unit==="crew"?` <span class="pill mute">× ${CREW} crew</span>`:""}</td>${vals.map((v,k)=>updCell(((v,k)=>{
+    return `<tr><td>${sv.sub?`<span class="svc-nm">${esc(sv.name)}<small>${esc(sv.sub)}</small></span>`:esc(sv.name)}${vcp}${qx}${sv.unit==="pax"?` <span class="pill mute">× ${paxFor(sv)} ${paxLbl(sv)}</span>`:sv.unit==="paxt"?` <span class="pill mute">${paxFor(sv)} ${paxIsArr(sv)?"arr.":"dep."} pax · tiered</span>`:isGpu(sv)?`<span class="tick-w"><label class="tick-l" title="1 hour if left empty">hours<input class="qty-in num" type="number" min="0" max="48" step="1" inputmode="numeric" data-gpu="1" placeholder="1" value="${isNum(state.gpuH)?state.gpuH:""}" aria-label="GPU hours (1 if empty)"></label></span>`:sv.gt?` <span class="pill mute">${gtOk(sv)?"× 1":"× 0"} · ${sv.gt==="overnight"?"overnight":sv.gt==="lt24"?"stay "+(isNum(sv.gtHours)?sv.gtHours:2)+"–24 h":"stay over "+((isNum(sv.gtHours)?sv.gtHours:2)*60)+" min"}</span>`:Array.isArray(sv.nightOnly)?` <span class="pill mute">${litOk(sv)?"× 1":"× 0"} · ${pad2(sv.nightOnly[0])}:00–${pad2(sv.nightOnly[1])}:00 only</span>`:sv.unit==="leg"?` <span class="pill mute">${mult(sv)?"× 1":"× 0 · no "+(paxIsArr(sv)?"arrival":"departure")+" pax"}</span>`:sv.unit==="day"?` <span class="pill mute">× ${state.days} days</span>`:sv.unit==="crew"?` <span class="pill mute">× ${CREW} crew</span>`:""}</td>${vals.map((v,k)=>updCell(((v,k)=>{
       if(v===null||v===undefined) return `<td class="na">—</td>`;
       if(sv.unit==="paxt"){ const x=pxtTotal(sv,v); return x===null?`<td class="na">—</td>`:`<td class="num">${fmt(x)}<span class="usd">${v.exact&&v.exact[String(paxFor(sv))]!==undefined?"from tariff":"per pax "+fmt(v.def)}</span></td>`; }
       if(sv.unit==="pct"){ const r=pctVal(v); if(r===null) return `<td class="txt">${esc(v)}</td>`; const c=qs[k], x=inCmp(a,i)?pctAmt(a,c.p,c.h,i):0; return `<td class="num">%${Math.round(r*10000)/100}${x?`<span class="usd">+${fmt(x,cur)}</span>`:""}</td>`; }
@@ -951,7 +966,7 @@ function renderDetail(partial){
   const tr=group("h","Handling services","g-h")+group("ap","Airport fees","g-ap")+group("x","Services outside the comparison","g-x");
   html+=`<section class="card matrix-card"><div class="card-h"><h3>Itemised prices · ${acLbl(state.ac)}</h3><span class="sub">${esc(cur||"Currency ?")} · green ▼ lowest price in the row</span></div>${vcBoth(a,qs)?`<div class="vc-warn" role="alert">⚠ ${VC_WARN}</div>`:""}
     <div class="tbl-wrap"><table><thead><tr><th>Service</th>${qs.map(c=>`<th>${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
-    ${tr}<tr class="disb"><td>Disbursement</td>${qs.map(c=>{const amt=(c.p.disb||0)*disbBaseAmt(a,c.p,c.h,!!a.handlingOnly);const df=isNum(c.p.disbFlat)?c.p.disbFlat:0; return `<td class="num">${isNum(c.p.disb)||df?[isNum(c.p.disb)?Math.round(c.p.disb*1000)/10+"%"+(amt?` · ${fmt(amt,cur)}`:""):"",df?`fee ${fmt(df,cur)}`:""].filter(Boolean).join(" + "):"—"}<span class="usd">${isNum(c.p.disb)?(disbAll(c.h)?"on whole invoice":"on airport fees"):"flat fee"}</span></td>`;}).join("")}</tr>
+    ${tr}<tr class="disb"><td>Disbursement</td>${qs.map(c=>{const amt=disbAmtOf(a,c.p,c.h,!!a.handlingOnly);const df=isNum(c.p.disbFlat)?c.p.disbFlat:0; return `<td class="num">${isNum(c.p.disb)||df?[isNum(c.p.disb)?Math.round(c.p.disb*1000)/10+"%"+(amt?` · ${fmt(amt,cur)}`:""):"",df?`fee ${fmt(df,cur)}`:""].filter(Boolean).join(" + "):"—"}<span class="usd">${isNum(c.p.disb)?(disbAll(c.h)?"on whole invoice":"on airport fees"):"flat fee"}</span></td>`;}).join("")}</tr>
     <tr class="subt"><td>Subtotal (excl. surcharge)</td>${qs.map(c=>`<td class="num">${c.total||c.complete?fmtT(c.total,cur):"—"}</td>`).join("")}</tr>
     <tr class="grp g-sc"><td colspan="${qs.length+1}">Surcharge <span class="pill mute" style="text-transform:none;letter-spacing:0">percentages on handling fee · flat amounts once</span></td></tr>
     ${qs.some(c=>c.h.holiday||c.h.holidayFlat)?`<tr class="sc-row"><td>Public holiday<span class="tick-w"><label class="tick-l" title="${holAuto(a)?"Automatic by date: ticked if arrival or departure is on the public holiday list; ticking on a non-listed date adds no charge, unticking on a holiday removes it":"Tick if the flight falls on a public holiday; not saved"}"><input type="checkbox" data-hol="1" ${holChk(a)?"checked":""} aria-label="Apply public holiday"> apply</label></span></td>${qs.map(c=>{const v=c.h.holiday||0, hfl=c.h.holidayFlat||0; if(!v&&!hfl) return `<td><span class="sc-chip none" style="float:right">None</span></td>`; const x=holAmt(a,c.p,c.h); return `<td class="num"><span class="sc-chip ${holOn(a)?"on":""}">Yes · ${v?`+${Math.round(v*100)}%`:""}${hfl?`+${fmt(hfl,cur)}${c.h.holPerLeg?" · her hareket":""}`:""}${Array.isArray(c.h.holidayOn)&&c.h.holidayOn.length?" · on "+c.h.holidayOn.length+" items":""}</span>${x?`<span class="usd">+${fmt(x,cur)}</span>`:""}</td>`;}).join("")}</tr>`:""}
@@ -1188,7 +1203,7 @@ function renderEditor(){
 
   const isDirty=dirty(), canSave=isDirty&&!ed.saving&&(!ed.isNew||(/^[A-Z]{4}$/.test(d.icao)&&!icaoBad));
   const msg=ed.msg?`<span class="msg ${ed.msgCls}">${esc(ed.msg)}</span>`:isDirty?`<span class="msg dirty">Unsaved changes</span>`:`<span class="msg">No changes</span>`;
-  html+=`<div class="savebar">${ed.confirmDel?`<div class="confirm">Delete <b>${esc(d.icao)}</b> and all its prices? This cannot be undone.
+  html+=`<div class="savebar">${ed.confirmDel?`<div class="confirm"><b>${esc(d.icao)}</b> and all its prices will be deleted. This cannot be undone. Do you confirm?
       <button type="button" class="btn danger sm" id="delYes">Yes, delete</button><button type="button" class="btn sm" id="delNo">Cancel</button></div>`:msg}
     <div class="acts">${!ed.isNew&&!ed.confirmDel?`<button type="button" class="btn ghost" id="delAp">Delete airport</button>`:""}
       <button type="button" class="btn" id="revert" ${isDirty?"":"disabled"}>${ed.isNew?"Cancel":"Revert"}</button>
@@ -1230,9 +1245,9 @@ function bindPk(d,h){
   $("pk-price").oninput=e=>{const r=cur(); r.price=num(e.target.value); put(r);};
   document.querySelectorAll("[data-pkbh]").forEach(x=>x.oninput=()=>{const r=cur(); r.bands[+x.dataset.pkbh][0]=num(x.value); put(r);});
   document.querySelectorAll("[data-pkbp]").forEach(x=>x.oninput=()=>{const r=cur(); r.bands[+x.dataset.pkbp][1]=num(x.value); put(r);});
-  document.querySelectorAll("[data-pkbdel]").forEach(x=>x.onclick=()=>{const r=cur(); r.bands.splice(+x.dataset.pkbdel,1); put(r,true);});
+  document.querySelectorAll("[data-pkbdel]").forEach(x=>x.onclick=()=>{ askConfirm("This parking band will be deleted.<br>Do you confirm?",()=>{const r=cur(); r.bands.splice(+x.dataset.pkbdel,1); put(r,true);}); });
   $("pkAddBand").onclick=()=>{const r=cur(); const lastH=r.bands.length?r.bands[r.bands.length-1][0]||0:0; r.bands.push([lastH?Math.min(lastH*2,lastH+12):12,null]); put(r,true); const n=$("pkb-p-"+(r.bands.length-1)); if(n) n.focus();};
-  $("pkClear").onclick=()=>{P.items[i]=null; ed.pk=null; renderEditor();};
+  $("pkClear").onclick=()=>{ askConfirm("This parking rule will be deleted.<br>Do you confirm?",()=>{P.items[i]=null; ed.pk=null; renderEditor();}); };
   $("pkClose").onclick=()=>{ const r=pkOf(P.items[i]); if(r){ r.bands=(r.bands||[]).filter(b=>isNum(b[0])&&isNum(b[1])).sort((x,y)=>x[0]-y[0]); P.items[i]=r; } ed.pk=null; renderEditor(); };
 }
 function totCell(a,p,h){ return quoteHasData(p)?fmtT(baseTotal(a,p,h),a.currency):'<span style="color:var(--muted)">—</span>'; }
@@ -1268,7 +1283,7 @@ function bindEditor(){
   document.querySelectorAll("[data-svc]").forEach(i=>i.onchange=()=>renderEditor());
   document.querySelectorAll("[data-sunit]").forEach(i=>i.onchange=()=>{const k=+i.dataset.sunit; d.services[k].unit=i.value; if(i.value!=="day") d.handlers.forEach(h=>AC.forEach(c=>{const v=h.prices[c].items[k]; if(isPk(v)) h.prices[c].items[k]=isNum(v.price)?v.price:null;})); ed.pk=null; renderEditor();});
   document.querySelectorAll("[data-sap]").forEach(i=>i.onchange=()=>{d.services[+i.dataset.sap].airport=i.checked; d.services[+i.dataset.sap].disb=i.checked; renderEditor();});
-  document.querySelectorAll("[data-sdel]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sdel; d.services.splice(i,1); d.handlers.forEach(h=>AC.forEach(c=>h.prices[c].items.splice(i,1))); renderEditor();});
+  document.querySelectorAll("[data-sdel]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sdel; const nm=(d.services[i]&&d.services[i].name)||"(unnamed)"; askConfirm(`The service <b>${esc(nm)}</b> and its prices for all handlers will be deleted.<br>Do you confirm?`,()=>{ d.services.splice(i,1); d.handlers.forEach(h=>AC.forEach(c=>h.prices[c].items.splice(i,1))); renderEditor(); });});
   $("addSvc").onclick=()=>{d.services.push({name:"",disb:false,unit:"flight",airport:false}); d.handlers.forEach(h=>AC.forEach(c=>h.prices[c].items.push(null))); renderEditor(); const n=$("svc-"+(d.services.length-1)); if(n) n.focus();};
   const addH=()=>{const n=$("newH").value.trim(); if(!n){$("newH").focus();return;} d.handlers.push({name:n,weekend:0,night:0,disbBase:"airport",prices:blankPrices(d.services.length)}); ed.h=d.handlers.length-1; renderEditor(); const f=$("c-"+AC[0]+"-0"); if(f) f.focus();};
   $("addH").onclick=addH; $("newH").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addH();}};
@@ -1281,7 +1296,7 @@ function bindEditor(){
     hfl("f-hwkf","weekendFlat"); hfl("f-hntf","nightFlat");
     $("f-hdb").onchange=e=>{h.disbBase=e.target.value; refreshTotals();};
     $("f-hname").oninput=e=>{h.name=e.target.value; const t=document.querySelector(`.h-tab[data-h="${ed.h}"]`); if(t) t.textContent=h.name||"(unnamed)"; refreshSavebar();};
-    $("delH").onclick=()=>{d.handlers.splice(ed.h,1); ed.h=Math.max(0,ed.h-1); renderEditor();};
+    $("delH").onclick=()=>{ askConfirm(`The handler <b>${esc(h.name||"(unnamed)")}</b> and all its prices will be deleted.<br>Do you confirm?`,()=>{ d.handlers.splice(ed.h,1); ed.h=Math.max(0,ed.h-1); renderEditor(); }); };
     document.querySelectorAll("[data-dp]").forEach(i=>i.oninput=()=>{const v=parseCell(i.value); h.prices[i.dataset.dp].disb=isNum(v)?v/100:null; refreshTotals();});
     document.querySelectorAll("[data-c]").forEach(i=>i.oninput=()=>{const v=parseCell(i.value); h.prices[i.dataset.c].items[+i.dataset.i]=v; i.classList.toggle("txtv",v!==null&&!isNum(v)); refreshTotals();});
     bindPk(d,h);
@@ -1301,7 +1316,7 @@ function cleanForSave(d){
   if(typeof o.verified==="string"&&o.verified.trim()) o.verified=o.verified.trim(); else delete o.verified;
   // drop services with empty names AND no values
   const keep=o.services.map((s,i)=>s.name.trim()!==""||o.handlers.some(h=>AC.some(c=>h.prices[c].items[i]!==null)));
-  o.services=o.services.filter((_,i)=>keep[i]).map(s=>({name:s.name.trim()||"Other",disb:!!s.airport,unit:UNITS[s.unit]?s.unit:"flight",airport:!!s.airport,...(s.info?{info:true}:{}),...(Array.isArray(s.nightOnly)?{nightOnly:s.nightOnly}:{}),...(s.nightAny?{nightAny:true}:{}),...(s.nightSc?{nightSc:true}:{}),...(s.nsLabel?{nsLabel:s.nsLabel}:{}),...(s.noDisb?{noDisb:true}:{}),...(s.pctNoSc?{pctNoSc:true}:{}),...(s.forceDisb?{forceDisb:true}:{}),...(s.opt?{opt:true}:{}),...(s.basket?{basket:true}:{}),...(s.tickDef?{tickDef:true}:{}),...(s.qty?{qty:true}:{}),...(s.qtyDef!==undefined?{qtyDef:s.qtyDef}:{}),...(Array.isArray(s.pctOn)&&s.pctOn.length?{pctOn:s.pctOn}:{}),...(Array.isArray(s.replaces)&&s.replaces.length?{replaces:s.replaces}:{}),...(s.gt?{gt:s.gt}:{}),...(isNum(s.gtHours)?{gtHours:s.gtHours}:{})}));
+  o.services=o.services.filter((_,i)=>keep[i]).map(s=>({name:s.name.trim()||"Other",disb:!!s.airport,unit:UNITS[s.unit]?s.unit:"flight",airport:!!s.airport,...(s.info?{info:true}:{}),...(Array.isArray(s.nightOnly)?{nightOnly:s.nightOnly}:{}),...(s.nightAny?{nightAny:true}:{}),...(s.nightSc?{nightSc:true}:{}),...(s.nsLabel?{nsLabel:s.nsLabel}:{}),...(s.sub?{sub:s.sub}:{}),...(s.noDisb?{noDisb:true}:{}),...(s.pctNoSc?{pctNoSc:true}:{}),...(s.forceDisb?{forceDisb:true}:{}),...(s.opt?{opt:true}:{}),...(s.basket?{basket:true}:{}),...(s.tickDef?{tickDef:true}:{}),...(s.qty?{qty:true}:{}),...(s.qtyDef!==undefined?{qtyDef:s.qtyDef}:{}),...(Array.isArray(s.pctOn)&&s.pctOn.length?{pctOn:s.pctOn}:{}),...(Array.isArray(s.replaces)&&s.replaces.length?{replaces:s.replaces}:{}),...(s.gt?{gt:s.gt}:{}),...(isNum(s.gtHours)?{gtHours:s.gtHours}:{})}));
   o.handlers=o.handlers.map(h=>{const prices={}; AC.forEach(c=>{const p=h.prices[c]; const items=p.items.filter((_,i)=>keep[i]); if(items.some(v=>v!==null)||isNum(p.disb)) prices[c]={disb:isNum(p.disb)?p.disb:null,items,...(isNum(p.nightFlat)?{nightFlat:p.nightFlat}:{}),...(isNum(p.disbFlat)?{disbFlat:p.disbFlat}:{}),...(p.upd&&typeof p.upd==="object"?{upd:p.upd}:{})};}); return {name:h.name.trim()||"Unnamed handler",...(typeof h.note==="string"&&h.note.trim()?{note:h.note.trim()}:{}),weekend:h.weekend||0,night:h.night||0,weekendFlat:h.weekendFlat||0,nightFlat:h.nightFlat||0,disbBase:h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport",...(isNum(h.nightFrom)?{nightFrom:h.nightFrom}:{}),...(isNum(h.nightTo)?{nightTo:h.nightTo}:{}),...(Array.isArray(h.wkDays)&&h.wkDays.length?{wkDays:h.wkDays}:{}),...(h.nightLeg?{nightLeg:h.nightLeg}:{}),...(h.scOnce?{scOnce:true}:{}),...(h.wkOnNight?{wkOnNight:true}:{}),...(h.nightPerLeg?{nightPerLeg:true}:{}),...(h.wkPerLeg?{wkPerLeg:true}:{}),...(h.wkSunPm?{wkSunPm:h.wkSunPm}:{}),...(isNum(h.holidayFlat)?{holidayFlat:h.holidayFlat}:{}),...(h.holPerLeg?{holPerLeg:true}:{}),...(isNum(h.holiday)&&h.holiday>0?{holiday:h.holiday}:{}),...(isNum(h.overnight)&&h.overnight>0?{overnight:h.overnight}:{}),...(isNum(h.overnightFlat)&&h.overnightFlat>0?{overnightFlat:h.overnightFlat}:{}),...(Array.isArray(h.holidayOn)&&h.holidayOn.length?{holidayOn:h.holidayOn}:{}),...(isNum(h.otRate)&&h.otRate>0?{otRate:h.otRate}:{}),...(isNum(h.otFrom)?{otFrom:h.otFrom}:{}),...(isNum(h.otTo)?{otTo:h.otTo}:{}),...(isNum(h.ferryDisc)&&h.ferryDisc>0?{ferryDisc:h.ferryDisc}:{}),...(h.extraSc&&isNum(h.extraSc.rate)?{extraSc:h.extraSc}:{}),prices};});
   delete o.weekend; delete o.night;
   o.updatedAt=new Date().toISOString();
@@ -1325,6 +1340,20 @@ async function save(){
     ed.msgCls="err";
   }
   renderAdmin();
+}
+/* silme onayı (Manage): handler, servis satırı, parking bandı/kuralı silinmeden önce sorulur; sayfa içi pencere (tarayıcı confirm'ü kullanılmaz) */
+function askConfirm(html,onYes){
+  const old=document.getElementById("cfm-ov"); if(old) old.remove();
+  const ov=document.createElement("div"); ov.id="cfm-ov"; ov.className="cfm-ov";
+  ov.innerHTML=`<div class="cfm-box" role="alertdialog" aria-modal="true" aria-labelledby="cfm-t"><div id="cfm-t" class="cfm-t">${html}</div><div class="cfm-a"><button type="button" class="btn sm" id="cfm-no">Cancel</button><button type="button" class="btn danger sm" id="cfm-yes">Yes, delete</button></div></div>`;
+  document.body.appendChild(ov);
+  const close=()=>{ov.remove(); document.removeEventListener("keydown",kd);};
+  const kd=e=>{ if(e.key==="Escape") close(); };
+  document.addEventListener("keydown",kd);
+  ov.onclick=e=>{ if(e.target===ov) close(); };
+  document.getElementById("cfm-no").onclick=close;
+  document.getElementById("cfm-yes").onclick=()=>{ close(); onYes(); };
+  document.getElementById("cfm-no").focus();
 }
 async function delAirport(){
   const icao=ed.icao;
