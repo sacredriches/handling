@@ -21,11 +21,11 @@ Panel sekmesi görüntüleme, Manage sekmesi düzenleme içindir. Veri Firebase'
 3. **Rules** sekmesi → `firestore.rules` içeriğini yapıştır → **Publish**.
 4. **Build → Authentication → Get started → Sign-in method → Google** → Enable → Save.
    **Settings → Authorized domains → Add domain** → `sacredriches.github.io`.
-5. **Firestore → Data → Start collection** → Collection ID `editors` → Document ID = düzenleyicinin Google e-postası (küçük harf), alan ekleme gerekmez (ör. `name` / `Deniz`). Her düzenleyici için bir doküman.
+5. **Firestore → Data → Start collection** → Collection ID `Editors` → Document ID = düzenleyicinin Google e-postası (küçük harf), alan ekleme gerekmez (ör. `name` / `Deniz`). Her düzenleyici için bir doküman.
 6. **Project settings (çark) → Your apps → Web (</>)** → uygulama adı ver → çıkan `firebaseConfig` içindeki `apiKey`, `authDomain`, `projectId`, `appId` değerlerini `firebase-config.js`'e yaz ve repoya yükle.
 7. Siteyi aç → **Sign in to edit** → düzenleyici hesabıyla gir → **Import data** (veritabanı boşken bir kez görünür; `handling-database.json`'daki bütün meydanları Firebase'e yazar).
 
-Düzenleyici eklemek/çıkarmak: Firestore'da `editors` koleksiyonuna doküman ekle/sil. Kod değişmez.
+Düzenleyici eklemek/çıkarmak: Firestore'da `Editors` koleksiyonuna doküman ekle/sil. Kod değişmez.
 
 ## Yeni aktarım md dosyası geldiğinde (sayfa kodu güncellemesi)
 
@@ -40,5 +40,5 @@ Claude'la yeni bir aktarım md dosyası hazırlarken güncel veriyi vermek için
 ## Yaygın hatalar
 
 - **"The database is not available in this view"**: `index.html` md'den değil eski panelden çıkmış; yeniden md'den çıkarın.
-- **"You do not have edit permission"**: Giriş yapılmamış ya da e-posta `editors` koleksiyonunda yok.
+- **"You do not have edit permission"**: Giriş yapılmamış ya da e-posta `Editors` koleksiyonunda yok.
 - **Google girişi açılmıyor**: Authentication → Authorized domains'e `sacredriches.github.io` eklenmemiş.

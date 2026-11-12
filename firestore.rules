@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isEditor() {
       return request.auth != null
-        && exists(/databases/$(database)/documents/editors/$(request.auth.token.email.lower()));
+        && exists(/databases/$(database)/documents/Editors/$(request.auth.token.email.lower()));
     }
     // Panel: herkes okuyabilir. Sadece giriş yapanlar okusun isterseniz: allow read: if request.auth != null;
     match /airports/{icao} {
@@ -15,8 +15,8 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isEditor();
     }
-    // Düzenleyici listesi: herkes sadece kendi kaydını görebilir; liste konsoldan yönetilir.
-    match /editors/{email} {
+    // Düzenleyici listesi (koleksiyon adı büyük E ile "Editors"): herkes sadece kendi kaydını görebilir; liste konsoldan yönetilir.
+    match /Editors/{email} {
       allow read: if request.auth != null && request.auth.token.email.lower() == email;
       allow write: if false;
     }

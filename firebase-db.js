@@ -1,7 +1,7 @@
 /* Firebase bağlantısı: panelin claude.ai veritabanı arayüzünü (window.claude.use("db"/"user")) Firestore ile sağlar.
    Panel kodu (index.html) değişmez; bu dosya ondan önce yüklenir.
    - Okuma herkese açık, canlı (onSnapshot): bir kişinin kaydı herkesin ekranına anında gelir.
-   - Kayıt: Google ile giriş + Firestore'da editors/<e-posta> dokümanı.
+   - Kayıt: Google ile giriş + Firestore'da Editors/<e-posta> dokümanı.
    - Dokümanlar Firestore'a {j: "<JSON metni>"} olarak yazılır (Firestore iç içe dizileri desteklemiyor; ör. bands [[3.25,150]]).
    - Sağ alttaki çubuk: giriş/çıkış, "Download JSON" (aktarım md'si için yedek), veritabanı boşsa ilk yükleme. */
 (function(){
@@ -18,7 +18,7 @@
     fs = firebase.firestore(app); auth = firebase.auth(app);
     user = await new Promise(res => { const off = auth.onAuthStateChanged(u => { off(); res(u); }); });
     if (user && user.email) {
-      try { isEditor = (await fs.collection("editors").doc(user.email.toLowerCase()).get()).exists; } catch (e) { isEditor = false; }
+      try { isEditor = (await fs.collection("Editors").doc(user.email.toLowerCase()).get()).exists; } catch (e) { isEditor = false; }
     }
     bar();
   })();
