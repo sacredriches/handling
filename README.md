@@ -24,6 +24,7 @@ Panel sekmesi görüntüleme, Manage sekmesi düzenleme içindir. Veri Firebase'
 5. **Firestore → Data → Start collection** → Collection ID `Editors` → Document ID = düzenleyicinin Google e-postası (küçük harf), alan ekleme gerekmez (ör. `name` / `Deniz`). Her düzenleyici için bir doküman.
 6. **Project settings (çark) → Your apps → Web (</>)** → uygulama adı ver → çıkan `firebaseConfig` içindeki `apiKey`, `authDomain`, `projectId`, `appId` değerlerini `firebase-config.js`'e yaz ve repoya yükle.
 7. Siteyi aç → **Sign in to edit** → düzenleyici hesabıyla gir → **Import data** (veritabanı boşken bir kez görünür; `handling-database.json`'daki bütün meydanları Firebase'e yazar).
+8. Günlük güncelleme: claude.ai panelinden yeni `handling-database.json` repoya yüklendikten sonra siteyi aç → giriş yap → **Update from JSON**. Düğme önce mevcut Firebase verisinin yedeğini (`handling-backup-<tarih>.json`) bilgisayara indirir, sonra JSON'daki meydanları ve ayarları Firebase'e yazar (aynı kodlu meydanlar güncellenir; JSON'da olmayan meydanlara dokunmaz).
 
 Düzenleyici eklemek/çıkarmak: Firestore'da `Editors` koleksiyonuna doküman ekle/sil. Kod değişmez.
 

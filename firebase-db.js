@@ -51,25 +51,31 @@
 
   /* ---- sağ alt çubuk ---- */
   const sortKeys = v => Array.isArray(v) ? v.map(sortKeys) : v && typeof v === "object" ? Object.keys(v).sort().reduce((o, k) => (o[k] = sortKeys(v[k]), o), {}) : v;
-  async function exportJson() {
+  async function exportJson(fname) {
     const [a, s] = await Promise.all([fs.collection("airports").get(), fs.collection("settings").get()]);
     const out = { airports: {}, settings: {} };
     a.docs.forEach(d => { const x = dec(d.data()); if (x && x.icao) out.airports[x.icao] = x; });
     s.docs.forEach(d => { if (d.id === "fuel" || d.id === "fx") out.settings[d.id] = dec(d.data()); });
     const blob = new Blob([JSON.stringify(sortKeys(out))], { type: "application/json" });
     const u = URL.createObjectURL(blob), l = document.createElement("a");
-    l.href = u; l.download = "handling-database.json"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 1000);
+    l.href = u; l.download = fname || "handling-database.json"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 1000);
   }
-  async function importJson(btn) {
-    if (!confirm("handling-database.json içindeki bütün meydanlar ve ayarlar Firebase'e yazılacak. Devam?")) return;
-    btn.disabled = true; btn.textContent = "Importing…";
+  async function importJson(btn, update) {
+    if (!confirm(update ? "Önce mevcut Firebase verisinin yedeği bilgisayarınıza inecek, sonra handling-database.json içindeki meydanlar ve ayarlar Firebase'e yazılacak (aynı kodlu meydanlar güncellenir). Devam?" : "handling-database.json içindeki bütün meydanlar ve ayarlar Firebase'e yazılacak. Devam?")) return;
+    btn.disabled = true; btn.textContent = update ? "Backing up…" : "Importing…";
+    if (update) {
+      try { await exportJson("handling-backup-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".json"); }
+      catch (e) { btn.disabled = false; btn.textContent = "Update from JSON"; alert("Backup failed, nothing was changed: " + (e.message || e)); return; }
+      btn.textContent = "Importing…";
+    }
     try {
       const r = await fetch("handling-database.json", { cache: "no-store" }); const j = await r.json();
       const ap = j.airports || {}; const list = (Array.isArray(ap) ? ap : Object.values(ap)).filter(x => x && x.icao);
       const writes = list.map(x => [fs.collection("airports").doc(x.icao), x]);
       Object.entries(j.settings || {}).forEach(([k, v]) => writes.push([fs.collection("settings").doc(k), v]));
       for (let i = 0; i < writes.length; i += 400) { const b = fs.batch(); writes.slice(i, i + 400).forEach(([r, v]) => b.set(r, enc(v))); await b.commit(); }
-      btn.remove(); alert(list.length + " airports imported.");
+      if (update) { btn.disabled = false; btn.textContent = "Update from JSON"; } else btn.remove();
+      alert(update ? list.length + " airports updated. Backup saved to your downloads." : list.length + " airports imported.");
     } catch (e) { btn.disabled = false; btn.textContent = "Import failed — retry"; alert("Import failed: " + (e.message || e)); }
   }
   function bar() {
@@ -90,7 +96,7 @@
       span(user.email + (isEditor ? "" : " · view only"), isEditor ? "who" : "ro");
       if (isEditor) {
         add("Download JSON", () => exportJson().catch(e => alert("Export failed: " + (e.message || e))));
-        fs.collection("airports").limit(1).get().then(s => { if (s.empty) add("Import data", importJson, "pri"); }, () => {});
+        fs.collection("airports").limit(1).get().then(s => { if (s.empty) add("Import data", b => importJson(b, false), "pri"); else add("Update from JSON", b => importJson(b, true), "pri"); }, () => {});
       }
       add("Sign out", async () => { await auth.signOut(); location.reload(); });
     }
