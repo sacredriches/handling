@@ -94,7 +94,7 @@
       for (const x of list) {
         const d = await fs.collection("airports").doc(x.icao).get(); const cur = d.exists ? dec(d.data()) : null;
         const b = Object.prototype.hasOwnProperty.call(base, x.icao) ? base[x.icao] : undefined;
-        const bs = Array.isArray(b) ? b : [b]; const changed = b === undefined ? false : !bs.includes(cur ? (cur.updatedAt || null) : null);
+        const bs = Array.isArray(b) ? b : [b]; const cu = cur ? (cur.updatedAt || null) : null; const changed = b === undefined ? false : !(bs.includes(cu) || (cu && cu === x.updatedAt));
         if (changed) skip.push(x.icao + " (Firebase: " + ((cur && cur.updatedAt) || "deleted") + ")"); else ok.push(x);
       }
       const writes = ok.map(x => [fs.collection("airports").doc(x.icao), x]);
