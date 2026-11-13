@@ -397,6 +397,8 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .pk-freecol{display:flex;flex-direction:column;gap:8px;max-width:220px}
 .pk-chk{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;color:var(--ink-2);line-height:1.35}
 .hnote{color:var(--warn);font-size:12px;cursor:help;margin-left:2px}
+.h-type{display:block;font-size:.7em;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-top:2px;line-height:1.25}
+.h-type:not(:empty)::before{content:"";display:inline-block;width:1em;height:1em;margin-right:4px;vertical-align:-.15em;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.8l2.85 5.78 6.38.93-4.62 4.5 1.09 6.35L12 17.36l-5.7 3 1.09-6.35-4.62-4.5 6.38-.93z' fill='%23e9e6e6' stroke='%23a9a2a2' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")}
 .upd-d{font-size:11px;color:var(--muted);font-family:var(--f-mono);cursor:help}
 .upd-prev{display:block;font-size:10.5px;color:var(--muted)}
 .cfm-ov{position:fixed;inset:0;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
@@ -911,6 +913,9 @@ function updCell(td,c,sv,v){
   const tag=`<span class="usd upd-d" title="${esc(tip)}">${u.a?"≈ ":""}${updDmy(u.d)}${pv?`<span class="upd-prev">was ${esc(pv)}${u.pd?" · "+updDmy(u.pd):""}</span>`:""}</span>`;
   const k=td.lastIndexOf("</td>"); return k<0?td:td.slice(0,k)+tag+td.slice(k);
 }
+/* Handler tipi (FBO / HANDLER / FLIGHT SUPPORT): fiyat tablosunda ve karşılaştırmada ismin altında (h.type) */
+const H_TYPES=["FBO","HANDLER","FLIGHT SUPPORT","SUPERVISING AGENT"];
+const typeTag=h=>h&&h.type?`<span class="h-type">${esc(h.type)}</span>`:"";
 function renderDetail(partial){
   const el=document.getElementById("detail"), a=DATA.find(x=>x.icao===state.ap);
   if(!a){ el.innerHTML=""; return; }
@@ -954,7 +959,7 @@ function renderDetail(partial){
       const hv=x.p.items[handlingIdx(a)], why=typeof hv==="string"&&hv.trim()?hv.trim():"incomplete quote";
       const d=!x.complete?`<span class="d" style="color:var(--warn)">${esc(why)}</span>`:isBest?`<span class="d best">Best</span>`:"";
       return `<div class="brow"${x.h&&x.h.note?` title="${esc(x.h.note)}"`:""} data-h="${esc(x.name)}" data-base="${x.total}" data-t="${x.t}" data-c="${x.complete}">
-        <div class="hn">${esc(x.name)}${x.h&&x.h.note?` <span class="hnote" aria-label="${esc(x.h.note)}">ⓘ</span>`:""}</div>
+        <div class="hn">${esc(x.name)}${x.h&&x.h.note?` <span class="hnote" aria-label="${esc(x.h.note)}">ⓘ</span>`:""}${typeTag(x.h)}</div>
         <div class="track"><div class="fill ${isBest?"best":""} ${x.complete?"":"partial"}" style="width:${w}%">${x.t>x.total?`<div class="ext" style="left:${bw/w*100}%;width:${100-bw/w*100}%"></div>`:""}</div></div>
         <div class="bval">${!x.complete&&!(x.t>0)?`<span class="t num">—</span>`:usdTxtT(x.t,cur)?`<span class="t num">${usdTxtT(x.t,cur)}</span><span class="usd num">${fmtT(x.t,cur)}</span>`:`<span class="t num">${fmtT(x.t,cur)}</span>`}${x.t>x.total?`<span class="sc-amt num">+${fmtT(x.t-x.total,cur)} surcharge</span>`:""}${d}</div></div>`;}).join("")}</div>
     ${vcBoth(a,qs)?`<div class="vc-warn" role="alert">⚠ ${VC_WARN}</div>`:""}<div class="legend"><span><i style="background:var(--good)"></i>Best complete quote</span><span><i style="background:var(--bar)"></i>Other quotes</span>
@@ -996,7 +1001,7 @@ function renderDetail(partial){
   };
   const tr=group("h","Handling services","g-h")+group("ap","Airport fees","g-ap")+group("x","Services outside the comparison","g-x");
   html+=`<section class="card matrix-card"><div class="card-h"><h3>Itemised prices · ${acLbl(state.ac)}</h3><span class="sub">${esc(cur||"Currency ?")} · green ▼ lowest price in the row</span></div>${vcBoth(a,qs)?`<div class="vc-warn" role="alert">⚠ ${VC_WARN}</div>`:""}
-    <div class="tbl-wrap"><table><thead><tr><th>Service</th>${qs.map(c=>`<th>${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
+    <div class="tbl-wrap"><table><thead><tr><th>Service</th>${qs.map(c=>`<th>${esc(c.name)}${typeTag(c.h)}</th>`).join("")}</tr></thead><tbody>
     ${tr}<tr class="disb"><td>Disbursement</td>${qs.map(c=>{const amt=disbAmtOf(a,c.p,c.h,!!a.handlingOnly);const df=isNum(c.p.disbFlat)?c.p.disbFlat:0; return `<td class="num">${isNum(c.p.disb)||df?[isNum(c.p.disb)?Math.round(c.p.disb*1000)/10+"%"+(amt?` · ${fmt(amt,cur)}`:""):"",df?`fee ${fmt(df,cur)}`:""].filter(Boolean).join(" + "):"—"}<span class="usd">${isNum(c.p.disb)?(disbAll(c.h)?"on whole invoice":"on airport fees"):"flat fee"}</span></td>`;}).join("")}</tr>
     <tr class="subt"><td>Subtotal (excl. surcharge)</td>${qs.map(c=>`<td class="num">${c.total||c.complete?fmtT(c.total,cur):"—"}</td>`).join("")}</tr>
     <tr class="grp g-sc"><td colspan="${qs.length+1}">Surcharge <span class="pill mute" style="text-transform:none;letter-spacing:0">percentages on handling fee · flat amounts once</span></td></tr>
@@ -1117,7 +1122,7 @@ function blankAirport(){
 }
 function blankPrices(n){ const o={}; AC.forEach(c=>o[c]={disb:null,items:Array(n).fill(null)}); return o; }
 function normalize(a){
-  a=clone(a); a.notes=a.notes||""; a.country=a.country||""; delete a.weekend; delete a.night; (a.handlers||[]).forEach(h=>{h.weekend=h.weekend||0; h.night=h.night||0; h.weekendFlat=h.weekendFlat||0; h.nightFlat=h.nightFlat||0; h.disbBase=h.disbBase==="all"?"all":"airport";}); a.services=a.services||[]; a.handlers=a.handlers||[];
+  a=clone(a); a.notes=a.notes||""; a.country=a.country||""; delete a.weekend; delete a.night; (a.handlers||[]).forEach(h=>{h.weekend=h.weekend||0; h.night=h.night||0; h.weekendFlat=h.weekendFlat||0; h.nightFlat=h.nightFlat||0; h.disbBase=h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport";}); a.services=a.services||[]; a.handlers=a.handlers||[];
   a.handlers.forEach(h=>{ h.prices=h.prices||{}; AC.forEach(c=>{ const p=h.prices[c]||{disb:null,items:[]}; p.items=a.services.map((_,i)=>p.items[i]===undefined?null:p.items[i]); if(p.disb===undefined) p.disb=null; h.prices[c]=p; }); });
   delete a.updatedAt; delete a.updatedBy;
   return a;
@@ -1218,6 +1223,7 @@ function renderEditor(){
       ${h?`<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:end;justify-content:space-between">
           <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:end">
           <div class="field" style="width:280px;max-width:100%"><label for="f-hname">Handler name</label><input id="f-hname" value="${esc(h.name)}"></div>
+          <div class="field" style="width:160px"><label for="f-htype">Type</label><select id="f-htype"><option value="">—</option>${H_TYPES.map(T=>`<option ${h.type===T?"selected":""}>${T}</option>`).join("")}</select></div>
           <div class="field" style="width:120px"><label for="f-hwk">Weekend</label><div class="pct"><input id="f-hwk" inputmode="decimal" value="${pctStr(h.weekend)}" placeholder="0"></div></div>
           <div class="field" style="width:120px"><label for="f-hnt">Night</label><div class="pct"><input id="f-hnt" inputmode="decimal" value="${pctStr(h.night)}" placeholder="0"></div></div>
           <div class="field" style="width:140px"><label for="f-hwkf">Weekend flat</label><input id="f-hwkf" inputmode="decimal" value="${h.weekendFlat||""}" placeholder="0"></div>
@@ -1327,6 +1333,7 @@ function bindEditor(){
     const hfl=(id,key)=>{$(id).oninput=e=>{const v=parseCell(e.target.value); h[key]=isNum(v)&&v>0?v:0; refreshSavebar();};};
     hfl("f-hwkf","weekendFlat"); hfl("f-hntf","nightFlat");
     $("f-hdb").onchange=e=>{h.disbBase=e.target.value; refreshTotals();};
+    $("f-htype").onchange=e=>{ if(e.target.value) h.type=e.target.value; else delete h.type; refreshSavebar(); };
     $("f-hname").oninput=e=>{h.name=e.target.value; const t=document.querySelector(`.h-tab[data-h="${ed.h}"]`); if(t) t.textContent=h.name||"(unnamed)"; refreshSavebar();};
     $("delH").onclick=()=>{ askConfirm(`The handler <b>${esc(h.name||"(unnamed)")}</b> and all its prices will be deleted.<br>Do you confirm?`,()=>{ d.handlers.splice(ed.h,1); ed.h=Math.max(0,ed.h-1); renderEditor(); }); };
     document.querySelectorAll("[data-dp]").forEach(i=>i.oninput=()=>{const v=parseCell(i.value); h.prices[i.dataset.dp].disb=isNum(v)?v/100:null; refreshTotals();});
@@ -1348,8 +1355,8 @@ function cleanForSave(d){
   if(typeof o.verified==="string"&&o.verified.trim()) o.verified=o.verified.trim(); else delete o.verified;
   // drop services with empty names AND no values
   const keep=o.services.map((s,i)=>s.name.trim()!==""||o.handlers.some(h=>AC.some(c=>h.prices[c].items[i]!==null)));
-  o.services=o.services.filter((_,i)=>keep[i]).map(s=>({name:s.name.trim()||"Other",disb:!!s.airport,unit:UNITS[s.unit]?s.unit:"flight",airport:!!s.airport,...(s.info?{info:true}:{}),...(Array.isArray(s.nightOnly)?{nightOnly:s.nightOnly}:{}),...(s.nightAny?{nightAny:true}:{}),...(s.nightSc?{nightSc:true}:{}),...(s.nsLabel?{nsLabel:s.nsLabel}:{}),...(s.sub?{sub:s.sub}:{}),...(s.noDisb?{noDisb:true}:{}),...(s.pctNoSc?{pctNoSc:true}:{}),...(s.forceDisb?{forceDisb:true}:{}),...(s.opt?{opt:true}:{}),...(s.basket?{basket:true}:{}),...(s.tickDef?{tickDef:true}:{}),...(s.qty?{qty:true}:{}),...(s.qtyDef!==undefined?{qtyDef:s.qtyDef}:{}),...(isNum(s.gpuPer)?{gpuPer:s.gpuPer}:{}),...(s.overnightOnly?{overnightOnly:true}:{}),...(Array.isArray(s.pctOn)&&s.pctOn.length?{pctOn:s.pctOn}:{}),...(Array.isArray(s.replaces)&&s.replaces.length?{replaces:s.replaces}:{}),...(s.gt?{gt:s.gt}:{}),...(isNum(s.gtHours)?{gtHours:s.gtHours}:{})}));
-  o.handlers=o.handlers.map(h=>{const prices={}; AC.forEach(c=>{const p=h.prices[c]; const items=p.items.filter((_,i)=>keep[i]); if(items.some(v=>v!==null)||isNum(p.disb)) prices[c]={disb:isNum(p.disb)?p.disb:null,items,...(isNum(p.nightFlat)?{nightFlat:p.nightFlat}:{}),...(isNum(p.disbFlat)?{disbFlat:p.disbFlat}:{}),...(p.upd&&typeof p.upd==="object"?{upd:p.upd}:{})};}); return {name:h.name.trim()||"Unnamed handler",...(typeof h.note==="string"&&h.note.trim()?{note:h.note.trim()}:{}),weekend:h.weekend||0,night:h.night||0,weekendFlat:h.weekendFlat||0,nightFlat:h.nightFlat||0,disbBase:h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport",...(isNum(h.nightFrom)?{nightFrom:h.nightFrom}:{}),...(isNum(h.nightTo)?{nightTo:h.nightTo}:{}),...(Array.isArray(h.wkDays)&&h.wkDays.length?{wkDays:h.wkDays}:{}),...(h.nightLeg?{nightLeg:h.nightLeg}:{}),...(h.scOnce?{scOnce:true}:{}),...(h.wkOnNight?{wkOnNight:true}:{}),...(h.nightPerLeg?{nightPerLeg:true}:{}),...(h.wkPerLeg?{wkPerLeg:true}:{}),...(h.wkSunPm?{wkSunPm:h.wkSunPm}:{}),...(isNum(h.holidayFlat)?{holidayFlat:h.holidayFlat}:{}),...(h.holPerLeg?{holPerLeg:true}:{}),...(isNum(h.holiday)&&h.holiday>0?{holiday:h.holiday}:{}),...(isNum(h.overnight)&&h.overnight>0?{overnight:h.overnight}:{}),...(isNum(h.overnightFlat)&&h.overnightFlat>0?{overnightFlat:h.overnightFlat}:{}),...(Array.isArray(h.holidayOn)&&h.holidayOn.length?{holidayOn:h.holidayOn}:{}),...(isNum(h.otRate)&&h.otRate>0?{otRate:h.otRate}:{}),...(isNum(h.otFrom)?{otFrom:h.otFrom}:{}),...(isNum(h.otTo)?{otTo:h.otTo}:{}),...(isNum(h.ferryDisc)&&h.ferryDisc>0?{ferryDisc:h.ferryDisc}:{}),...(h.extraSc&&isNum(h.extraSc.rate)?{extraSc:h.extraSc}:{}),prices};});
+  o.services=o.services.filter((_,i)=>keep[i]).map(s=>({...s,name:s.name.trim()||"Other",disb:!!s.airport,unit:UNITS[s.unit]?s.unit:"flight",airport:!!s.airport,...(s.info?{info:true}:{}),...(Array.isArray(s.nightOnly)?{nightOnly:s.nightOnly}:{}),...(s.nightAny?{nightAny:true}:{}),...(s.nightSc?{nightSc:true}:{}),...(s.nsLabel?{nsLabel:s.nsLabel}:{}),...(s.sub?{sub:s.sub}:{}),...(s.noDisb?{noDisb:true}:{}),...(s.pctNoSc?{pctNoSc:true}:{}),...(s.forceDisb?{forceDisb:true}:{}),...(s.opt?{opt:true}:{}),...(s.basket?{basket:true}:{}),...(s.tickDef?{tickDef:true}:{}),...(s.qty?{qty:true}:{}),...(s.qtyDef!==undefined?{qtyDef:s.qtyDef}:{}),...(isNum(s.gpuPer)?{gpuPer:s.gpuPer}:{}),...(s.overnightOnly?{overnightOnly:true}:{}),...(Array.isArray(s.pctOn)&&s.pctOn.length?{pctOn:s.pctOn}:{}),...(Array.isArray(s.replaces)&&s.replaces.length?{replaces:s.replaces}:{}),...(s.gt?{gt:s.gt}:{}),...(isNum(s.gtHours)?{gtHours:s.gtHours}:{})}));
+  o.handlers=o.handlers.map(h=>{const prices={}; AC.forEach(c=>{const p=h.prices[c]; const items=p.items.filter((_,i)=>keep[i]); if(items.some(v=>v!==null)||isNum(p.disb)) prices[c]={disb:isNum(p.disb)?p.disb:null,items,...(isNum(p.nightFlat)?{nightFlat:p.nightFlat}:{}),...(isNum(p.disbFlat)?{disbFlat:p.disbFlat}:{}),...(p.upd&&typeof p.upd==="object"?{upd:p.upd}:{})};}); return {...Object.fromEntries(Object.entries(h).filter(([k])=>k!=="prices")),name:h.name.trim()||"Unnamed handler",...(typeof h.note==="string"&&h.note.trim()?{note:h.note.trim()}:{}),weekend:h.weekend||0,night:h.night||0,weekendFlat:h.weekendFlat||0,nightFlat:h.nightFlat||0,disbBase:h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport",...(isNum(h.nightFrom)?{nightFrom:h.nightFrom}:{}),...(isNum(h.nightTo)?{nightTo:h.nightTo}:{}),...(Array.isArray(h.wkDays)&&h.wkDays.length?{wkDays:h.wkDays}:{}),...(h.nightLeg?{nightLeg:h.nightLeg}:{}),...(h.scOnce?{scOnce:true}:{}),...(h.wkOnNight?{wkOnNight:true}:{}),...(h.nightPerLeg?{nightPerLeg:true}:{}),...(h.wkPerLeg?{wkPerLeg:true}:{}),...(h.wkSunPm?{wkSunPm:h.wkSunPm}:{}),...(isNum(h.holidayFlat)?{holidayFlat:h.holidayFlat}:{}),...(h.holPerLeg?{holPerLeg:true}:{}),...(isNum(h.holiday)&&h.holiday>0?{holiday:h.holiday}:{}),...(isNum(h.overnight)&&h.overnight>0?{overnight:h.overnight}:{}),...(isNum(h.overnightFlat)&&h.overnightFlat>0?{overnightFlat:h.overnightFlat}:{}),...(Array.isArray(h.holidayOn)&&h.holidayOn.length?{holidayOn:h.holidayOn}:{}),...(isNum(h.otRate)&&h.otRate>0?{otRate:h.otRate}:{}),...(isNum(h.otFrom)?{otFrom:h.otFrom}:{}),...(isNum(h.otTo)?{otTo:h.otTo}:{}),...(isNum(h.ferryDisc)&&h.ferryDisc>0?{ferryDisc:h.ferryDisc}:{}),...(h.extraSc&&isNum(h.extraSc.rate)?{extraSc:h.extraSc}:{}),prices};});
   delete o.weekend; delete o.night;
   o.updatedAt=new Date().toISOString();
   return o;
