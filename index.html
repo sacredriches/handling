@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ground Handling Price Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -146,6 +144,8 @@ tbody td:first-child{color:var(--ink-2)}
 td.min{color:var(--good);font-weight:600}
 td.min::before{content:"▼ ";font-size:9px;vertical-align:1px}
 td.txt{color:var(--muted);font-family:var(--f-body);font-size:13px}
+td.txt{white-space:normal;min-width:90px;max-width:150px;line-height:1.3}
+thead th:not(:first-child){white-space:normal;overflow-wrap:break-word;min-width:90px;max-width:170px;line-height:1.2;vertical-align:bottom}
 td.na{color:var(--line)}
 tr.sum td{border-top:2px solid var(--line);border-bottom:0;font-weight:600;color:var(--ink);background:var(--panel-2)}
 tr.sum td:first-child{background:var(--panel-2);color:var(--ink)}
@@ -400,7 +400,7 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .h-type{display:block;font-size:.7em;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-top:2px;line-height:1.25}
 .h-type:not(:empty)::before{content:"";display:inline-block;width:1em;height:1em;margin-right:4px;vertical-align:-.15em;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.8l2.85 5.78 6.38.93-4.62 4.5 1.09 6.35L12 17.36l-5.7 3 1.09-6.35-4.62-4.5 6.38-.93z' fill='%23e9e6e6' stroke='%23a9a2a2' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")}
 .upd-d{font-size:11px;color:var(--muted);font-family:var(--f-mono);cursor:help}
-.upd-prev{display:block;font-size:10.5px;color:var(--muted)}
+.upd-prev{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;white-space:normal;overflow-wrap:anywhere;max-width:150px;margin-left:auto;font-size:10.5px;line-height:1.3;color:var(--muted)}
 .cfm-ov{position:fixed;inset:0;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .cfm-box{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.25);max-width:420px;width:100%;padding:18px 18px 14px}
 .cfm-t{font-size:14px;line-height:1.45;margin-bottom:14px}
@@ -466,8 +466,7 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 </div>
 <div class="tip" id="tip" hidden></div>
 
-<script src="firebase-config.js"></script>
-<script src="firebase-db.js"></script>
+<script src="firebase-config.js"></script><script src="firebase-db.js"></script>
 <script>
 const AC = ["GL7T","GLEX","GL5T","GLF4","E35L","CL60"];
 const AC_NAME = {GL7T:"Global 7500 · T7-AFZ",GLEX:"Global Express / Global 6000 · T7-ELL, A6-AFD, A6-AFA, A6-AFC",GL5T:"Global 5000 / Gulfstream V · T7-ALEX, T7-ALEX1, T7-AFP, A6-AFE",GLF4:"Gulfstream IV · A6-FLH",E35L:"Legacy 600/650 · P4-OWN, P4-BVY, A6-AFO",CL60:"Challenger 600 · T7-ALX1, T7-KBI"};
