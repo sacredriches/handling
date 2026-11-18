@@ -1120,8 +1120,11 @@ function blankAirport(){
   return {icao:"",currency:"EUR",notes:"",services:DEFAULT_SERVICES.map(n=>({name:n,disb:/landing|parking/i.test(n),unit:/parking/i.test(n)?"day":"flight",airport:/landing|parking/i.test(n)})),handlers:[]};
 }
 function blankPrices(n){ const o={}; AC.forEach(c=>o[c]={disb:null,items:Array(n).fill(null)}); return o; }
+/* handlers: the store may hold an array (old) or an object keyed by slug (new). The app works on arrays; convert at load and save only. */
+const toArr=h=>Array.isArray(h)?h:Object.values(h||{});
+const hSlug=n=>String(n||"").toUpperCase().replace(/[^A-Z0-9]+/g,"_").replace(/^_+|_+$/g,"")||"HANDLER";
 function normalize(a){
-  a=clone(a); a.notes=a.notes||""; a.country=a.country||""; delete a.weekend; delete a.night; (a.handlers||[]).forEach(h=>{h.weekend=h.weekend||0; h.night=h.night||0; h.weekendFlat=h.weekendFlat||0; h.nightFlat=h.nightFlat||0; h.disbBase=h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport";}); a.services=a.services||[]; a.handlers=a.handlers||[];
+  a=clone(a); a.handlers=toArr(a.handlers); a.notes=a.notes||""; a.country=a.country||""; delete a.weekend; delete a.night; (a.handlers||[]).forEach(h=>{h.weekend=h.weekend||0; h.night=h.night||0; h.weekendFlat=h.weekendFlat||0; h.nightFlat=h.nightFlat||0; h.disbBase=h.disbBase==="all"||h.disbBase==="allxs"?h.disbBase:"airport";}); a.services=a.services||[]; a.handlers=a.handlers||[];
   a.handlers.forEach(h=>{ h.prices=h.prices||{}; AC.forEach(c=>{ const p=h.prices[c]||{disb:null,items:[]}; p.items=a.services.map((_,i)=>p.items[i]===undefined||p.items[i]===0?null:p.items[i]); /* panel rule: a price is never 0 — not shared = "—" */ if(p.disb===undefined) p.disb=null; h.prices[c]=p; }); });
   delete a.updatedAt; delete a.updatedBy;
   return a;
@@ -1368,7 +1371,7 @@ async function save(){
   const body=cleanForSave(d);
   try{
     await DB.doc("airports/"+body.icao).set(body);
-    ed={icao:body.icao,isNew:false,draft:normalize(body),orig:normalize(body),h:Math.min(ed.h,Math.max(0,body.handlers.length-1)),msg:"Saved. Panel updated.",msgCls:"ok",confirmDel:false,saving:false,updatedAt:body.updatedAt};
+    ed={icao:body.icao,isNew:false,draft:normalize(body),orig:normalize(body),h:Math.min(ed.h,Math.max(0,toArr(body.handlers).length-1)),msg:"Saved. Panel updated.",msgCls:"ok",confirmDel:false,saving:false,updatedAt:body.updatedAt};
     state.ap=body.icao;
   }catch(e){
     ed.saving=false;
@@ -1420,13 +1423,13 @@ setTab(state.tab);
   if(!DB){
     /* standalone copy (e.g. GitHub Pages): read-only data from handling-database.json next to this page */
     try{ const emb=document.getElementById("embedded-db"); let j; if(emb&&emb.textContent.trim()) j=JSON.parse(emb.textContent); else { const r=await fetch("handling-database.json",{cache:"no-store"}); if(!r.ok) throw new Error(r.status); j=await r.json(); }
-      const ap=j.airports||{}; DATA=(Array.isArray(ap)?ap:Object.values(ap)).filter(a=>a&&a.icao).map(a=>({...a,handlers:a.handlers||[],services:a.services||[]})).sort((x,y)=>x.icao.localeCompare(y.icao));
+      const ap=j.airports||{}; DATA=(Array.isArray(ap)?ap:Object.values(ap)).filter(a=>a&&a.icao).map(a=>({...a,handlers:toArr(a.handlers),services:a.services||[]})).sort((x,y)=>x.icao.localeCompare(y.icao));
       const st=j.settings||{}; FX=st.fx||{rates:{}}; if(!FX.rates) FX.rates={}; FUEL=st.fuel||{price:null,updatedAt:null}; if(!isNum(FUEL.price)) FUEL.price=null;
       canWrite=false; loaded=true; loadErr=null; renderPanel(); showFuel(); if(state.tab==="admin") renderAdmin(); return;
     }catch(e){}
     loadErr="The database is not available in this view. Open the page on claude.ai while signed in, or put handling-database.json next to this page and open it from a web server."; renderPanel(); if(state.tab==="admin") renderAdmin(); return; }
   DB.collection("airports").onSnapshot(snap=>{
-    DATA=snap.docs.map(d=>d.data()).filter(a=>a&&a.icao).map(a=>({...a,handlers:a.handlers||[],services:a.services||[]})).sort((x,y)=>x.icao.localeCompare(y.icao));
+    DATA=snap.docs.map(d=>d.data()).filter(a=>a&&a.icao).map(a=>({...a,handlers:toArr(a.handlers),services:a.services||[]})).sort((x,y)=>x.icao.localeCompare(y.icao));
     loaded=true; loadErr=null;
     state.tab==="admin"?renderAdminList():renderPanel();
     if(state.tab==="admin"&&!ed.draft) renderEditor();
