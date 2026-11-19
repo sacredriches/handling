@@ -2,18 +2,15 @@
  "_note": "ICAO -> son teyit edilen panel (artifact db) surumu. db_write ile yanlis ifVersion gondererek alinan 409 cevabi canli surumu doner; buradaki sayiyla ayniysa handling-database.json panelle ayni demektir ve db_get gerekmez.",
  "_updated": "2026-11-19",
  "airports": {
+  "OERK": 14,
+  "LFBO": 3,
+  "LIEO": 7,
   "UCFL": 9,
   "LFPB": 25,
-  "LIEO": 7,
   "LATI": 24,
   "LYTV": 17
  },
- "_kural": "objectForm listesindeki meydanlarda handlers NESNE bicimindedir; tek alanlik merge guvenlidir. Listede olmayan meydanda handlers DIZI olabilir ve kismi nesne merge dizinin tamamini siler. Panelde \"Handler bicimini duzelt\" dugmesi calistirildiktan sonra butun meydanlar listeye girer, handling-database.json da nesne bicimine cevrilir ve asagidaki surumler sifirlanir.",
- "objectForm": [
-  "LATI",
-  "LIEO",
-  "LYTV",
-  "UCFL"
- ],
- "migrationPending": true
+ "_kural": "Panelde butun meydanlarda handlers NESNE bicimindedir (bakim islemi 19 Kas 2026'da calistirildi, updatedAt degerleri korundu). Tek alanlik merge guvenlidir. Yeni bir handler anahtari yazmadan once anahtarin var oldugunu dogrula: olmayan anahtara merge yapmak bos bir handler yaratir.",
+ "objectForm": "ALL",
+ "migrationPending": false
 }
