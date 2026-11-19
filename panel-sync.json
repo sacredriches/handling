@@ -1,0 +1,11 @@
+{
+ "_note": "ICAO -> son teyit edilen panel (artifact db) surumu. db_write ile yanlis ifVersion gondererek alinan 409 cevabi canli surumu doner; buradaki sayiyla ayniysa handling-database.json panelle ayni demektir ve db_get gerekmez.",
+ "_updated": "2026-11-19",
+ "airports": {
+  "UCFL": 9,
+  "LFPB": 25,
+  "LIEO": 7,
+  "LATI": 24,
+  "LYTV": 17
+ }
+}
