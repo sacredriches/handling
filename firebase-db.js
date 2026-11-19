@@ -64,7 +64,7 @@
     if (!confirm("handling-database.json içindeki bütün meydanlar ve ayarlar Firebase'e yazılacak. Devam?")) return;
     btn.disabled = true; btn.textContent = "Importing…";
     try {
-      const r = await fetch("handling-database.json", { cache: "no-store" }); const j = await r.json();
+      const r = await fetch("handling-database.json?t=" + Date.now(), { cache: "no-store" }); const j = await r.json();
       const ap = j.airports || {}; const list = (Array.isArray(ap) ? ap : Object.values(ap)).filter(x => x && x.icao);
       const writes = list.map(x => [fs.collection("airports").doc(x.icao), x]);
       Object.entries(j.settings || {}).forEach(([k, v]) => writes.push([fs.collection("settings").doc(k), v]));
@@ -78,12 +78,12 @@
   async function updateJson(btn) {
     const label = "Update from JSON";
     let j;
-    try { const r = await fetch("handling-update.json", { cache: "no-store" }); if (!r.ok) throw new Error("HTTP " + r.status); j = await r.json(); }
+    try { const r = await fetch("handling-update.json?t=" + Date.now(), { cache: "no-store" }); if (!r.ok) throw new Error("HTTP " + r.status); j = await r.json(); }
     catch (e) { alert("handling-update.json could not be read: " + (e.message || e)); return; }
     const ap = j.airports || {}; const list = Object.values(ap).filter(x => x && x.icao); const base = j.base || {};
     const st = Object.entries(j.settings || {});
     if (!list.length && !st.length) { alert("Nothing to update (handling-update.json is empty)."); return; }
-    if (!confirm("Güncellenecek meydanlar (" + list.length + "): " + list.map(x => x.icao).join(", ") + (st.length ? "\nAyarlar: " + st.map(x => x[0]).join(", ") : "") +
+    if (!confirm("Paket: " + (j.createdAt || "tarihsiz") + "\nGüncellenecek meydanlar (" + list.length + "): " + list.map(x => x.icao + " -> " + (x.updatedAt || "?")).join(", ") + (st.length ? "\nAyarlar: " + st.map(x => x[0]).join(", ") : "") +
       "\n\nÖnce mevcut Firebase verisinin yedeği bilgisayarınıza inecek. Başka meydanlara dokunulmaz. Devam?")) return;
     btn.disabled = true; btn.textContent = "Backing up…";
     try { await exportJson("handling-backup-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".json"); }
@@ -95,14 +95,15 @@
         const d = await fs.collection("airports").doc(x.icao).get(); const cur = d.exists ? dec(d.data()) : null;
         const b = Object.prototype.hasOwnProperty.call(base, x.icao) ? base[x.icao] : undefined;
         const bs = Array.isArray(b) ? b : [b]; const cu = cur ? (cur.updatedAt || null) : null; const changed = b === undefined ? false : !(bs.includes(cu) || (cu && cu === x.updatedAt));
-        if (changed) skip.push(x.icao + " (Firebase: " + ((cur && cur.updatedAt) || "deleted") + ")"); else ok.push(x);
+        if (changed) skip.push([x, x.icao + " (Firebase: " + ((cur && cur.updatedAt) || "deleted") + ")"]); else ok.push(x);
       }
+      if (skip.length && confirm("Bu meydanlar Firebase'de son esitlemeden beri degismis (" + skip.length + "):\n" + skip.map(e => e[1]).join("\n") + "\n\nYine de paketteki haliyle UZERINE YAZILSIN mi?\n(Hayir dersen atlanir. Yedek zaten indi.)")) { skip.forEach(e => ok.push(e[0])); skip.length = 0; }
       const writes = ok.map(x => [fs.collection("airports").doc(x.icao), x]);
       st.forEach(([k, v]) => writes.push([fs.collection("settings").doc(k), v]));
       for (let i = 0; i < writes.length; i += 400) { const bt = fs.batch(); writes.slice(i, i + 400).forEach(([r, v]) => bt.set(r, enc(v))); await bt.commit(); }
       btn.disabled = false; btn.textContent = label;
       alert("Updated (" + ok.length + "): " + (ok.map(x => x.icao).join(", ") || "—") +
-        (skip.length ? "\n\nNOT updated, changed in Firebase by someone else since the last sync (" + skip.length + "): " + skip.join(", ") : "") +
+        (skip.length ? "\n\nNOT updated, changed in Firebase by someone else since the last sync (" + skip.length + "): " + skip.map(e => e[1]).join(", ") : "") +
         "\n\nBackup saved to your downloads.");
     } catch (e) { btn.disabled = false; btn.textContent = label; alert("Update failed: " + (e.message || e)); }
   }
