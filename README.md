@@ -1,6 +1,6 @@
 # Ground Handling Price Database (GitHub Pages)
 
-Site: https://index.flcn.today/ (eski adres sacredriches.github.io/handling buraya yönlenir)
+Site: https://nexus.flcn.today/ (Falcon Nexus)
 
 Panel sekmesi görüntüleme, Manage sekmesi düzenleme içindir. Veri Firebase'de (Firestore) tutulur: bir kişinin kaydı herkesin ekranına anında gelir. Kayıt için sağ alttan **Sign in to edit** ile Google hesabıyla giriş yapılır; sadece düzenleyici listesindeki hesaplar kayıt yapabilir.
 
