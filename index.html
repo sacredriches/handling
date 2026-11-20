@@ -199,6 +199,7 @@ tr.sc-row td{vertical-align:middle}
 .bval .usd{font-size:12px;color:var(--muted)}
 .fx-note{margin-top:10px;font-size:12.5px;color:var(--muted)}
 td .usd{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
+.xls-act{margin-top:8px}
 .fx-box{border-top:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
 .fx-det>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;padding:2px 0}
 .fx-det>summary::-webkit-details-marker{display:none}
@@ -928,7 +929,7 @@ function renderDetail(partial){
   const ag=ageInfo(a);
   if(a.handlingOnly) chips.push(`<span class="chip">Comparing <b>handling fee</b> only</span>`);
   const ctry=countryOf(a);
-  let html=`<section class="card"><div class="ap-head"><div class="ap-id"><span class="icao ${a.verified?"ver":""}" ${a.verified?`title="${esc(a.verified)}"`:""}>${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span>${ctry?`<span class="ctry">${esc(ctry)}</span>`:""}</div><div class="facts">${chips.join("")}</div>${apUpd(a,ag)}</div></section>`;
+  let html=`<section class="card"><div class="ap-head"><div class="ap-id"><span class="icao ${a.verified?"ver":""}" ${a.verified?`title="${esc(a.verified)}"`:""}>${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span>${ctry?`<span class="ctry">${esc(ctry)}</span>`:""}</div><div class="facts">${chips.join("")}</div><div class="xls-act"><button type="button" class="btn sm" id="mkXls">Make Comparison Excel</button></div>${apUpd(a,ag)}</div></section>`;
   const qs=s.qs;
   const hasDay=a.services.some(s=>s.unit==="day");
   const wks=a.handlers.map(h=>h.weekend||0).filter(v=>v>0), nts=a.handlers.map(h=>h.night||0).filter(v=>v>0);
@@ -1165,6 +1166,171 @@ function fxNote(cur){
   const r=FX.rates&&FX.rates[cur];
   return isNum(r)?`<div class="foot" style="padding-bottom:0">Dollar equivalent: 1 ${esc(cur)} = ${r} USD${FX.updatedAt?` (${fmtDate(FX.updatedAt).split(" ").slice(0,3).join(" ")})`:""}. The rate is updated in the Manage tab.</div>`:`<div class="foot" style="padding-bottom:0">No dollar rate entered for ${esc(cur)}. You can add it in the Manage tab.</div>`;
 }
+/* ===== Comparison Excel: tarayicida gercek .xlsx uretir, dis kutuphane yok ===== */
+const X_ESC = t => String(t == null ? "" : t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[c]));
+const XCRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function xCrc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = XCRC[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function xZip(files) {                       /* files: [{name, data:Uint8Array}] — sikistirmasiz (STORED) */
+  const enc = new TextEncoder(), parts = [], dir = []; let off = 0;
+  const u16 = n => [n & 255, (n >> 8) & 255], u32 = n => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >> 24) & 255];
+  files.forEach(f => {
+    const nm = enc.encode(f.name), crc = xCrc32(f.data), sz = f.data.length;
+    const lh = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(0),
+      ...u32(crc), ...u32(sz), ...u32(sz), ...u16(nm.length), ...u16(0)]);
+    parts.push(lh, nm, f.data);
+    dir.push({ nm, crc, sz, off });
+    off += lh.length + nm.length + sz;
+  });
+  const cd = [];
+  dir.forEach(d => {
+    cd.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(0),
+      ...u32(d.crc), ...u32(d.sz), ...u32(d.sz), ...u16(d.nm.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(d.off)]), d.nm);
+  });
+  const cdLen = cd.reduce((s, x) => s + x.length, 0);
+  const eocd = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(dir.length), ...u16(dir.length), ...u32(cdLen), ...u32(off), ...u16(0)]);
+  const all = [...parts, ...cd, eocd];
+  const total = all.reduce((s, x) => s + x.length, 0), out = new Uint8Array(total);
+  let q = 0; all.forEach(x => { out.set(x, q); q += x.length; });
+  return new Blob([out], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}
+/* hucre: {v, n:true sayi, s:stil} — stiller: 0 normal, 1 kalin, 2 baslik, 3 bolum, 4 para, 5 kalin para, 6 kucuk gri */
+function xSheet(rows, merges, widths) {
+  const col = i => { let s = "", n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = ((n - m) / 26) | 0; } return s; };
+  const body = rows.map((r, ri) => {
+    const cells = (r || []).map((c, ci) => {
+      if (c == null || c.v === "" || c.v == null) return c && c.s ? `<c r="${col(ci)}${ri + 1}" s="${c.s}"/>` : "";
+      const ref = `${col(ci)}${ri + 1}`, st = c.s ? ` s="${c.s}"` : "";
+      return c.n ? `<c r="${ref}"${st}><v>${c.v}</v></c>`
+                 : `<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${X_ESC(c.v)}</t></is></c>`;
+    }).join("");
+    return `<row r="${ri + 1}">${cells}</row>`;
+  }).join("");
+  const cols = widths && widths.length
+    ? `<cols>${widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join("")}</cols>` : "";
+  const mg = merges && merges.length
+    ? `<mergeCells count="${merges.length}">${merges.map(m => `<mergeCell ref="${m}"/>`).join("")}</mergeCells>` : "";
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0" showGridLines="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>${cols}<sheetData>${body}</sheetData>${mg}</worksheet>`;
+}
+const X_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.00"/></numFmts>
+<fonts count="4"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="10"/><name val="Arial"/></font><font><b/><sz val="12"/><color rgb="FFFFFFFF"/><name val="Arial"/></font><font><sz val="9"/><color rgb="FF7A7A7A"/><name val="Arial"/></font></fonts>
+<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1F2A44"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE6F1"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/><bottom style="thin"><color rgb="FFD9D9D9"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="7">
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1"/>
+<xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="1" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1"/>
+<xf numFmtId="164" fontId="1" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"/>
+<xf numFmtId="0" fontId="3" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1"/>
+</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+function xlsxBlob(sheetName, rows, merges, widths) {
+  const e = new TextEncoder(), f = (name, str) => ({ name, data: e.encode(str) });
+  return xZip([
+    f("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`),
+    f("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`),
+    f("xl/workbook.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${X_ESC(sheetName).slice(0, 31)}" sheetId="1" r:id="rId1"/></sheets></workbook>`),
+    f("xl/_rels/workbook.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`),
+    f("xl/styles.xml", X_STYLES),
+    f("xl/worksheets/sheet1.xml", xSheet(rows, merges, widths)),
+  ]);
+}
+/* Karsilastirma tablosunu tek sayfada, butun ucak gruplari yan yana, yuzde sutunu yok */
+function exportCmpXlsx() {
+  const a = DATA.find(x => x.icao === state.ap);
+  if (!a) { return; }
+  const groups = AC.filter(c => quotesFor(a, c).length);
+  if (!groups.length) { return; }
+  const hs = toArr(a.handlers).filter(h => groups.some(c => quoteHasData(h.prices && h.prices[c])));
+  const pOf = (h, c) => (h.prices && h.prices[c]) || null;
+  const W = hs.length, cols = 1 + groups.length * W;
+  const rows = [], merges = [];
+  const blank = () => new Array(cols).fill(null);
+
+  let r = blank(); r[0] = { v: `${a.icao} · HANDLER COMPARISON · ${a.currency || ""}`, s: 2 };
+  rows.push(r); merges.push(`A1:${colName(cols - 1)}1`);
+  const scen = `${state.arrD} ${state.arrT} → ${state.depD} ${state.depT} · ${state.arrPax}+${state.depPax} pax · ${state.days} day(s)`;
+  r = blank(); r[0] = { v: scen, s: 6 }; rows.push(r);
+
+  r = blank();
+  groups.forEach((c, gi) => { r[1 + gi * W] = { v: acLbl(c) + (AC_TAILS[c] ? " · " + AC_TAILS[c] : ""), s: 3 }; });
+  rows.push(r);
+  const rowNo = rows.length;
+  groups.forEach((c, gi) => {
+    const c1 = 1 + gi * W;
+    if (W > 1) merges.push(`${colName(c1)}${rowNo}:${colName(c1 + W - 1)}${rowNo}`);
+  });
+
+  r = blank(); r[0] = { v: "Service", s: 3 };
+  groups.forEach((c, gi) => hs.forEach((h, hi) => { r[1 + gi * W + hi] = { v: h.name, s: 3 }; }));
+  rows.push(r);
+
+  const section = (title) => { const x = blank(); x[0] = { v: title, s: 1 }; rows.push(x); };
+  const bodyRow = (i) => {
+    const x = blank(); x[0] = { v: a.services[i].name, s: 0 };
+    let any = false;
+    groups.forEach((c, gi) => hs.forEach((h, hi) => {
+      const p = pOf(h, c); if (!p) return;
+      const v = p.items && p.items[i];
+      if (v == null) return;
+      if (typeof v === "string") { x[1 + gi * W + hi] = { v, s: 0 }; any = true; return; }
+      const amtv = lineAmt(a, i, v);
+      if (amtv == null) return;
+      x[1 + gi * W + hi] = { v: Math.round(amtv * 100) / 100, n: true, s: 4 }; any = true;
+    }));
+    if (any) rows.push(x);
+  };
+
+  const idx = a.services.map((s, i) => i);
+  const inBasket = i => inCmp(a, i);
+  const secs = [
+    ["HANDLING & SERVICES", idx.filter(i => inBasket(i) && !a.services[i].airport)],
+    ["AIRPORT CHARGES", idx.filter(i => inBasket(i) && a.services[i].airport)],
+    ["OTHER (not in the comparison basket)", idx.filter(i => !inBasket(i))],
+  ];
+  secs.forEach(([t, list]) => { if (!list.length) return; section(t); list.forEach(bodyRow); });
+
+  const dz = blank(); dz[0] = { v: "Disbursement", s: 1 }; let anyD = false;
+  groups.forEach((c, gi) => hs.forEach((h, hi) => {
+    const p = pOf(h, c); if (!p) return;
+    const d = disbAmtOf(a, p, h) + (isNum(p.disbFlat) ? p.disbFlat : 0);
+    if (!d) return;
+    dz[1 + gi * W + hi] = { v: Math.round(d * 100) / 100, n: true, s: 4 }; anyD = true;
+  }));
+  if (anyD) rows.push(dz);
+
+  const tt = blank(); tt[0] = { v: "TOTAL", s: 3 };
+  groups.forEach((c, gi) => hs.forEach((h, hi) => {
+    const p = pOf(h, c); if (!p || !quoteHasData(p)) return;
+    tt[1 + gi * W + hi] = { v: Math.round(scenTotal(a, p, h) * 100) / 100, n: true, s: 5 };
+  }));
+  rows.push(tt);
+
+  const note = blank();
+  note[0] = { v: `Exported ${new Date().toISOString().slice(0, 16).replace("T", " ")} · amounts for the scenario above, excluding VAT · prices from the panel`, s: 6 };
+  rows.push(blank(), note);
+
+  const widths = [40].concat(new Array(cols - 1).fill(15));
+  const blob = xlsxBlob(`${a.icao} comparison`, rows, merges, widths);
+  xSaveFile(blob, `${a.icao}_comparison_${new Date().toISOString().slice(0, 10)}.xlsx`);
+}
+/* claude.ai panelinde dogrudan indirme calismaz: downloads yetkisi uzerinden kaydedilir.
+   GitHub Pages kopyasinda claude.use yoktur, orada normal indirme baglantisi kullanilir. */
+async function xSaveFile(blob, filename) {
+  let dl = null;
+  try { if (window.claude && typeof window.claude.use === "function") dl = await window.claude.use("downloads"); } catch (e) { dl = null; }
+  if (dl) { try { await dl.save({ filename, data: blob }); } catch (e) {} return; }
+  const url = URL.createObjectURL(blob), link = document.createElement("a");
+  link.href = url; link.download = filename;
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+function colName(i) { let s = "", n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = ((n - m) / 26) | 0; } return s; }
+document.addEventListener("click", e => { const b = e.target && e.target.closest && e.target.closest("#mkXls"); if (b) { e.preventDefault(); exportCmpXlsx(); } });
 function renderFx(){
   const el=document.getElementById("fxBox"); if(!el) return;
   if(!loaded||canWrite===false){ el.innerHTML=""; return; }
