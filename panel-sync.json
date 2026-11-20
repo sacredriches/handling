@@ -2,7 +2,7 @@
  "_note": "ICAO -> son teyit edilen panel (artifact db) surumu. db_write ile yanlis ifVersion gondererek alinan 409 cevabi canli surumu doner; buradaki sayiyla ayniysa handling-database.json panelle ayni demektir ve db_get gerekmez.",
  "_updated": "2026-11-20",
  "airports": {
-  "OERK": 14,
+  "OERK": 20,
   "LFBO": 3,
   "LIEO": 7,
   "UCFL": 9,
@@ -29,7 +29,8 @@
   "LGAV": 13,
   "LGRP": 11,
   "HECA": 52,
-  "KEWR": 12
+  "KEWR": 12,
+  "HLLB": 14
  },
  "_kural": "Panelde butun meydanlarda handlers NESNE bicimindedir (bakim islemi 19 Kas 2026'da calistirildi, updatedAt degerleri korundu). Tek alanlik merge guvenlidir. Yeni bir handler anahtari yazmadan once anahtarin var oldugunu dogrula: olmayan anahtara merge yapmak bos bir handler yaratir.",
  "objectForm": "ALL",
