@@ -25,10 +25,19 @@
 
   /* Delta paketi: handling-update.json'daki _patch, Firebase'deki kayit uzerine uygulanir.
      Nesneler derin birlesir, diziler ve skalerler bastan yazilir, "__del__" o anahtari siler. */
-  const patch = (t, p) => {
+  const patch = (t, p, path) => {
     if (p === null || typeof p !== "object" || Array.isArray(p)) return p;
-    const o = (t && typeof t === "object" && !Array.isArray(t)) ? Object.assign({}, t) : {};
-    for (const k in p) { const v = p[k]; if (v === "__del__") delete o[k]; else o[k] = patch(o[k], v); }
+    /* Hedef beklenen bicimde degilse SESSIZCE {} ile baslama: eldeki alanlar yok olur.
+       20 Kas 2026'da HLLB/OERK'te tam olarak bu oldu. Uyusmazlikta delta iptal edilir. */
+    if (t === undefined || t === null) throw new Error("delta: '" + (path || "?") + "' Firebase kaydinda yok");
+    if (typeof t !== "object" || Array.isArray(t)) throw new Error("delta: '" + (path || "?") + "' Firebase'de beklenen bicimde degil");
+    const o = Object.assign({}, t);
+    for (const k in p) {
+      const v = p[k], np = (path ? path + "." : "") + k;
+      if (v === "__del__") delete o[k];
+      else if (v !== null && typeof v === "object" && !Array.isArray(v) && !(k in o)) o[k] = v;  /* yeni dal: oldugu gibi */
+      else o[k] = patch(o[k], v, np);
+    }
     return o;
   };
   const dec = raw => { if (!raw) return raw; if (typeof raw.j === "string") { try { return JSON.parse(raw.j); } catch (e) { return null; } } return raw; };
@@ -107,7 +116,9 @@
           /* Delta paketi tahmin yurutmez: Firebase kaydi yoksa veya beklenen surumde degilse uygulanmaz. */
           if (!cur) { miss.push(x.icao + " (Firebase'de kayit yok)"); continue; }
           if (changed) { miss.push(x.icao + " (Firebase: " + (cu || "?") + ", paket " + (b || "?") + " bekliyordu)"); continue; }
-          x._full = patch(cur, x._patch); x._full.updatedAt = x.updatedAt || x._full.updatedAt; ok.push(x); continue;
+          try { x._full = patch(cur, x._patch, x.icao); }
+          catch (e) { miss.push(x.icao + " \u2014 " + (e.message || e)); continue; }
+          x._full.updatedAt = x.updatedAt || x._full.updatedAt; ok.push(x); continue;
         }
         if (changed) skip.push([x, x.icao + " (Firebase: " + ((cur && cur.updatedAt) || "deleted") + ")"]); else ok.push(x);
       }
