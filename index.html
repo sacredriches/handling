@@ -200,6 +200,8 @@ tr.sc-row td{vertical-align:middle}
 .fx-note{margin-top:10px;font-size:12.5px;color:var(--muted)}
 td .usd{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:2px}
 .xls-act{margin-top:8px}
+.pk-copy{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.pk-copy select{font:12px var(--f-body);padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--panel-2);color:var(--ink)}
 .fx-box{border-top:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
 .fx-det>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;padding:2px 0}
 .fx-det>summary::-webkit-details-marker{display:none}
@@ -1431,7 +1433,8 @@ function pkEditor(d,h){
   const r=pkOf(h.prices[c].items[i])||{pk:1,free:0,bands:[],every:1,price:null};
   const H=trip().ok?trip().hrs:24, cur=d.currency;
   const ex=[2,6,12,24,30,48].map(x=>`<span class="pk-ex"><b class="num">${x} h</b> ${fmt(pkCost(r,x)??0,cur)}</span>`).join("");
-  return `<div class="pk-ed" id="pkEd"><div class="pk-h"><b>${esc(s.name)}</b> · <span title="${AC_NAME[c]}">${acLbl(c)}</span> · ${esc(cur)}</div>
+  const cpy=AC.filter(x=>x!==c&&isPk(h.prices[x]&&h.prices[x].items[i]));
+  return `<div class="pk-ed" id="pkEd"><div class="pk-h"><b>${esc(s.name)}</b> · <span title="${AC_NAME[c]}">${acLbl(c)}</span> · ${esc(cur)}${cpy.length?`<label class="pk-copy"><span>Copy rule from</span><select id="pkCopy"><option value="">—</option>${cpy.map(x=>`<option value="${x}">${acLbl(x)}</option>`).join("")}</select></label>`:""}</div>
     <div class="pk-grid">
       <div class="pk-freecol"><label class="field pk-f"><span>Free hours</span><input id="pk-free" inputmode="decimal" value="${r.free||""}" placeholder="0"></label>
         <label class="pk-chk"><input type="checkbox" id="pk-full24" ${r.full24!==false?"checked":""}> If free hours are exceeded, the 24-hour rate is charged</label></div>
@@ -1453,6 +1456,13 @@ function bindPk(d,h){
   const cur=()=>{ let r=pkOf(P.items[i]); r=r?clone(r):{pk:1,free:0,bands:[],every:1,price:null}; return r; };
   const num=x=>{const v=parseCell(x); return isNum(v)&&v>=0?v:null;};
   const put=(r,full)=>{ P.items[i]=r; if(full){ renderEditor(); } else { const b=$(`pk-${c}-${i}`); if(b) b.textContent=PK_SHORT.includes(d.icao)?pkShort(r,d.currency):pkDesc(r,d.currency); const pv=document.querySelector("#pkEd .pk-prev"); if(pv){ const H=trip().ok?trip().hrs:24; pv.innerHTML=`<span class="pk-lbl">Example amounts</span>`+[2,6,12,24,30,48].map(x=>`<span class="pk-ex"><b class="num">${x} h</b> ${fmt(pkCost(r,x)??0,d.currency)}</span>`).join("")+`<span class="pk-ex now"><b>Current stay (${fmtStay(H)})</b> ${fmt(pkCost(r,H)??0,d.currency)}</span>`; } refreshTotals(); } };
+  /* Kuralı başka bir uçak grubundan kopyala: yapı aynen gelir, sonra housing/saatlik elle düzeltilir */
+  const pkc=$("pkCopy");
+  if(pkc) pkc.onchange=()=>{ const g=pkc.value; if(!g) return;
+    const src=h.prices[g]&&h.prices[g].items[ed.pk.i];
+    if(!isPk(src)) return;
+    h.prices[ed.pk.c].items[ed.pk.i]=clone(src);
+    renderEditor(); const e2=$("pkEd"); if(e2) e2.scrollIntoView({block:"nearest"}); };
   $("pk-free").oninput=e=>{const r=cur(); r.free=num(e.target.value)||0; put(r);};
   $("pk-full24").onchange=e=>{const r=cur(); if(e.target.checked) delete r.full24; else r.full24=false; put(r);};
   $("pk-every").oninput=e=>{const r=cur(); const v=num(e.target.value); r.every=v===null?1:v; put(r);};
