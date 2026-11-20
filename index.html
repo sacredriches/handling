@@ -1215,6 +1215,8 @@ function renderEditor(){
       <input class="svc-in" data-svc="${i}" id="svc-${i}" value="${esc(s.name)}" aria-label="Service name">
       <select class="unit-sel" data-sunit="${i}" id="su-${i}" aria-label="Unit">${Object.entries(UNITS).map(([k,l])=>`<option value="${k}" ${(UNITS[s.unit]?s.unit:"flight")===k?"selected":""}>${l}</option>`).join("")}</select>
       <label class="chk" title="Airport charge (landing, parking, navigation etc.). Disbursement applies to these items."><input type="checkbox" data-sap="${i}" id="sa-${i}" ${s.airport?"checked":""}> Airport fee</label>
+      <button type="button" class="btn ghost sm" data-sup="${i}" ${i===0?"disabled":""} title="Move up" aria-label="Move ${esc(s.name)} up">↑</button>
+      <button type="button" class="btn ghost sm" data-sdn="${i}" ${i===d.services.length-1?"disabled":""} title="Move down" aria-label="Move ${esc(s.name)} down">↓</button>
       <button type="button" class="btn ghost sm" data-sdel="${i}" aria-label="Delete row ${esc(s.name)}">Delete</button></div>`).join("")}</div>
       <div style="margin-top:10px"><button type="button" class="btn sm" id="addSvc">+ Add item</button></div></div></section>`;
 
@@ -1324,6 +1326,17 @@ function bindEditor(){
   document.querySelectorAll("[data-sunit]").forEach(i=>i.onchange=()=>{const k=+i.dataset.sunit; d.services[k].unit=i.value; if(i.value!=="day") d.handlers.forEach(h=>AC.forEach(c=>{const v=h.prices[c].items[k]; if(isPk(v)) h.prices[c].items[k]=isNum(v.price)?v.price:null;})); ed.pk=null; renderEditor();});
   document.querySelectorAll("[data-sap]").forEach(i=>i.onchange=()=>{d.services[+i.dataset.sap].airport=i.checked; d.services[+i.dataset.sap].disb=i.checked; renderEditor();});
   document.querySelectorAll("[data-sdel]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sdel; const nm=(d.services[i]&&d.services[i].name)||"(unnamed)"; askConfirm(`The service <b>${esc(nm)}</b> and its prices for all handlers will be deleted.<br>Do you confirm?`,()=>{ d.services.splice(i,1); d.handlers.forEach(h=>AC.forEach(c=>h.prices[c].items.splice(i,1))); renderEditor(); });});
+  /* Satir tasima: servis listesiyle her handler'in her grubunun fiyat dizisi BIRLIKTE kaydirilir.
+     Kisa kalmis diziler once services uzunluguna kadar null ile doldurulur, yoksa takas bozulur. */
+  const svcMove=(i,j)=>{ if(i<0||j<0||i>=d.services.length||j>=d.services.length) return;
+    const sw=a=>{ const t=a[i]; a[i]=a[j]; a[j]=t; };
+    sw(d.services);
+    d.handlers.forEach(h=>AC.forEach(c=>{ const it=h.prices[c].items;
+      while(it.length<d.services.length) it.push(null);
+      sw(it); }));
+    renderEditor(); };
+  document.querySelectorAll("[data-sup]").forEach(b=>b.onclick=()=>svcMove(+b.dataset.sup,+b.dataset.sup-1));
+  document.querySelectorAll("[data-sdn]").forEach(b=>b.onclick=()=>svcMove(+b.dataset.sdn,+b.dataset.sdn+1));
   $("addSvc").onclick=()=>{d.services.push({name:"",disb:false,unit:"flight",airport:false}); d.handlers.forEach(h=>AC.forEach(c=>h.prices[c].items.push(null))); renderEditor(); const n=$("svc-"+(d.services.length-1)); if(n) n.focus();};
   const addH=()=>{const n=$("newH").value.trim(); if(!n){$("newH").focus();return;} d.handlers.push({name:n,weekend:0,night:0,disbBase:"airport",prices:blankPrices(d.services.length)}); ed.h=d.handlers.length-1; renderEditor(); const f=$("c-"+AC[0]+"-0"); if(f) f.focus();};
   $("addH").onclick=addH; $("newH").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addH();}};
