@@ -1550,6 +1550,39 @@ function bindEditor(){
   const dy=$("delYes"); if(dy) dy.onclick=delAirport;
   const dn=$("delNo"); if(dn) dn.onclick=()=>{ed.confirmDel=false; renderEditor();};
 }
+/* Elle girilen/degistirilen fiyatlara belge tarihi damgasi: kaydederken taslak, acilistaki
+   orijinalle karsilastirilir ve degisen her hucreye upd[hizmet adi] = {d: bugun, prev, pd} yazilir.
+   Satir adiyla eslestirilir (satir tasindiysa kaymaz); ad bulunamazsa konuma duser (satir yeniden
+   adlandirilmis olabilir). Bosaltilan hucreye damga basilmaz. Mevcut src korunur. */
+function stampEdits(d, orig){
+  if(!d||!orig||!Array.isArray(d.services)) return;
+  const today=new Date().toISOString().slice(0,10);
+  const oi={}; (orig.services||[]).forEach((s,i)=>{ if(s&&s.name) oi[s.name]=i; });
+  const oh={}; toArr(orig.handlers).forEach(h=>{ oh[hSlug(h.name)]=h; });
+  const same=(x,y)=>JSON.stringify(x===undefined?null:x)===JSON.stringify(y===undefined?null:y);
+  toArr(d.handlers).forEach(h=>{
+    const o=oh[hSlug(h.name)];
+    AC.forEach(c=>{
+      const p=h.prices&&h.prices[c];
+      if(!p||!Array.isArray(p.items)) return;
+      p.items.forEach((v,i)=>{
+        const s=d.services[i]; if(!s||!s.name) return;
+        const oidx=(s.name in oi)?oi[s.name]:i;
+        const op=o&&o.prices&&o.prices[c];
+        const ov=(op&&Array.isArray(op.items))?op.items[oidx]:undefined;
+        if(same(v,ov)) return;
+        if(v===null||v===undefined) return;
+        p.upd=p.upd||{};
+        const prev=p.upd[s.name]||{};
+        const u={...prev, d:today};
+        if(prev.d&&prev.d!==today) u.pd=prev.d;
+        if(ov!==null&&ov!==undefined) u.prev=(typeof ov==="object")?pkDesc(ov,d.currency):ov;
+        delete u.a;
+        p.upd[s.name]=u;
+      });
+    });
+  });
+}
 function cleanForSave(d){
   const o=clone(d);
   o.icao=o.icao.toUpperCase();
@@ -1569,6 +1602,7 @@ async function save(){
   const d=ed.draft;
   if(ed.isNew&&(!/^[A-Z]{4}$/.test(d.icao)||DATA.some(a=>a.icao===d.icao))) return;
   ed.saving=true; ed.msg="Kaydediliyor…"; ed.msgCls=""; renderEditor();
+  stampEdits(d, ed.orig);
   const body=cleanForSave(d);
   try{
     await DB.doc("airports/"+body.icao).set(body);
