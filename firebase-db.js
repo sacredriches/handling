@@ -23,6 +23,14 @@
     bar();
   })();
 
+  /* Delta paketi: handling-update.json'daki _patch, Firebase'deki kayit uzerine uygulanir.
+     Nesneler derin birlesir, diziler ve skalerler bastan yazilir, "__del__" o anahtari siler. */
+  const patch = (t, p) => {
+    if (p === null || typeof p !== "object" || Array.isArray(p)) return p;
+    const o = (t && typeof t === "object" && !Array.isArray(t)) ? Object.assign({}, t) : {};
+    for (const k in p) { const v = p[k]; if (v === "__del__") delete o[k]; else o[k] = patch(o[k], v); }
+    return o;
+  };
   const dec = raw => { if (!raw) return raw; if (typeof raw.j === "string") { try { return JSON.parse(raw.j); } catch (e) { return null; } } return raw; };
   const enc = obj => ({ j: JSON.stringify(obj) });
   const mapErr = e => { const c = e && e.code; const o = new Error((e && e.message) || "error");
@@ -90,19 +98,26 @@
     catch (e) { btn.disabled = false; btn.textContent = label; alert("Backup failed, nothing was changed: " + (e.message || e)); return; }
     btn.textContent = "Updating…";
     try {
-      const ok = [], skip = [];
+      const ok = [], skip = [], miss = [];
       for (const x of list) {
         const d = await fs.collection("airports").doc(x.icao).get(); const cur = d.exists ? dec(d.data()) : null;
         const b = Object.prototype.hasOwnProperty.call(base, x.icao) ? base[x.icao] : undefined;
         const bs = Array.isArray(b) ? b : [b]; const cu = cur ? (cur.updatedAt || null) : null; const changed = b === undefined ? false : !(bs.includes(cu) || (cu && cu === x.updatedAt));
+        if (x._patch) {
+          /* Delta paketi tahmin yurutmez: Firebase kaydi yoksa veya beklenen surumde degilse uygulanmaz. */
+          if (!cur) { miss.push(x.icao + " (Firebase'de kayit yok)"); continue; }
+          if (changed) { miss.push(x.icao + " (Firebase: " + (cu || "?") + ", paket " + (b || "?") + " bekliyordu)"); continue; }
+          x._full = patch(cur, x._patch); x._full.updatedAt = x.updatedAt || x._full.updatedAt; ok.push(x); continue;
+        }
         if (changed) skip.push([x, x.icao + " (Firebase: " + ((cur && cur.updatedAt) || "deleted") + ")"]); else ok.push(x);
       }
       if (skip.length && confirm("Bu meydanlar Firebase'de son esitlemeden beri degismis (" + skip.length + "):\n" + skip.map(e => e[1]).join("\n") + "\n\nYine de paketteki haliyle UZERINE YAZILSIN mi?\n(Hayir dersen atlanir. Yedek zaten indi.)")) { skip.forEach(e => ok.push(e[0])); skip.length = 0; }
-      const writes = ok.map(x => [fs.collection("airports").doc(x.icao), x]);
+      const writes = ok.map(x => [fs.collection("airports").doc(x.icao), x._full || x]);
       st.forEach(([k, v]) => writes.push([fs.collection("settings").doc(k), v]));
       for (let i = 0; i < writes.length; i += 400) { const bt = fs.batch(); writes.slice(i, i + 400).forEach(([r, v]) => bt.set(r, enc(v))); await bt.commit(); }
       btn.disabled = false; btn.textContent = label;
-      alert("Updated (" + ok.length + "): " + (ok.map(x => x.icao).join(", ") || "—") +
+      alert("Updated (" + ok.length + "): " + (ok.map(x => x.icao + (x._patch ? " (delta)" : "")).join(", ") || "—") +
+        (miss.length ? "\n\nDELTA uygulanmadi (" + miss.length + "): " + miss.join(", ") : "") +
         (skip.length ? "\n\nNOT updated, changed in Firebase by someone else since the last sync (" + skip.length + "): " + skip.map(e => e[1]).join(", ") : "") +
         "\n\nBackup saved to your downloads.");
     } catch (e) { btn.disabled = false; btn.textContent = label; alert("Update failed: " + (e.message || e)); }
