@@ -1444,6 +1444,9 @@ function pkEditor(d,h){
       <div class="pk-then"><span class="pk-lbl">${(r.bands||[]).length?"After the last band":"Charge"}</span>
         <div class="pk-band"><span>every</span><input id="pk-every" inputmode="decimal" value="${isNum(r.every)?r.every:1}" aria-label="Every how many hours"><span>hours</span><input id="pk-price" inputmode="decimal" value="${isNum(r.price)?r.price:""}" placeholder="${(r.bands||[]).length?"empty = repeat":"price"}" aria-label="Price"></div>
         <span class="help">Parking is calculated hourly: enter the hourly rate (every 1 hour). If the handler gave a 24-hour price, divide it by 24. Enter 0 hours to charge once per stay.</span></div>
+      <div class="pk-then"><span class="pk-lbl">Housing <span class="help">daily rate for a long stay</span></span>
+        <div class="pk-band"><span>over</span><input id="pk-after" inputmode="decimal" value="${isNum(r.after)?r.after:""}" placeholder="—" aria-label="Housing applies over how many hours"><span>hours, each started 24 h</span><input id="pk-day24" inputmode="decimal" value="${isNum(r.day24)?r.day24:""}" placeholder="—" aria-label="Housing price per 24 hours"></div>
+        <span class="help">Leave the hours empty and the daily rate is charged from the first 24 h, with the remainder hourly. Leave both empty for no housing.</span></div>
     </div>
     <div class="pk-prev"><span class="pk-lbl">Example amounts</span>${ex}<span class="pk-ex now"><b>Current stay (${fmtStay(H)})</b> ${fmt(pkCost(r,H)??0,cur)}</span></div>
     <div class="pk-act"><button type="button" class="btn sm" id="pkClear">Clear rule</button><button type="button" class="btn sm primary" id="pkClose">Done</button></div></div>`;
@@ -1467,6 +1470,9 @@ function bindPk(d,h){
   $("pk-full24").onchange=e=>{const r=cur(); if(e.target.checked) delete r.full24; else r.full24=false; put(r);};
   $("pk-every").oninput=e=>{const r=cur(); const v=num(e.target.value); r.every=v===null?1:v; put(r);};
   $("pk-price").oninput=e=>{const r=cur(); r.price=num(e.target.value); put(r);};
+  /* housing: after + day24 — kalis "after" saatini asarsa her baslayan 24 saat day24 */
+  $("pk-after").oninput=e=>{const r=cur(); const v=num(e.target.value); if(v===null) delete r.after; else r.after=v; put(r);};
+  $("pk-day24").oninput=e=>{const r=cur(); const v=num(e.target.value); if(v===null){ delete r.day24; delete r.after; } else r.day24=v; put(r);};
   document.querySelectorAll("[data-pkbh]").forEach(x=>x.oninput=()=>{const r=cur(); r.bands[+x.dataset.pkbh][0]=num(x.value); put(r);});
   document.querySelectorAll("[data-pkbp]").forEach(x=>x.oninput=()=>{const r=cur(); r.bands[+x.dataset.pkbp][1]=num(x.value); put(r);});
   document.querySelectorAll("[data-pkbdel]").forEach(x=>x.onclick=()=>{ askConfirm("This parking band will be deleted.<br>Do you confirm?",()=>{const r=cur(); r.bands.splice(+x.dataset.pkbdel,1); put(r,true);}); });
