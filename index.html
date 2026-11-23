@@ -1458,7 +1458,7 @@ function bindPk(d,h){
   const {c,i}=ed.pk, P=h.prices[c];
   const cur=()=>{ let r=pkOf(P.items[i]); r=r?clone(r):{pk:1,free:0,bands:[],every:1,price:null}; return r; };
   const num=x=>{const v=parseCell(x); return isNum(v)&&v>=0?v:null;};
-  const put=(r,full)=>{ P.items[i]=r; if(full){ renderEditor(); } else { const b=$(`pk-${c}-${i}`); if(b) b.textContent=PK_SHORT.includes(d.icao)?pkShort(r,d.currency):pkDesc(r,d.currency); const pv=document.querySelector("#pkEd .pk-prev"); if(pv){ const H=trip().ok?trip().hrs:24; pv.innerHTML=`<span class="pk-lbl">Example amounts</span>`+[2,6,12,24,30,48].map(x=>`<span class="pk-ex"><b class="num">${x} h</b> ${fmt(pkCost(r,x)??0,d.currency)}</span>`).join("")+`<span class="pk-ex now"><b>Current stay (${fmtStay(H)})</b> ${fmt(pkCost(r,H)??0,d.currency)}</span>`; } refreshTotals(); } };
+  const put=(r,full)=>{ delete r.desc; P.items[i]=r; if(full){ renderEditor(); } else { const b=$(`pk-${c}-${i}`); if(b) b.textContent=PK_SHORT.includes(d.icao)?pkShort(r,d.currency):pkDesc(r,d.currency); const pv=document.querySelector("#pkEd .pk-prev"); if(pv){ const H=trip().ok?trip().hrs:24; pv.innerHTML=`<span class="pk-lbl">Example amounts</span>`+[2,6,12,24,30,48].map(x=>`<span class="pk-ex"><b class="num">${x} h</b> ${fmt(pkCost(r,x)??0,d.currency)}</span>`).join("")+`<span class="pk-ex now"><b>Current stay (${fmtStay(H)})</b> ${fmt(pkCost(r,H)??0,d.currency)}</span>`; } refreshTotals(); } };
   /* Kuralı başka bir uçak grubundan kopyala: yapı aynen gelir, sonra housing/saatlik elle düzeltilir */
   const pkc=$("pkCopy");
   if(pkc) pkc.onchange=()=>{ const g=pkc.value; if(!g) return;
