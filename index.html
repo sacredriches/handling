@@ -936,7 +936,7 @@ function renderDetail(partial){
   const ag=ageInfo(a);
   if(a.handlingOnly) chips.push(`<span class="chip">Comparing <b>handling fee</b> only</span>`);
   const ctry=countryOf(a);
-  let html=`<section class="card"><div class="ap-head"><div class="ap-id"><span class="icao ${a.verified?"ver":""}" ${a.verified?`title="${esc(a.verified)}"`:""}>${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span>${ctry?`<span class="ctry">${esc(ctry)}</span>`:""}</div><div class="facts">${chips.join("")}</div><div class="xls-act"><button type="button" class="btn sm" id="mkXls">Make Comparison Excel</button></div>${apUpd(a,ag)}</div></section>`;
+  let html=`<section class="card"><div class="ap-head"><div class="ap-id"><span class="icao ${a.verified?"ver":""}" ${a.verified?`title="${esc(a.verified)}"`:""}>${a.icao}${a.verified&&a.tick!==false?`<span class="vtick" aria-label="Verified against invoice">✓</span>`:""}</span>${ctry?`<span class="ctry">${esc(ctry)}</span>`:""}</div><div class="facts">${chips.join("")}</div><div class="xls-act"><button type="button" class="btn sm" id="mkXls" title="Selected aircraft group only">Make Comparison Excel</button> <button type="button" class="btn sm" id="mkXlsAll" title="All aircraft groups with prices">All groups</button></div>${apUpd(a,ag)}</div></section>`;
   const qs=s.qs;
   const hasDay=a.services.some(s=>s.unit==="day");
   const wks=a.handlers.map(h=>h.weekend||0).filter(v=>v>0), nts=a.handlers.map(h=>h.night||0).filter(v=>v>0);
@@ -1200,130 +1200,352 @@ function xZip(files) {                       /* files: [{name, data:Uint8Array}]
   let q = 0; all.forEach(x => { out.set(x, q); q += x.length; });
   return new Blob([out], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
 }
-/* hucre: {v, n:true sayi, s:stil} — stiller: 0 normal, 1 kalin, 2 baslik, 3 bolum, 4 para, 5 kalin para, 6 kucuk gri */
-function xSheet(rows, merges, widths) {
+/* hucre: {v, n:true sayi, f:formul (v = onbellek degeri), s:stil} — stiller X_ST ile adlandirilir */
+function xSheet(rows, merges, widths, freezeRow, heights) {
   const col = i => { let s = "", n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = ((n - m) / 26) | 0; } return s; };
   const body = rows.map((r, ri) => {
     const cells = (r || []).map((c, ci) => {
-      if (c == null || c.v === "" || c.v == null) return c && c.s ? `<c r="${col(ci)}${ri + 1}" s="${c.s}"/>` : "";
+      if (c == null) return "";
       const ref = `${col(ci)}${ri + 1}`, st = c.s ? ` s="${c.s}"` : "";
+      if (c.f) return `<c r="${ref}"${st}${c.n ? "" : ` t="str"`}><f>${X_ESC(c.f)}</f><v>${c.n ? (isNum(c.v) ? c.v : 0) : X_ESC(c.v == null ? "" : c.v)}</v></c>`;
+      if (c.v === "" || c.v == null) return c.s ? `<c r="${ref}"${st}/>` : "";
       return c.n ? `<c r="${ref}"${st}><v>${c.v}</v></c>`
                  : `<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${X_ESC(c.v)}</t></is></c>`;
     }).join("");
-    return `<row r="${ri + 1}">${cells}</row>`;
+    const ht = heights && heights[ri] ? ` ht="${heights[ri]}" customHeight="1"` : "";
+    return `<row r="${ri + 1}"${ht}>${cells}</row>`;
   }).join("");
   const cols = widths && widths.length
     ? `<cols>${widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join("")}</cols>` : "";
   const mg = merges && merges.length
     ? `<mergeCells count="${merges.length}">${merges.map(m => `<mergeCell ref="${m}"/>`).join("")}</mergeCells>` : "";
+  const fr = freezeRow ? `<pane ySplit="${freezeRow}" topLeftCell="A${freezeRow + 1}" activePane="bottomLeft" state="frozen"/>` : "";
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0" showGridLines="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>${cols}<sheetData>${body}</sheetData>${mg}</worksheet>`;
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0" showGridLines="0">${fr}</sheetView></sheetViews>${cols}<sheetData>${body}</sheetData>${mg}<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToHeight="0"/></worksheet>`;
 }
-const X_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+/* Stil sirasi (cellXfs): ornek Excel "Laufer vs QAS" renkleri — bordo 6D1313, acik bej F5EDE0, yesil D1FAE5, turuncu FFEDD5 */
+const X_ST = { normal: 0, title: 1, sub: 2, head: 3, bullet: 4, th: 5, txt: 6, txtA: 7, num: 8, numA: 9, dGreen: 10, dOrange: 11, totT: 12, totN: 13, band: 14, note: 15, noteA: 16, bold: 17, boldN: 18, ctr: 19, ctrA: 20, bandN: 21 };
+function xStyles(numFmt) {
+  const B = `borderId="1" applyBorder="1"`, CEN = `<alignment horizontal="center" vertical="center"/>`, CENW = `<alignment horizontal="center" vertical="center" wrapText="1"/>`, LEFT = `<alignment horizontal="left" vertical="center"/>`, WRAP = `<alignment horizontal="left" vertical="center" wrapText="1"/>`;
+  const xf = (font, fill, nf, extra, al) => `<xf numFmtId="${nf ? 164 : 0}" fontId="${font}" fillId="${fill}" ${extra || `borderId="0"`} xfId="0" applyFont="1"${fill ? ` applyFill="1"` : ""}${nf ? ` applyNumberFormat="1"` : ""}${al ? ` applyAlignment="1">${al}</xf>` : "/>"}`;
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-<numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.00"/></numFmts>
-<fonts count="4"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="10"/><name val="Arial"/></font><font><b/><sz val="12"/><color rgb="FFFFFFFF"/><name val="Arial"/></font><font><sz val="9"/><color rgb="FF7A7A7A"/><name val="Arial"/></font></fonts>
-<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1F2A44"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE6F1"/><bgColor indexed="64"/></patternFill></fill></fills>
-<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/><bottom style="thin"><color rgb="FFD9D9D9"/></bottom><diagonal/></border></borders>
+<numFmts count="1"><numFmt numFmtId="164" formatCode="${X_ESC(numFmt)}"/></numFmts>
+<fonts count="7"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="16"/><color rgb="FF6D1313"/><name val="Arial"/></font><font><i/><sz val="10"/><color rgb="FF666666"/><name val="Arial"/></font><font><b/><sz val="12"/><color rgb="FF6D1313"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font><font><b/><sz val="10"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FF6D1313"/><name val="Arial"/></font></fonts>
+<fills count="7"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF6D1313"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF5EDE0"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD1FAE5"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFEDD5"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFEAD9C6"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD4C4B0"/></left><right style="thin"><color rgb="FFD4C4B0"/></right><top style="thin"><color rgb="FFD4C4B0"/></top><bottom style="thin"><color rgb="FFD4C4B0"/></bottom><diagonal/></border></borders>
 <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
-<cellXfs count="7">
-<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/>
-<xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1"/>
-<xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center"/></xf>
-<xf numFmtId="0" fontId="1" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
-<xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1"/>
-<xf numFmtId="164" fontId="1" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"/>
-<xf numFmtId="0" fontId="3" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1"/>
+<cellXfs count="22">
+${xf(0, 0, 0)}
+${xf(1, 0, 0, null, CEN)}
+${xf(2, 0, 0, null, CEN)}
+${xf(3, 0, 0)}
+${xf(0, 0, 0)}
+${xf(4, 2, 0, B, CENW)}
+${xf(0, 0, 0, B, LEFT)}
+${xf(0, 3, 0, B, LEFT)}
+${xf(0, 0, 1, B, CEN)}
+${xf(0, 3, 1, B, CEN)}
+${xf(0, 4, 1, B, CEN)}
+${xf(0, 5, 1, B, CEN)}
+${xf(4, 2, 0, B, LEFT)}
+${xf(4, 2, 1, B, CEN)}
+${xf(6, 6, 0, B, LEFT)}
+${xf(0, 0, 0, B, WRAP)}
+${xf(0, 3, 0, B, WRAP)}
+${xf(5, 0, 0)}
+${xf(5, 0, 1)}
+${xf(0, 0, 0, B, CENW)}
+${xf(0, 3, 0, B, CENW)}
+${xf(6, 6, 1, B, CEN)}
 </cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
-function xlsxBlob(sheetName, rows, merges, widths) {
+}
+function xlsxBlob(sheetName, rows, merges, widths, opt) {
+  opt = opt || {};
   const e = new TextEncoder(), f = (name, str) => ({ name, data: e.encode(str) });
   return xZip([
     f("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`),
     f("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`),
-    f("xl/workbook.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${X_ESC(sheetName).slice(0, 31)}" sheetId="1" r:id="rId1"/></sheets></workbook>`),
+    f("xl/workbook.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${X_ESC(sheetName).slice(0, 31)}" sheetId="1" r:id="rId1"/></sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`),
     f("xl/_rels/workbook.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`),
-    f("xl/styles.xml", X_STYLES),
-    f("xl/worksheets/sheet1.xml", xSheet(rows, merges, widths)),
+    f("xl/styles.xml", xStyles(opt.numFmt || "#,##0.00")),
+    f("xl/worksheets/sheet1.xml", xSheet(rows, merges, widths, opt.freeze, opt.heights)),
   ]);
 }
-/* Karsilastirma tablosunu tek sayfada, butun ucak gruplari yan yana, yuzde sutunu yok */
-function exportCmpXlsx() {
+/* para birimine gore sayi bicimi; JPY kurussuz */
+function xNumFmt(cur) {
+  const sym = { USD: "$", EUR: "€", GBP: "£", JPY: "¥" }[cur];
+  const d = cur === "JPY" ? "#,##0" : "#,##0.00";
+  return sym ? `"${sym}"${d};-"${sym}"${d}` : `${d};-${d}`;
+}
+/* kategori: ornek Excel'deki gibi Airport / Handling / Lounge / Transport / Services / Other */
+function xCat(s) {
+  const n = s.name || "";
+  if (s.airport) return "Airport";
+  if (/lounge|\bvip\b|\bcip\b|terminal|\bgat\b/i.test(n)) return "Lounge";
+  if (/bank|card|payment/i.test(n)) return "Services";
+  if (/transport|\bbus\b|shuttle|limo|\bcar\b|transfer/i.test(n)) return "Transport";
+  if (/handling|supervision|push ?back|towing|\bgpu\b|\basu\b|\bacu\b|belt|steps|loader|lavatory|toilet|water|trash|waste|manpower/i.test(n)) return "Handling";
+  if (/permit|slot|ppr|arrangement|coordination|ciq|apis|flight plan|application|admin|agent|communication|bank|naccs/i.test(n)) return "Services";
+  return "Other";
+}
+/* Karsilastirma Excel'i: tek sayfa, ornek "Laufer vs QAS" bicimi. Butun gruplarda ayni olan hizmetler bir kez ("Common"),
+   gruba gore degisenler her grup icin alt alta; her grubun sonunda o grubun toplami (canli formul). */
+/* Excel dugmesinin yaninda kisa uyari (artifact'ta alert() engelli) */
+function xMsg(text) {
+  const b = document.getElementById("mkXls"); if (!b || !b.parentNode) return;
+  let m = b.parentNode.querySelector(".xls-msg");
+  if (!m) { m = document.createElement("div"); m.className = "xls-msg"; m.setAttribute("role", "status"); m.style.cssText = "margin-top:6px;font-size:12.5px;color:#9a3412"; b.parentNode.appendChild(m); }
+  m.textContent = text;
+  clearTimeout(xMsg._t); xMsg._t = setTimeout(() => { if (m) m.textContent = ""; }, 7000);
+}
+function exportCmpXlsx(all) {
   const a = DATA.find(x => x.icao === state.ap);
   if (!a) { return; }
-  const groups = AC.filter(c => quotesFor(a, c).length);
-  if (!groups.length) { return; }
+  /* sadece en az bir handler'in handling fiyati olan gruplar; digerleri ust bilgide listelenir */
+  const withData = AC.filter(c => quotesFor(a, c).length);
+  /* all: fiyati olan butun gruplar; degilse sadece panelde secili grup */
+  const groups = withData.filter(c => (all || c === state.ac) && toArr(a.handlers).some(h => { const p = h.prices && h.prices[c]; return p && isComplete(a, p); }));
+  if (!groups.length) { xMsg(all ? `No handler has a handling price at ${a.icao} yet.` : `No handler has a handling price for ${state.ac} at ${a.icao}. Use “All groups” or choose another aircraft.`); return; }
+  const skipped = all ? withData.filter(c => !groups.includes(c)) : [];
   const hs = toArr(a.handlers).filter(h => groups.some(c => quoteHasData(h.prices && h.prices[c])));
+  if (!hs.length) { return; }
+  const cur = a.currency || "";
   const pOf = (h, c) => (h.prices && h.prices[c]) || null;
-  const W = hs.length, cols = 1 + groups.length * W;
-  const rows = [], merges = [];
+  const W = hs.length, two = W === 2;
+  const C0 = 2, cDiff = two ? C0 + W : -1, cNote = C0 + W + (two ? 1 : 0), cols = cNote + 1;
+  const rows = [], merges = [], heights = [];
   const blank = () => new Array(cols).fill(null);
+  const ref = (ci, ri) => `${colName(ci)}${ri}`;
+  const r2 = x => Math.round(x * 100) / 100;
+  const dec = cur === "JPY" ? 0 : 2, sym = { USD: "$", EUR: "€", GBP: "£", JPY: "¥" }[cur];
+  const money = x => (x < 0 ? "-" : "") + (sym || "") + Math.abs(x).toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (sym ? "" : " " + cur);
+  const allM = r => merges.push(`A${r}:${colName(cols - 1)}${r}`);
 
-  let r = blank(); r[0] = { v: `${a.icao} · HANDLER COMPARISON · ${a.currency || ""}`, s: 2 };
-  rows.push(r); merges.push(`A1:${colName(cols - 1)}1`);
-  const scen = `${state.arrD} ${state.arrT} → ${state.depD} ${state.depT} · ${state.arrPax}+${state.depPax} pax · ${state.days} day(s)`;
-  r = blank(); r[0] = { v: scen, s: 6 }; rows.push(r);
-
-  r = blank();
-  groups.forEach((c, gi) => { r[1 + gi * W] = { v: acLbl(c) + (AC_TAILS[c] ? " · " + AC_TAILS[c] : ""), s: 3 }; });
-  rows.push(r);
-  const rowNo = rows.length;
-  groups.forEach((c, gi) => {
-    const c1 = 1 + gi * W;
-    if (W > 1) merges.push(`${colName(c1)}${rowNo}:${colName(c1 + W - 1)}${rowNo}`);
-  });
-
-  r = blank(); r[0] = { v: "Service", s: 3 };
-  groups.forEach((c, gi) => hs.forEach((h, hi) => { r[1 + gi * W + hi] = { v: h.name, s: 3 }; }));
-  rows.push(r);
-
-  const section = (title) => { const x = blank(); x[0] = { v: title, s: 1 }; rows.push(x); };
-  const bodyRow = (i) => {
-    const x = blank(); x[0] = { v: a.services[i].name, s: 0 };
-    let any = false;
-    groups.forEach((c, gi) => hs.forEach((h, hi) => {
-      const p = pOf(h, c); if (!p) return;
-      const v = p.items && p.items[i];
-      if (v == null) return;
-      if (typeof v === "string") { x[1 + gi * W + hi] = { v, s: 0 }; any = true; return; }
-      const amtv = lineAmt(a, i, v);
-      if (amtv == null) return;
-      x[1 + gi * W + hi] = { v: Math.round(amtv * 100) / 100, n: true, s: 4 }; any = true;
-    }));
-    if (any) rows.push(x);
+  /* hucre degeri: sayi (bu senaryo icin tutar), metin ("Included"), ya da null (fiyat yok) */
+  const cellOf = (h, c, i) => {
+    const p = pOf(h, c); if (!p) return null;
+    const v = p.items && p.items[i];
+    if (v == null) return null;
+    if (typeof v === "string" && !isPk(v)) return v.trim() || null;
+    if (repOff(a, p, i)) return null;
+    const x = lineAmt(a, i, v);
+    return x == null ? null : r2(x);
+  };
+  const same = (x, y) => x === y || (x == null && y == null);
+  /* ortak satirda her handler'in degeri, fiyati tam oldugu ilk gruptan alinir */
+  const repG = h => groups.find(c => { const p = pOf(h, c); return p && isComplete(a, p); }) || groups.find(c => quoteHasData(pOf(h, c))) || groups[0];
+  const t = trip();
+  const noteFor = (i) => {
+    const s = a.services[i], q = qtyOf(a, i), bits = [];
+    if (s.unit === "pax") bits.push(`per pax × ${paxFor(s)} ${paxLbl(s)}`);
+    else if (s.unit === "crew") bits.push(`per crew × ${CREW}`);
+    else if (s.unit === "day") bits.push(`stay ${fmtStay(t.ok ? t.hrs : 24)}`);
+    else if (isGpu(s)) bits.push(`${Math.round(gpuU(s) * 100) / 100} unit(s)`);
+    if (s.unit !== "day" && s.unit !== "pax" && q !== 1 && (s.qty || !inBasket(s))) bits.push(`× ${q}`);
+    return bits.join(" · ");
   };
 
-  const idx = a.services.map((s, i) => i);
-  const inBasket = i => inCmp(a, i);
-  const secs = [
-    ["HANDLING & SERVICES", idx.filter(i => inBasket(i) && !a.services[i].airport)],
-    ["AIRPORT CHARGES", idx.filter(i => inBasket(i) && a.services[i].airport)],
-    ["OTHER (not in the comparison basket)", idx.filter(i => !inBasket(i))],
+  /* ust bilgi */
+  let r = blank(); r[0] = { v: `${a.icao} – Handler Comparison (All Amounts in ${cur}, excl. VAT)`, s: X_ST.title }; rows.push(r); allM(1); heights[0] = 28;
+  const stay = t.ok ? fmtStay(t.hrs) : "—";
+  r = blank(); r[0] = { v: `${groups.join(" / ")} · ${a.icao} · ${state.arrPax} + ${state.depPax} Pax · Stay ${stay} · All figures ${cur}, excl. VAT · Prices from Falcon Nexus`, s: X_ST.sub }; rows.push(r); allM(2);
+  rows.push(blank());
+  r = blank(); r[0] = { v: "Flight Assumptions", s: X_ST.head }; rows.push(r);
+  const bullets = [
+    `• Station: ${a.icao}${a.country ? " / " + a.country : ""}`,
+    ...groups.map(c => `• Aircraft: ${c} – ${AC_NAME[c] || acLbl(c)}`),
+    `• Arrival ${state.arrD} ${state.arrT} local · Departure ${state.depD} ${state.depT} local (stay ${stay})`,
+    `• Passengers: ${state.arrPax} arriving, ${state.depPax} departing`,
   ];
-  secs.forEach(([t, list]) => { if (!list.length) return; section(t); list.forEach(bodyRow); });
+  if (skipped.length) bullets.push(`• Not shown (no handling price for these aircraft): ${skipped.join(", ")}`);
+  const ticked = a.services.map((s, i) => i).filter(i => !inBasket(a.services[i]) && isTick(a, i)).map(i => a.services[i].name + (qtyOf(a, i) !== 1 ? ` × ${qtyOf(a, i)}` : ""));
+  const offd = a.services.map((s, i) => i).filter(i => inBasket(a.services[i]) && isOff(a, i)).map(i => a.services[i].name);
+  if (ticked.length) bullets.push(`• Ticked into the total: ${ticked.join(", ")}`);
+  if (offd.length) bullets.push(`• Removed from the total: ${offd.join(", ")}`);
+  bullets.forEach(b => { const x = blank(); x[0] = { v: b, s: X_ST.bullet }; rows.push(x); allM(rows.length); });
+  rows.push(blank());
 
-  const dz = blank(); dz[0] = { v: disbRowLbl(hs), s: 1 }; let anyD = false;
-  groups.forEach((c, gi) => hs.forEach((h, hi) => {
-    const p = pOf(h, c); if (!p) return;
-    const d = disbAmtOf(a, p, h) + (isNum(p.disbFlat) ? p.disbFlat : 0);
-    if (!d) return;
-    dz[1 + gi * W + hi] = { v: Math.round(d * 100) / 100, n: true, s: 4 }; anyD = true;
-  }));
-  if (anyD) rows.push(dz);
+  /* baslik satiri */
+  r = blank(); r[0] = { v: "Category", s: X_ST.th }; r[1] = { v: "Service", s: X_ST.th };
+  hs.forEach((h, k) => { r[C0 + k] = { v: `${h.name} (${cur})`, s: X_ST.th }; });
+  if (two) r[cDiff] = { v: `Difference (${cur})`, s: X_ST.th };
+  r[cNote] = { v: "Notes", s: X_ST.th };
+  rows.push(r); const HEAD = rows.length; heights[HEAD - 1] = 30;
 
-  const tt = blank(); tt[0] = { v: "TOTAL", s: 3 };
-  groups.forEach((c, gi) => hs.forEach((h, hi) => {
-    const p = pOf(h, c); if (!p || !quoteHasData(p)) return;
-    tt[1 + gi * W + hi] = { v: Math.round(scenTotal(a, p, h) * 100) / 100, n: true, s: 5 };
-  }));
-  rows.push(tt);
+  /* hizmetleri ortak / gruba bagli olarak ayir; sadece toplama girenler (sepet + tikli) */
+  const vis = a.services.map((s, i) => i).filter(i => !isNs(a.services[i]) && a.services[i].unit !== "pct");
+  const inTot = vis.filter(i => inCmp(a, i));
+  const outTot = vis.filter(i => !inCmp(a, i));
+  const order = list => list.slice().sort((x, y) => (a.services[x].airport ? 1 : 0) - (a.services[y].airport ? 1 : 0));
+  /* bir hizmet, herhangi bir handler'in fiyat verdigi gruplar arasinda farkli ise gruba baglidir */
+  const varies = i => hs.some(h => { const gs = groups.filter(c => { const p = pOf(h, c); return p && isComplete(a, p); }); return gs.some(c => !same(cellOf(h, c, i), cellOf(h, gs[0], i))); });
+  const anyVal = (i, gs) => hs.some(h => gs.some(c => cellOf(h, c, i) != null));
+  const common = groups.length > 1 ? order(inTot.filter(i => !varies(i) && hs.some(h => cellOf(h, repG(h), i) != null))) : [];
+  const perGroup = c => order(inTot.filter(i => (groups.length === 1 || varies(i)) && anyVal(i, [c])));
 
-  const note = blank();
-  note[0] = { v: `Exported ${new Date().toISOString().slice(0, 16).replace("T", " ")} · amounts for the scenario above, excluding VAT · prices from the panel`, s: 6 };
-  rows.push(blank(), note);
+  let alt = 0;
+  const band = (txt) => { const x = blank(); x[0] = { v: txt, s: X_ST.band }; for (let k = 1; k < cols; k++) x[k] = { v: "", s: X_ST.band }; rows.push(x); alt = 0; };
+  const diffCell = (ri, vals) => {
+    if (!two) return null;
+    const [x, y] = vals, ok = isNum(x) && isNum(y);
+    return { f: `IF(AND(ISNUMBER(${ref(C0, ri)}),ISNUMBER(${ref(C0 + 1, ri)})),${ref(C0, ri)}-${ref(C0 + 1, ri)},"")`, v: ok ? r2(x - y) : "", n: ok, s: ok ? (x - y <= 0 ? X_ST.dGreen : X_ST.dOrange) : (alt % 2 ? X_ST.ctr : X_ST.ctrA) };
+  };
+  /* bir hizmet satiri; donen deger: satir no */
+  const svcRow = (i, c, label) => {
+    const s = a.services[i], A = alt++ % 2 === 0, ri = rows.length + 1, x = blank();
+    x[0] = { v: xCat(s), s: A ? X_ST.txtA : X_ST.txt };
+    x[1] = { v: label || s.name, s: A ? X_ST.txtA : X_ST.txt };
+    const vals = hs.map(h => cellOf(h, c || repG(h), i));
+    vals.forEach((v, k) => {
+      x[C0 + k] = isNum(v) ? { v, n: true, s: A ? X_ST.numA : X_ST.num } : { v: v == null ? "—" : v, s: A ? X_ST.ctrA : X_ST.ctr };
+    });
+    if (two) { const d = diffCell(ri, vals); x[cDiff] = d; }
+    x[cNote] = { v: noteFor(i), s: A ? X_ST.noteA : X_ST.note };
+    rows.push(x); return ri;
+  };
+  /* tutarli bir satir (surcharge, disbursement, % kalemler) */
+  const amtRow = (cat, label, vals, note) => {
+    if (!vals.some(v => isNum(v) && v !== 0)) return null;
+    const A = alt++ % 2 === 0, ri = rows.length + 1, x = blank();
+    x[0] = { v: cat, s: A ? X_ST.txtA : X_ST.txt }; x[1] = { v: label, s: A ? X_ST.txtA : X_ST.txt };
+    vals.forEach((v, k) => { x[C0 + k] = isNum(v) ? { v: r2(v), n: true, s: A ? X_ST.numA : X_ST.num } : { v: "—", s: A ? X_ST.ctrA : X_ST.ctr }; });
+    if (two) x[cDiff] = diffCell(ri, vals.map(v => isNum(v) ? r2(v) : v));
+    x[cNote] = { v: note || "", s: A ? X_ST.noteA : X_ST.note };
+    rows.push(x); return ri;
+  };
 
-  const widths = [40].concat(new Array(cols - 1).fill(15));
-  const blob = xlsxBlob(`${a.icao} comparison`, rows, merges, widths);
-  xSaveFile(blob, `${a.icao}_comparison_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  /* 1) her grubun handling fee'si alt alta  2) ortak hizmetler  3) gruba gore degisen diger hizmetler (hizmet hizmet, gruplar alt alta)
+     4) surcharge / disbursement (gruplar alt alta)  5) grup toplamlari (canli formul) */
+  const one = groups.length === 1, hIdx = handlingIdx(a);
+  const gRows = {}; groups.forEach(c => { gRows[c] = []; });
+  const has = {}; groups.forEach(c => { has[c] = hs.map(h => { const p = pOf(h, c); return !!(p && isComplete(a, p)); }); });
+  const sfx = (name, c) => one ? name : `${name} – ${c}`;
+  if (hIdx >= 0) {
+    band(one ? "Handling Fee" : "Handling Fee by aircraft group");
+    groups.forEach(c => gRows[c].push(svcRow(hIdx, c, one ? a.services[hIdx].name : `${a.services[hIdx].name} – ${c} · ${AC_NAME[c] || acLbl(c)}`)));
+  }
+  const commonRows = [];
+  if (common.length) {
+    band("Common to all aircraft groups (same price for every group)");
+    common.filter(i => i !== hIdx).forEach(i => commonRows.push(svcRow(i, null)));
+  }
+  const varying = inTot.filter(i => i !== hIdx && (one || varies(i)) && groups.some(c => anyVal(i, [c])));
+  if (varying.length) {
+    band(one ? "Other services and airport charges" : "Other services that vary by aircraft group");
+    order(varying).forEach(i => groups.forEach(c => { if (anyVal(i, [c])) gRows[c].push(svcRow(i, c, sfx(a.services[i].name, c))); }));
+  }
+  /* ucretler: grup basina degerler */
+  const fee = {};
+  groups.forEach(c => {
+    const scv = hs.map((h, k) => { const p = pOf(h, c); return has[c][k] && p ? scAmt(a, p, h) : null; });
+    fee[c] = {
+      sc: scv,
+      ds: hs.map((h, k) => { const p = pOf(h, c); if (!has[c][k] || !p) return null; return disbAmtOf(a, p, h) + (isNum(p.disbFlat) ? p.disbFlat : 0) + (disbAll(h) ? scv[k] * (p.disb || 0) : 0); }),
+      pc: hs.map((h, k) => { const p = pOf(h, c); return has[c][k] && p ? pctAmt(a, p, h) : null; }),
+    };
+  });
+  const lbl = [...new Set(hs.map(disbLbl).filter(Boolean))];
+  const dName = lbl.length === 1 ? lbl[0] : "Disbursement / admin fee";
+  const dNote = lbl.length > 1 ? hs.map(h => `${h.name}: ${disbLbl(h) || "disbursement"}`).join(" · ") : "Handler's percentage on the items it applies to";
+  const nz = v => v.some(x => isNum(x) && x !== 0);
+  const feeTypes = [["sc", "Surcharges (night / weekend / holiday / overnight)", "Calculated by the panel for the times above"], ["ds", dName, dNote], ["pc", "Percentage items (card fee etc.)", ""]]
+    .filter(([k]) => groups.some(c => nz(fee[c][k])));
+  /* disbursement orani: miktarla birlikte oran ve uygulandigi taban da gorunsun */
+  const pctTxt = r => `${Math.round(r * 10000) / 100}%`;
+  const baseTxt = h => (h.disbBase === "all" ? "whole invoice" : h.disbBase === "allxs" ? "whole invoice excl. supervision" : "airport fees")
+    + (Array.isArray(h.disbAlsoOn) && h.disbAlsoOn.length ? ` + ${h.disbAlsoOn.length} other item${h.disbAlsoOn.length > 1 ? "s" : ""}` : "")
+    + (Array.isArray(h.noDisbOn) && h.noDisbOn.length ? ` (excl. ${h.noDisbOn.length} item${h.noDisbOn.length > 1 ? "s" : ""})` : "");
+  const rateOf = (h, c) => { const p = pOf(h, c); if (!p || !isComplete(a, p)) return null; const r = p.disb || 0, f = isNum(p.disbFlat) ? p.disbFlat : 0; if (!r && !f) return "None"; return [r ? `${pctTxt(r)} on ${baseTxt(h)}` : "", f ? `+ ${money(f)} flat` : ""].filter(Boolean).join(" "); };
+  const rateRow = (c, label) => {
+    const A = alt++ % 2 === 0, x = blank();
+    x[0] = { v: "Fees", s: A ? X_ST.txtA : X_ST.txt }; x[1] = { v: label, s: A ? X_ST.txtA : X_ST.txt };
+    hs.forEach((h, k) => { const v = c ? rateOf(h, c) : groups.map(g => rateOf(h, g)).find(z => z != null); x[C0 + k] = { v: v == null ? "—" : v, s: A ? X_ST.ctrA : X_ST.ctr }; });
+    if (two) x[cDiff] = { v: "", s: A ? X_ST.ctrA : X_ST.ctr };
+    x[cNote] = { v: "Rate and base for comparison (not added to the total)", s: A ? X_ST.noteA : X_ST.note };
+    rows.push(x); heights[rows.length - 1] = 26;
+  };
+  const rateSame = hs.every(h => { const v = groups.map(c => rateOf(h, c)).filter(z => z != null); return v.every(z => z === v[0]); });
+  if (feeTypes.length || hs.some(h => groups.some(c => { const v = rateOf(h, c); return v && v !== "None"; }))) {
+    band(one ? "Surcharges and fees" : "Surcharges and fees by aircraft group");
+    if (rateSame) rateRow(null, `${dName} – rate`);
+    else groups.forEach(c => rateRow(c, `${dName} – rate – ${c}`));
+    feeTypes.forEach(([k, name, note]) => groups.forEach(c => { const ri = amtRow("Fees", sfx(name, c), fee[c][k], note); if (ri) gRows[c].push(ri); }));
+  }
+  band(one ? "Total per turnaround" : "Total per turnaround by aircraft group");
+  const summary = [], totRow = {};
+  groups.forEach(c => {
+    const T = rows.length + 1, x = blank(), refsRows = [...commonRows, ...gRows[c]];
+    x[0] = { v: "", s: X_ST.totT }; x[1] = { v: `TOTAL PER TURNAROUND – ${c}`, s: X_ST.totT };
+    const tots = hs.map((h, k) => {
+      const p = pOf(h, c);
+      if (!has[c][k] || !p) { x[C0 + k] = { v: quoteHasData(p) ? "no handling price" : "—", s: X_ST.totN }; return null; }
+      const cl = colName(C0 + k);
+      const sum = refsRows.reduce((sm, ri) => { const cell = rows[ri - 1][C0 + k]; return sm + (cell && cell.n ? cell.v : 0); }, 0);
+      x[C0 + k] = { f: refsRows.length ? `SUM(${refsRows.map(ri => cl + ri).join(",")})` : "0", v: r2(sum), n: true, s: X_ST.totN };
+      return r2(sum);
+    });
+    if (two) x[cDiff] = { f: `IF(AND(ISNUMBER(${ref(C0, T)}),ISNUMBER(${ref(C0 + 1, T)})),${ref(C0, T)}-${ref(C0 + 1, T)},"")`, v: isNum(tots[0]) && isNum(tots[1]) ? r2(tots[0] - tots[1]) : "", n: isNum(tots[0]) && isNum(tots[1]), s: X_ST.totN };
+    x[cNote] = { v: one ? "Services + fees" : `Handling ${c} + common services + ${c} services and fees`, s: X_ST.totT };
+    rows.push(x); totRow[c] = T;
+    summary.push({ c, tots });
+  });
+  rows.push(blank());
+
+  /* toplama girmeyen kalemler (bilgi icin) */
+  const outList = order(outTot.filter(i => anyVal(i, groups)));
+  const outC = [], outG = {}; groups.forEach(c => { outG[c] = []; });
+  if (outList.length) {
+    band("Not in the turnaround total (optional / on request; tick in the panel to add)");
+    outList.forEach(i => {
+      if (groups.length > 1 && varies(i)) groups.forEach(c => { if (anyVal(i, [c])) outG[c].push({ ri: svcRow(i, c, `${a.services[i].name} – ${c}`), i }); });
+      else outC.push({ ri: svcRow(i, null), i });
+    });
+    /* her sey dahil toplam: turnaround toplami + yukaridaki butun kalemler + bunlara dusen disbursement */
+    band(one ? "Grand total incl. all listed services" : "Grand total incl. all listed services, by aircraft group");
+    const gt = {};
+    groups.forEach(c => {
+      const list = [...outC, ...outG[c]];
+      const dv = hs.map((h, k) => {
+        const p = pOf(h, c); if (!has[c][k] || !p || !p.disb) return null;
+        return list.reduce((sm, o) => { const cell = rows[o.ri - 1][C0 + k]; return sm + (cell && cell.n && disbOn(h, a.services[o.i]) ? cell.v * p.disb : 0); }, 0);
+      });
+      gt[c] = { list, dRow: amtRow("Fees", sfx(`${dName} on the items above`, c), dv, "Same rate as in the turnaround total") };
+    });
+    groups.forEach(c => {
+      const T = rows.length + 1, x = blank(), refs = [...gt[c].list.map(o => o.ri), ...(gt[c].dRow ? [gt[c].dRow] : [])];
+      x[0] = { v: "", s: X_ST.totT }; x[1] = { v: `TOTAL INCL. ALL LISTED SERVICES – ${c}`, s: X_ST.totT };
+      const tv = hs.map((h, k) => {
+        const p = pOf(h, c);
+        if (!has[c][k] || !p) { x[C0 + k] = { v: quoteHasData(p) ? "no handling price" : "—", s: X_ST.totN }; return null; }
+        const cl = colName(C0 + k), base = rows[totRow[c] - 1][C0 + k];
+        const sum = (base && base.n ? base.v : 0) + refs.reduce((sm, ri) => { const cell = rows[ri - 1][C0 + k]; return sm + (cell && cell.n ? cell.v : 0); }, 0);
+        x[C0 + k] = { f: `SUM(${[cl + totRow[c], ...refs.map(ri => cl + ri)].join(",")})`, v: r2(sum), n: true, s: X_ST.totN };
+        return r2(sum);
+      });
+      if (two) x[cDiff] = { f: `IF(AND(ISNUMBER(${ref(C0, T)}),ISNUMBER(${ref(C0 + 1, T)})),${ref(C0, T)}-${ref(C0 + 1, T)},"")`, v: isNum(tv[0]) && isNum(tv[1]) ? r2(tv[0] - tv[1]) : "", n: isNum(tv[0]) && isNum(tv[1]), s: X_ST.totN };
+      x[cNote] = { v: "Turnaround total + every optional item at the quantity shown (incl. change / cancellation fees)", s: X_ST.totT };
+      rows.push(x);
+    });
+    rows.push(blank());
+  }
+
+  /* sonuc notlari */
+  r = blank(); r[0] = { v: "Summary", s: X_ST.head }; rows.push(r);
+  const lines = summary.map(({ c, tots }) => {
+    const L = hs.map((h, k) => ({ n: h.name, v: tots[k] })).filter(o => isNum(o.v)).sort((p, q) => p.v - q.v);
+    if (!L.length) return `• ${c}: no complete quote.`;
+    if (L.length === 1) return `• ${c}: only ${L[0].n} has a complete quote (${money(L[0].v)}).`;
+    return `• ${c}: lowest ${L[0].n} ${money(L[0].v)}; ` + L.slice(1).map(o => `${o.n} +${money(r2(o.v - L[0].v))}`).join(", ") + ".";
+  });
+  lines.push("• Totals = comparison basket (handling, supervision, permits/slots, GSE, toilet/water/trash, VIP/CIP, all airport fees) + ticked items + surcharges + disbursement, for the times and pax above.");
+  lines.push("• \"—\" = price not shared by the handler; \"Included\" = included in another fee or free of charge.");
+  lines.push(`• Exported from Falcon Nexus on ${new Date().toISOString().slice(0, 16).replace("T", " ")} UTC. Prices exclude VAT.`);
+  lines.forEach(b => { const x = blank(); x[0] = { v: b, s: X_ST.bullet }; rows.push(x); allM(rows.length); });
+
+  const widths = [14, 48].concat(new Array(W).fill(22), two ? [20] : [], [50]);
+  const blob = xlsxBlob(a.icao, rows, merges, widths, { numFmt: xNumFmt(cur), freeze: HEAD, heights });
+  xSaveFile(blob, all ? `${a.icao}_COMPARISON.xlsx` : `${a.icao}_${groups[0]}_COMPARISON.xlsx`);
 }
 /* claude.ai panelinde dogrudan indirme calismaz: downloads yetkisi uzerinden kaydedilir.
    GitHub Pages kopyasinda claude.use yoktur, orada normal indirme baglantisi kullanilir. */
@@ -1337,7 +1559,7 @@ async function xSaveFile(blob, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 function colName(i) { let s = "", n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = ((n - m) / 26) | 0; } return s; }
-document.addEventListener("click", e => { const b = e.target && e.target.closest && e.target.closest("#mkXls"); if (b) { e.preventDefault(); exportCmpXlsx(); } });
+document.addEventListener("click", e => { const t = e.target && e.target.closest && e.target.closest("#mkXls, #mkXlsAll"); if (t) { e.preventDefault(); exportCmpXlsx(t.id === "mkXlsAll"); } });
 function renderFx(){
   const el=document.getElementById("fxBox"); if(!el) return;
   if(!loaded||canWrite===false){ el.innerHTML=""; return; }
