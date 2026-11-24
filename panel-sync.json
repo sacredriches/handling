@@ -29,7 +29,7 @@
   "OJAM": 6,
   "LGAV": 24,
   "LGRP": 11,
-  "HECA": 93, "FVRG": 5,
+  "HECA": 97, "FVRG": 5,
   "KEWR": 12,
   "HLLB": 16,
   "VHHH": 2,
@@ -40,7 +40,8 @@
   "OODQ": 1,
   "LIRP": 17,
   "LOWW": 16,
-  "FSIA": 12
+  "FSIA": 12,
+  "HEGN": 13
  },
  "_kural": "Panelde butun meydanlarda handlers NESNE bicimindedir (bakim islemi 19 Kas 2026'da calistirildi, updatedAt degerleri korundu). Tek alanlik merge guvenlidir. Yeni bir handler anahtari yazmadan once anahtarin var oldugunu dogrula: olmayan anahtara merge yapmak bos bir handler yaratir.",
  "objectForm": "ALL",
