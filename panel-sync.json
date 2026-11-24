@@ -34,14 +34,15 @@
   "HLLB": 16,
   "VHHH": 2,
   "RJTT": 4,
-  "VTCC": 3,
+  "VTCC": 7,
   "HAAB": 30,
   "EHAM": 6,
   "OODQ": 1,
   "LIRP": 17,
   "LOWW": 16,
   "FSIA": 12,
-  "HEGN": 13
+  "HEGN": 13,
+  "MYNN": 1
  },
  "_kural": "Panelde butun meydanlarda handlers NESNE bicimindedir (bakim islemi 19 Kas 2026'da calistirildi, updatedAt degerleri korundu). Tek alanlik merge guvenlidir. Yeni bir handler anahtari yazmadan once anahtarin var oldugunu dogrula: olmayan anahtara merge yapmak bos bir handler yaratir.",
  "objectForm": "ALL",
