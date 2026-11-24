@@ -31,9 +31,11 @@
   "LGRP": 11,
   "HECA": 93, "FVRG": 5,
   "KEWR": 12,
-  "HLLB": 14,
+  "HLLB": 16,
   "VHHH": 2,
-  "RJTT": 4
+  "RJTT": 4,
+  "VTCC": 3,
+  "HAAB": 14
  },
  "_kural": "Panelde butun meydanlarda handlers NESNE bicimindedir (bakim islemi 19 Kas 2026'da calistirildi, updatedAt degerleri korundu). Tek alanlik merge guvenlidir. Yeni bir handler anahtari yazmadan once anahtarin var oldugunu dogrula: olmayan anahtara merge yapmak bos bir handler yaratir.",
  "objectForm": "ALL",
