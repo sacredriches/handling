@@ -1,1 +1,2059 @@
-{"airports":{},"base":{}}
+{
+ "createdAt": "2026-11-25T04:35:00.000Z",
+ "airports": {
+  "OAMS": {
+   "country": "Afghanistan",
+   "currency": "USD",
+   "handlers": {
+    "SONIC_JET": {
+     "disbBase": "airport",
+     "name": "SONIC JET",
+     "night": 0,
+     "prices": {
+      "CL60": {
+       "disb": 0.1,
+       "items": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        220,
+        400,
+        150,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           88
+          ]
+         ],
+         "desc": "First 4 h free, then 88 per started 24 h (4 × 22 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 88
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ATC Fees (Arrival + Departure)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 400 (CAA 150 arrival + 150 departure = 300)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight (CAA; not on Sonic quote)",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Departing Pax Tax": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "40 per departing pax"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 22 t (CAA; Sonic 245 for 24.5 t, approx)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Lighting Fees": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 150 approx (CAA 60 per movement)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 22 t per 24 h, first 4 h free (Sonic 98 per day for 24.5 t)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        }
+       }
+      },
+      "E35L": {
+       "disb": 0.1,
+       "items": [
+        2100,
+        400,
+        100,
+        35,
+        130,
+        700,
+        1200,
+        500,
+        100,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        245,
+        400,
+        150,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           98
+          ]
+         ],
+         "desc": "First 4 h free, then 98.0 per started 24 h (4 × 24.5 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 98
+        },
+        40,
+        1700,
+        1050
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "1,200 per hour",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 400 (CAA 150 arrival + 150 departure = 300)"
+        },
+        "Admin / Communication Fee": {
+         "calc": "35",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight (CAA; not on Sonic quote)",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Departing Pax Tax": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "40 per departing pax"
+        },
+        "GPU (per hour)": {
+         "calc": "700 per hour",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Handling Fee": {
+         "calc": "basic handling turnaround 2,100",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Labor (per person)": {
+         "calc": "100 per labor",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 24.5 t (CAA; Sonic 245 for 24.5 t, approx)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Landing Permission / PPR": {
+         "calc": "130 per landing permit or PPR",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Lighting Fees": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 150 approx (CAA 60 per movement)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 24.5 t per 24 h, first 4 h free (Sonic 98 per day for 24.5 t)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "500 per use (wide body 700)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "400",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Supervision Night Difference (18:00–03:00 UTC)": {
+         "calc": "night supervision 500 − 400",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Technical Stop Handling (instead of turnaround)": {
+         "calc": "technical stop 1,050",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Transit Handling (instead of turnaround)": {
+         "calc": "transit 1,700",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": 0.1,
+       "items": [
+        2900,
+        500,
+        100,
+        35,
+        130,
+        700,
+        1200,
+        500,
+        100,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        420,
+        400,
+        150,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           168
+          ]
+         ],
+         "desc": "First 4 h free, then 168 per started 24 h (4 × 42 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 168
+        },
+        40,
+        2300,
+        1450
+       ],
+       "upd": {
+        "ATC Fees (Arrival + Departure)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 400 (CAA 150 arrival + 150 departure = 300)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight (CAA; not on Sonic quote)",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Departing Pax Tax": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "40 per departing pax"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "10 × 42 t (CAA; Sonic 420 for 42 t, approx)"
+        },
+        "Lighting Fees": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 150 approx (CAA 60 per movement)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "4 × 42 t per 24 h, first 4 h free (Sonic 168 per day for 42 t)"
+        },
+        "Handling Fee": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "basic handling turnaround 2,900"
+        },
+        "Supervision & Arrangement": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "500"
+        },
+        "Supervision Night Difference (18:00–03:00 UTC)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "night supervision 600 − 500"
+        },
+        "Admin / Communication Fee": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "35"
+        },
+        "Landing Permission / PPR": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "130 per landing permit or PPR"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "700 per hour"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "1,200 per hour"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "500 per use (wide body 700)"
+        },
+        "Labor (per person)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "100 per labor"
+        },
+        "Transit Handling (instead of turnaround)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "transit 2,300"
+        },
+        "Technical Stop Handling (instead of turnaround)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "calc": "technical stop 1,450"
+        }
+       }
+      },
+      "GL7T": {
+       "disb": 0.1,
+       "items": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        530,
+        400,
+        150,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           212
+          ]
+         ],
+         "desc": "First 4 h free, then 212 per started 24 h (4 × 53 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 212
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ATC Fees (Arrival + Departure)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 400 (CAA 150 arrival + 150 departure = 300)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight (CAA; not on Sonic quote)",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Departing Pax Tax": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "40 per departing pax"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 53 t (CAA; Sonic 245 for 24.5 t, approx)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Lighting Fees": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 150 approx (CAA 60 per movement)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 53 t per 24 h, first 4 h free (Sonic 98 per day for 24.5 t)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        }
+       }
+      },
+      "GLEX": {
+       "disb": 0.1,
+       "items": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        460,
+        400,
+        150,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           184
+          ]
+         ],
+         "desc": "First 4 h free, then 184 per started 24 h (4 × 46 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 184
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ATC Fees (Arrival + Departure)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 400 (CAA 150 arrival + 150 departure = 300)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight (CAA; not on Sonic quote)",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Departing Pax Tax": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "40 per departing pax"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 46 t (CAA; Sonic 245 for 24.5 t, approx)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Lighting Fees": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 150 approx (CAA 60 per movement)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 46 t per 24 h, first 4 h free (Sonic 98 per day for 24.5 t)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": 0.1,
+       "items": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        340,
+        400,
+        150,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           136
+          ]
+         ],
+         "desc": "First 4 h free, then 136 per started 24 h (4 × 34 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 136
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ATC Fees (Arrival + Departure)": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 400 (CAA 150 arrival + 150 departure = 300)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight (CAA; not on Sonic quote)",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Departing Pax Tax": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "40 per departing pax"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 34 t (CAA; Sonic 245 for 24.5 t, approx)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        },
+        "Lighting Fees": {
+         "d": "2026-11-24",
+         "src": "Sonic Jet TCE OAMS, 24 Nov 2026 (GL-5 42 t, pax)",
+         "pd": "2026-11-12",
+         "calc": "Sonic Jet 150 approx (CAA 60 per movement)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 34 t per 24 h, first 4 h free (Sonic 98 per day for 24.5 t)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote OAMS, 12 Nov 2026 (CL-60 24.5 t, pax)"
+        }
+       }
+      }
+     },
+     "type": "SUPERVISING AGENT",
+     "weekend": 0
+    },
+    "BALKH_AIR_SERVICES": {
+     "disbBase": "airport",
+     "name": "BALKH AIR SERVICES",
+     "night": 0,
+     "prices": {
+      "CL60": {
+       "disb": null,
+       "items": [
+        3168,
+        200,
+        null,
+        null,
+        null,
+        410,
+        550,
+        350,
+        null,
+        200,
+        200,
+        450,
+        420,
+        170,
+        110,
+        110,
+        80,
+        50,
+        70,
+        25,
+        100,
+        150,
+        150,
+        30,
+        220,
+        300,
+        120,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           88
+          ]
+         ],
+         "desc": "First 4 h free, then 88 per started 24 h (4 × 22 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 88
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "550 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ASU / Air Starter (per bleed)": {
+         "calc": "420 per bleed (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "calc": "150 arrival + 150 departure",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "ATS Flight Plan Print & Signature": {
+         "calc": "50",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Conveyor Belt (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Crew Bus (1 included)": {
+         "calc": "100 per bus; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Headset (1 included)": {
+         "calc": "30; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Pax Bus (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Stairs (per hour)": {
+         "calc": "170 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Toilet Service (1 included)": {
+         "calc": "200 per service (NB); 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "CUTE / CUPPS (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "DCS Check-in (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Departing Pax Tax": {
+         "calc": "40 per departing pax (Sonic Jet quote; CAA table blank)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote 12 Nov 2026"
+        },
+        "GPU (per hour)": {
+         "calc": "410 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Garbage Removal": {
+         "calc": "70 per service",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Handling Fee": {
+         "calc": "pax flight, MTOW 22 t",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 22 t",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Lighting Fees": {
+         "calc": "60 per movement × 2",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Meteo / Flight Ops File Printing": {
+         "calc": "80 (more than 10 pages)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 22 t per 24 h, first 4 h free",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Potable Water": {
+         "calc": "200 per service (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "push back 350 per movement (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "200 per flight",
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Towing (per leg)": {
+         "calc": "450 per leg (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Wheelchair": {
+         "calc": "25 per wheelchair",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        }
+       }
+      },
+      "E35L": {
+       "disb": null,
+       "items": [
+        3168,
+        200,
+        null,
+        null,
+        null,
+        410,
+        550,
+        350,
+        null,
+        200,
+        200,
+        450,
+        420,
+        170,
+        110,
+        110,
+        80,
+        50,
+        70,
+        25,
+        100,
+        150,
+        150,
+        30,
+        245,
+        300,
+        120,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           98
+          ]
+         ],
+         "desc": "First 4 h free, then 98.0 per started 24 h (4 × 24.5 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 98
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "550 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ASU / Air Starter (per bleed)": {
+         "calc": "420 per bleed (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "calc": "150 arrival + 150 departure",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "ATS Flight Plan Print & Signature": {
+         "calc": "50",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Conveyor Belt (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Crew Bus (1 included)": {
+         "calc": "100 per bus; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Headset (1 included)": {
+         "calc": "30; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Pax Bus (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Stairs (per hour)": {
+         "calc": "170 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Toilet Service (1 included)": {
+         "calc": "200 per service (NB); 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "CUTE / CUPPS (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "DCS Check-in (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Departing Pax Tax": {
+         "calc": "40 per departing pax (Sonic Jet quote; CAA table blank)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote 12 Nov 2026"
+        },
+        "GPU (per hour)": {
+         "calc": "410 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Garbage Removal": {
+         "calc": "70 per service",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Handling Fee": {
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 24.5 t",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Lighting Fees": {
+         "calc": "60 per movement × 2",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Meteo / Flight Ops File Printing": {
+         "calc": "80 (more than 10 pages)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 24.5 t per 24 h, first 4 h free",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Potable Water": {
+         "calc": "200 per service (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "push back 350 per movement (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "200 per flight",
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Towing (per leg)": {
+         "calc": "450 per leg (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Wheelchair": {
+         "calc": "25 per wheelchair",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": null,
+       "items": [
+        4320,
+        200,
+        null,
+        null,
+        null,
+        410,
+        550,
+        350,
+        null,
+        200,
+        200,
+        450,
+        420,
+        170,
+        110,
+        110,
+        80,
+        50,
+        70,
+        25,
+        100,
+        150,
+        150,
+        30,
+        420,
+        300,
+        120,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           168
+          ]
+         ],
+         "desc": "First 4 h free, then 168 per started 24 h (4 × 42 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 168
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "550 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ASU / Air Starter (per bleed)": {
+         "calc": "420 per bleed (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "calc": "150 arrival + 150 departure",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "ATS Flight Plan Print & Signature": {
+         "calc": "50",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Conveyor Belt (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Crew Bus (1 included)": {
+         "calc": "100 per bus; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Headset (1 included)": {
+         "calc": "30; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Pax Bus (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Stairs (per hour)": {
+         "calc": "170 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Toilet Service (1 included)": {
+         "calc": "200 per service (NB); 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "CUTE / CUPPS (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "DCS Check-in (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Departing Pax Tax": {
+         "calc": "40 per departing pax (Sonic Jet quote; CAA table blank)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote 12 Nov 2026"
+        },
+        "GPU (per hour)": {
+         "calc": "410 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Garbage Removal": {
+         "calc": "70 per service",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Handling Fee": {
+         "calc": "pax flight, MTOW 42 t",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 42 t",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Lighting Fees": {
+         "calc": "60 per movement × 2",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Meteo / Flight Ops File Printing": {
+         "calc": "80 (more than 10 pages)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 42 t per 24 h, first 4 h free",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Potable Water": {
+         "calc": "200 per service (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "push back 350 per movement (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "200 per flight",
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Towing (per leg)": {
+         "calc": "450 per leg (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Wheelchair": {
+         "calc": "25 per wheelchair",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        }
+       }
+      },
+      "GL7T": {
+       "disb": null,
+       "items": [
+        4320,
+        200,
+        null,
+        null,
+        null,
+        410,
+        550,
+        350,
+        null,
+        200,
+        200,
+        450,
+        420,
+        170,
+        110,
+        110,
+        80,
+        50,
+        70,
+        25,
+        100,
+        150,
+        150,
+        30,
+        530,
+        300,
+        120,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           212
+          ]
+         ],
+         "desc": "First 4 h free, then 212 per started 24 h (4 × 53 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 212
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "550 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ASU / Air Starter (per bleed)": {
+         "calc": "420 per bleed (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "calc": "150 arrival + 150 departure",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "ATS Flight Plan Print & Signature": {
+         "calc": "50",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Conveyor Belt (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Crew Bus (1 included)": {
+         "calc": "100 per bus; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Headset (1 included)": {
+         "calc": "30; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Pax Bus (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Stairs (per hour)": {
+         "calc": "170 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Toilet Service (1 included)": {
+         "calc": "200 per service (NB); 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "CUTE / CUPPS (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "DCS Check-in (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Departing Pax Tax": {
+         "calc": "40 per departing pax (Sonic Jet quote; CAA table blank)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote 12 Nov 2026"
+        },
+        "GPU (per hour)": {
+         "calc": "410 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Garbage Removal": {
+         "calc": "70 per service",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Handling Fee": {
+         "calc": "pax flight, MTOW 53 t",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 53 t",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Lighting Fees": {
+         "calc": "60 per movement × 2",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Meteo / Flight Ops File Printing": {
+         "calc": "80 (more than 10 pages)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 53 t per 24 h, first 4 h free",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Potable Water": {
+         "calc": "200 per service (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "push back 350 per movement (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "200 per flight",
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Towing (per leg)": {
+         "calc": "450 per leg (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Wheelchair": {
+         "calc": "25 per wheelchair",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        }
+       }
+      },
+      "GLEX": {
+       "disb": null,
+       "items": [
+        4320,
+        200,
+        null,
+        null,
+        null,
+        410,
+        550,
+        350,
+        null,
+        200,
+        200,
+        450,
+        420,
+        170,
+        110,
+        110,
+        80,
+        50,
+        70,
+        25,
+        100,
+        150,
+        150,
+        30,
+        460,
+        300,
+        120,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           184
+          ]
+         ],
+         "desc": "First 4 h free, then 184 per started 24 h (4 × 46 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 184
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "550 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ASU / Air Starter (per bleed)": {
+         "calc": "420 per bleed (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "calc": "150 arrival + 150 departure",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "ATS Flight Plan Print & Signature": {
+         "calc": "50",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Conveyor Belt (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Crew Bus (1 included)": {
+         "calc": "100 per bus; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Headset (1 included)": {
+         "calc": "30; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Pax Bus (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Stairs (per hour)": {
+         "calc": "170 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Toilet Service (1 included)": {
+         "calc": "200 per service (NB); 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "CUTE / CUPPS (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "DCS Check-in (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Departing Pax Tax": {
+         "calc": "40 per departing pax (Sonic Jet quote; CAA table blank)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote 12 Nov 2026"
+        },
+        "GPU (per hour)": {
+         "calc": "410 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Garbage Removal": {
+         "calc": "70 per service",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Handling Fee": {
+         "calc": "pax flight, MTOW 46 t",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 46 t",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Lighting Fees": {
+         "calc": "60 per movement × 2",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Meteo / Flight Ops File Printing": {
+         "calc": "80 (more than 10 pages)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 46 t per 24 h, first 4 h free",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Potable Water": {
+         "calc": "200 per service (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "push back 350 per movement (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "200 per flight",
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Towing (per leg)": {
+         "calc": "450 per leg (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Wheelchair": {
+         "calc": "25 per wheelchair",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": null,
+       "items": [
+        3936,
+        200,
+        null,
+        null,
+        null,
+        410,
+        550,
+        350,
+        null,
+        200,
+        200,
+        450,
+        420,
+        170,
+        110,
+        110,
+        80,
+        50,
+        70,
+        25,
+        100,
+        150,
+        150,
+        30,
+        340,
+        300,
+        120,
+        500,
+        {
+         "bands": [
+          [
+           4,
+           0
+          ],
+          [
+           24,
+           136
+          ]
+         ],
+         "desc": "First 4 h free, then 136 per started 24 h (4 × 34 t)",
+         "every": 24,
+         "free": 0,
+         "pk": 1,
+         "price": 136
+        },
+        40,
+        null,
+        null
+       ],
+       "upd": {
+        "ACU (per hour)": {
+         "calc": "550 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ASU / Air Starter (per bleed)": {
+         "calc": "420 per bleed (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "ATC Fees (Arrival + Departure)": {
+         "calc": "150 arrival + 150 departure",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "ATS Flight Plan Print & Signature": {
+         "calc": "50",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Conveyor Belt (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Crew Bus (1 included)": {
+         "calc": "100 per bus; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Headset (1 included)": {
+         "calc": "30; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Pax Bus (1 included)": {
+         "calc": "150; 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Stairs (per hour)": {
+         "calc": "170 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Additional Toilet Service (1 included)": {
+         "calc": "200 per service (NB); 1 included",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Aviation Security (per flight)": {
+         "calc": "500 per flight",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "CUTE / CUPPS (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "DCS Check-in (per flight)": {
+         "calc": "110",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Departing Pax Tax": {
+         "calc": "40 per departing pax (Sonic Jet quote; CAA table blank)",
+         "d": "2026-11-12",
+         "src": "Sonic Jet quote 12 Nov 2026"
+        },
+        "GPU (per hour)": {
+         "calc": "410 per hour (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Garbage Removal": {
+         "calc": "70 per service",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Handling Fee": {
+         "calc": "pax flight, MTOW 34 t",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Landing Fee (10 per ton, min 100)": {
+         "calc": "10 × 34 t",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Lighting Fees": {
+         "calc": "60 per movement × 2",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Meteo / Flight Ops File Printing": {
+         "calc": "80 (more than 10 pages)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Parking (first 4 h free, then per 24 h ton × 4)": {
+         "calc": "4 × 34 t per 24 h, first 4 h free",
+         "d": "2026-11-12",
+         "src": "Afghanistan CAA fees regulation (international charges)"
+        },
+        "Potable Water": {
+         "calc": "200 per service (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Pushback / Towing (conventional, per use)": {
+         "calc": "push back 350 per movement (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Supervision & Arrangement": {
+         "calc": "200 per flight",
+         "d": "2026-11-14",
+         "src": "BALKH AIR SERVICES invoice (A6-AFO E35L 24 t, 14 Nov 2026; ramp handling log 12682)"
+        },
+        "Towing (per leg)": {
+         "calc": "450 per leg (NB)",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        },
+        "Wheelchair": {
+         "calc": "25 per wheelchair",
+         "d": "2026-11-12",
+         "src": "BALKH AIR SERVICES ground handling charges sheet (undated; NB prices)"
+        }
+       }
+      }
+     },
+     "type": "HANDLER",
+     "weekend": 0
+    }
+   },
+   "holidays": [],
+   "icao": "OAMS",
+   "notes": "Mazar-i-Sharif (OAMS / MZR), Afghanistan, USD. Sources: Afghanistan Civil Aviation Authority fees regulation (international: ATC 150 arrival + 150 departure, landing 10 per ton (MTOW), parking first 4 h free then every 24 h 4 per ton, lighting sunrise–sunset 60 / sunset–sunrise 60, aviation security 500 per flight, cargo security 100; domestic: no ATC, landing 3 per ton, parking 1.5 per ton, lighting 20, security 200; departing pax tax table blank; children up to 2 years exempt) and SONIC JET quote (12 Nov 2026; CL-60 24.5 t, pax; \"E35L\" noted): landing 245 approx (min 100), parking 98 per day (first 4 h free), ATC 400, lighting 150 approx, departing pax tax 40; basic handling transit 1,700 / turnaround 2,100, technical stop 1,050 (incl. marshalling, pax steps up to 2 h, water/toilet on request, cargo breakdown, baggage equipment); GPU 700 per hour, ACU 1,200 per hour, push back conventional 500 / wide body 700 per use, labor 100, supervision & arrangement 400, supervision at night 500 (18:00–03:00 UTC), disbursement 10%, sales government tax 4%, admin/communication 35, landing permission / PPR 130; cargo handling of combined flights 60 per ton, reload 90 per ton, warehouse 0.5 / 0.25 / 0.10 per kg; cancellation 30% of handling < 12 h, 50% < 6 h before STA. USER DECISIONS (13 Nov 2026): handler SONIC JET; handling only in E35L group (quote group); airport fees by CAA per ton in all groups (22 / 24.5 / 34 / 42 / 46 / 53 t); ATC 400 and lighting 150 as on Sonic quote (CAA 300 / 60 per movement; to be compared when another handler quotes); aviation security 500 from CAA in basket (not on quote); turnaround 2,100 in basket, transit and technical stop as tick rows replacing it; supervision 400 + night difference 100 automatic (22:30–07:30 local); admin 35, PPR 130, ACU and push back in basket, GPU per hour, labor tick; disbursement 10% on airport fees; sales tax 4% not entered (tax); cargo, warehouse and cancellation not entered. BALKH AIR SERVICES ground handling charges sheet (undated, entered as 12 Nov 2026; USD; prices shown NB/WB = narrow body / wide body, valid for scheduled and non-scheduled flights): basic handling pax flight by MTOW 0–9.99 t 2,496, 10–24.99 t 3,168, 25–39.99 t 3,936, 40–79.99 t 4,320 (cargo 2,592 / 3,360 / 4,416 / 4,992; larger classes not relevant); NB: GPU 410 per hour, fresh water 200, wheelchair 25, additional toilet 200 (1 included), push back 350 per movement, towing 450 per leg, additional stairs 170 per hour, ACU 550 per hour, de-ice equipment 1,500, CUTE 110, DCS 110, meteo/flight ops file printing 80, ATS flight plan print 50, de-ice fluid 14 per litre, ASU 420 per bleed, LDL 400 / MDL 600 per hour, jack 80, forklift 100, cherry picker 170, catering transfer 300, crew bus 100 (1 included), cabin cleaning 250, cabin disinfection 70, hold disinfection 120, cabin dressing 150, hold cleaning 110, garbage 70, ambulift 150, headset 30 (1 included), conveyor 150 (1 included), pax bus 150 (1 included), offloading baggage 100 per pax, nitrogen 200. USER DECISIONS (13 Nov 2026): NB prices; all groups by MTOW; airport fees from CAA (ATC 300, lighting 60 per movement = 120, landing 10 per ton, parking ton × 4 per 24 h after 4 h, security 500) and departing pax tax 40 (Sonic; CAA table blank); no disbursement (not stated); handling, GPU per hour, ACU and push back in basket; other services tick; cargo and WB-only items not entered. BALKH AIR SERVICES invoice (14 Nov 2026; A6-AFO E35L, MTOW 24 t / 24,300 kg on ramp log 12682, DXB–OAMS–DXB, ATA 20:43, ATD 21:52, 14 Nov 2026): basic ground handling (10–24.99 t) 3,168, supervision 200 per flight; subtotal 3,368, taxes 4% 134.72, total 3,502.72. Ramp log: tractor 20:44–21:52 (not charged), supervision. No airport fees on invoice. USER DECISIONS (16 Nov 2026): Balkh supervision 200 in all groups; 4% tax not entered; CAA airport fees kept; green and ticked (handling invoice exact). SONIC JET trip cost estimate (24 Nov 2026; GL-5 42 t, pax, civil side): airport fees unchanged (landing 420 approx, parking 168 per day first 4 h free, ATC 400, lighting 150 approx, departing pax tax 40); basic handling transit 2,300 / turnaround 2,900, technical stop 1,450; GPU 700 per hour, ACU 1,200 per hour, push back conventional 500 / wide body 700, labor 100, supervision & arrangement 500, supervision at night 600 (18:00–03:00 UTC), disbursement 10%, sales government tax 4%, admin/communication 35, landing permission / PPR 130. USER DECISIONS (25 Nov 2026): GL5T column entered from this estimate (same structure as E35L; night difference 100); GLEX and GL7T handling left empty (to be requested from Sonic Jet); wide body push back not entered; sales tax not entered; green/tick and verified unchanged.",
+   "services": [
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Handling Fee",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Supervision & Arrangement",
+     "noDisb": true,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Supervision Night Difference (18:00–03:00 UTC)",
+     "nightAny": true,
+     "nightOnly": [
+      22.5,
+      7.5
+     ],
+     "nightSc": true,
+     "noDisb": true,
+     "nsLabel": "Supervision at night 500 instead of 400 (18:00–03:00 UTC = 22:30–07:30 local)",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Admin / Communication Fee",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Landing Permission / PPR",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "GPU (per hour)",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "ACU (per hour)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Pushback / Towing (conventional, per use)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Labor (per person)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Potable Water",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Additional Toilet Service (1 included)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Towing (per leg)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "ASU / Air Starter (per bleed)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Additional Stairs (per hour)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "CUTE / CUPPS (per flight)",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "DCS Check-in (per flight)",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Meteo / Flight Ops File Printing",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "ATS Flight Plan Print & Signature",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Garbage Removal",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Wheelchair",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Additional Crew Bus (1 included)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Additional Pax Bus (1 included)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Additional Conveyor Belt (1 included)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Additional Headset (1 included)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Landing Fee (10 per ton, min 100)",
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "ATC Fees (Arrival + Departure)",
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Lighting Fees",
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Aviation Security (per flight)",
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Parking (first 4 h free, then per 24 h ton × 4)",
+     "unit": "day"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Departing Pax Tax",
+     "unit": "pax"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Transit Handling (instead of turnaround)",
+     "opt": true,
+     "qty": true,
+     "qtyDef": 1,
+     "replaces": [
+      "Handling Fee"
+     ],
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Technical Stop Handling (instead of turnaround)",
+     "opt": true,
+     "qty": true,
+     "qtyDef": 1,
+     "replaces": [
+      "Handling Fee"
+     ],
+     "unit": "flight"
+    }
+   ],
+   "tz": "Asia/Kabul",
+   "updatedAt": "2026-11-25T04:35:00.000Z",
+   "verified": "BALKH AIR SERVICES invoice (A6-AFO E35L, 14 Nov 2026, DXB–OAMS–DXB, 1 h 9 min; excl. 4% tax): handling 3,168 + supervision 200 = 3,368, exact. Airport fees not on invoice; CAA tariff values in panel (not yet invoiced). SONIC JET from quote (12 Nov 2026)."
+  }
+ },
+ "base": {
+  "OAMS": [
+   "2026-11-16T07:45:00.000Z"
+  ]
+ }
+}
