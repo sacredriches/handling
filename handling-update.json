@@ -1,5 +1,5 @@
 {
- "createdAt": "2026-11-25T07:45:00.000Z",
+ "createdAt": "2026-11-25T07:52:00.000Z",
  "airports": {
   "RJTT": {
    "icao": "RJTT",
@@ -2768,7 +2768,12 @@
     }
    },
    "updatedAt": "2026-11-25T07:25:12.314Z",
-   "verified": "UNIVERSAL quote Japan-25656 (T7-AFZ, 27 Nov 12:30 – 30 Nov 12:55 LT, 5 + 5 pax, crew transportation ×2 ticked): panel 2,321,380, quote 2,261,420; difference = parking 3 extra 24 h periods +69,960 (21,200 per started 24 h, user decision; quote 21,200 for the stay) and fueler schedule update −10,000 (not entered, user decision). AIR CONTRAIL quote QT-49 (T7-AFZ, 21:30 / 21:55 local, overtime once, 5 + 5 pax, crew transportation ×1 ticked, navigation and GPU unticked, catering excluded): panel 2,425,310, quote 2,352,170; difference = parking 3 extra 24 h periods +73,140 only."
+   "verified": "UNIVERSAL quote Japan-25656 (T7-AFZ, 27 Nov 12:30 – 30 Nov 12:55 LT, 5 + 5 pax, crew transportation ×2 ticked): panel 2,321,380, quote 2,261,420; difference = parking 3 extra 24 h periods +69,960 (21,200 per started 24 h, user decision; quote 21,200 for the stay) and fueler schedule update −10,000 (not entered, user decision). AIR CONTRAIL quote QT-49 (T7-AFZ, 21:30 / 21:55 local, overtime once, 5 + 5 pax, crew transportation ×1 ticked, navigation and GPU unticked, catering excluded): panel 2,425,310, quote 2,352,170; difference = parking 3 extra 24 h periods +73,140 only.",
+   "hOrder": [
+    "JAS",
+    "UNIVERSAL",
+    "AIR_CONTRAIL"
+   ]
   },
   "VHHH": {
    "icao": "VHHH",
