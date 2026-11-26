@@ -1,6 +1,1204 @@
 {
- "createdAt": "2026-11-26T07:51:00.000Z",
+ "createdAt": "2026-11-26T07:56:00.000Z",
  "airports": {
+  "EGGW": {
+   "currency": "GBP",
+   "handlers": {
+    "HARRODS_AVIATION": {
+     "disbBase": "airport",
+     "name": "HARRODS AVIATION",
+     "night": 0,
+     "prices": {
+      "CL60": {
+       "disb": 0.15,
+       "items": [
+        2040.0,
+        150,
+        22,
+        null,
+        {
+         "pk": 1,
+         "free": 0,
+         "every": 1,
+         "price": 145.0,
+         "bands": []
+        },
+        null,
+        null,
+        1.04,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        150,
+        425,
+        160,
+        0.06,
+        0.05,
+        "Included",
+        null,
+        null,
+        265,
+        217.5
+       ],
+       "upd": {
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "D 1632 × 1.25"
+        },
+        "Parking Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "116 per hour × 1.25"
+        },
+        "Toilet Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Water Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Trash / Waste Removal": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Border Force Immigration Clearance": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Immigration Support Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "LLA Passenger Security Levy": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods Additional Price List 2026-27 Issue 5",
+         "calc": "usage 265 per hour (provision 132 per hour not entered)"
+        },
+        "Hangarage (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "174 × 1.25"
+        },
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        }
+       }
+      },
+      "E35L": {
+       "disb": 0.15,
+       "items": [
+        2040.0,
+        150,
+        22,
+        null,
+        {
+         "pk": 1,
+         "free": 0,
+         "every": 1,
+         "price": 145.0,
+         "bands": []
+        },
+        null,
+        null,
+        1.04,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        150,
+        425,
+        160,
+        0.06,
+        0.05,
+        "Included",
+        null,
+        null,
+        265,
+        217.5
+       ],
+       "upd": {
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "D 1632 × 1.25"
+        },
+        "Parking Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "116 per hour × 1.25"
+        },
+        "Toilet Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Water Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Trash / Waste Removal": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Border Force Immigration Clearance": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Immigration Support Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "LLA Passenger Security Levy": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods Additional Price List 2026-27 Issue 5",
+         "calc": "usage 265 per hour (provision 132 per hour not entered)"
+        },
+        "Hangarage (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "174 × 1.25"
+        },
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": 0.15,
+       "items": [
+        2280.0,
+        150,
+        22,
+        null,
+        {
+         "pk": 1,
+         "free": 0,
+         "every": 1,
+         "price": 175.0,
+         "bands": []
+        },
+        null,
+        null,
+        1.04,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        150,
+        425,
+        160,
+        0.06,
+        0.05,
+        "Included",
+        null,
+        null,
+        265,
+        261.25
+       ],
+       "upd": {
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "C 1824 × 1.25"
+        },
+        "Parking Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "140 per hour × 1.25"
+        },
+        "Toilet Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Water Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Trash / Waste Removal": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Border Force Immigration Clearance": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Immigration Support Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "LLA Passenger Security Levy": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods Additional Price List 2026-27 Issue 5",
+         "calc": "usage 265 per hour (provision 132 per hour not entered)"
+        },
+        "Hangarage (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "209 × 1.25"
+        },
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        }
+       }
+      },
+      "GL7T": {
+       "disb": 0.15,
+       "items": [
+        2460,
+        150,
+        22,
+        803.96,
+        {
+         "bands": [],
+         "every": 1,
+         "free": 0,
+         "pk": 1,
+         "price": 310
+        },
+        19.68,
+        1027,
+        1.04,
+        576.49,
+        48.4,
+        18.71,
+        1350.27,
+        276.98,
+        1103.46,
+        150,
+        425,
+        160,
+        0.06,
+        0.05,
+        "Included",
+        null,
+        null,
+        265,
+        465.0
+       ],
+       "upd": {
+        "Border Force Immigration Clearance": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Dep Night Operating Charge (Departure)": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Handling Fee": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Immigration Support Service": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Infrastructure / Other Airport Charge": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "LLA Passenger Security Levy": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Landing Fee": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "NATS London Approach": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "NOX Charges - Arrival": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "NOX Charges - Departure": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Navigation / ATC Charge": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Parking Fee": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Security Screening (per service)": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Toilet Service": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Trash / Waste Removal": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Water Service": {
+         "d": "2026-10-20",
+         "a": 1
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-10-20"
+        },
+        "Passenger Fee / Tax (per departing pax)": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026)",
+         "calc": "own invoice 16.08 per flight"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods Additional Price List 2026-27 Issue 5",
+         "calc": "usage 265 per hour (provision 132 per hour not entered)"
+        },
+        "Hangarage (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "372 × 1.25"
+        },
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
+         "d": "2026-10-20",
+         "a": 1
+        }
+       }
+      },
+      "GLEX": {
+       "disb": 0.15,
+       "items": [
+        2280.0,
+        150,
+        22,
+        924.55,
+        {
+         "pk": 1,
+         "free": 0,
+         "every": 1,
+         "price": 175.0,
+         "bands": []
+        },
+        19.68,
+        null,
+        1.04,
+        662.96,
+        111.32,
+        21.06,
+        306.27,
+        804.56,
+        null,
+        150,
+        425,
+        160,
+        0.06,
+        0.05,
+        "Included",
+        null,
+        null,
+        265,
+        261.25
+       ],
+       "upd": {
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "C 1824 × 1.25"
+        },
+        "Parking Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "140 per hour × 1.25"
+        },
+        "Toilet Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Water Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Trash / Waste Removal": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Border Force Immigration Clearance": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Immigration Support Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "LLA Passenger Security Levy": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Landing Fee": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "Navigation / ATC Charge": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "Infrastructure / Other Airport Charge": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "NATS London Approach": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "NOX Charges - Departure": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "NOX Charges - Arrival": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "Passenger Fee / Tax (per departing pax)": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, from Signature)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods Additional Price List 2026-27 Issue 5",
+         "calc": "usage 265 per hour (provision 132 per hour not entered)"
+        },
+        "Hangarage (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "209 × 1.25"
+        },
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": 0.15,
+       "items": [
+        2280.0,
+        150,
+        22,
+        null,
+        {
+         "pk": 1,
+         "free": 0,
+         "every": 1,
+         "price": 175.0,
+         "bands": []
+        },
+        null,
+        null,
+        1.04,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        150,
+        425,
+        160,
+        0.06,
+        0.05,
+        "Included",
+        null,
+        null,
+        265,
+        261.25
+       ],
+       "upd": {
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "C 1824 × 1.25"
+        },
+        "Parking Fee": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "140 per hour × 1.25"
+        },
+        "Toilet Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Water Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Trash / Waste Removal": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Border Force Immigration Clearance": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Immigration Support Service": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "LLA Passenger Security Levy": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods Additional Price List 2026-27 Issue 5",
+         "calc": "usage 265 per hour (provision 132 per hour not entered)"
+        },
+        "Hangarage (per hour)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (unsigned) × 1.25 = ad-hoc level",
+         "calc": "209 × 1.25"
+        },
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
+         "d": "2026-11-26",
+         "src": "Harrods invoice level (4 Sep 2026) / Harrods Additional Price List 2026-27 Issue 5"
+        }
+       }
+      }
+     },
+     "type": "FBO",
+     "weekend": 0.25,
+     "wkDays": [
+      5,
+      6,
+      0
+     ],
+     "holiday": 1
+    },
+    "SIGNATURE": {
+     "disbBase": "airport",
+     "name": "SIGNATURE",
+     "night": 0,
+     "prices": {
+      "CL60": {
+       "disb": null,
+       "items": [
+        "Basic Ground Handling not provided",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "upd": {
+        "Handling Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        }
+       }
+      },
+      "E35L": {
+       "disb": null,
+       "items": [
+        "Basic Ground Handling not provided",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "upd": {
+        "Handling Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": null,
+       "items": [
+        "Basic Ground Handling not provided",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "upd": {
+        "Handling Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        }
+       }
+      },
+      "GL7T": {
+       "disb": null,
+       "items": [
+        2520,
+        168,
+        51,
+        924.55,
+        {
+         "after": 19,
+         "bands": [],
+         "day24": 3284,
+         "every": 1,
+         "free": 0,
+         "pk": 1,
+         "price": 171
+        },
+        19.68,
+        635,
+        null,
+        662.96,
+        111.32,
+        23.07,
+        1552.19,
+        1552.19,
+        null,
+        168,
+        310,
+        null,
+        0.06,
+        null,
+        88,
+        546,
+        727,
+        null,
+        null
+       ],
+       "upd": {
+        "Border Force Immigration Clearance": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Handling Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Infrastructure / Other Airport Charge": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Landing Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "NATS London Approach": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "NOX Charges - Arrival": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "NOX Charges - Departure": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Navigation / ATC Charge": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Parking Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Peak difference (per direction; qty = peak directions)": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Security Screening (per service)": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Slot Booking Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Super Peak difference (per direction; qty = super peak directions)": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Toilet Service": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Trash / Waste Removal": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Water Service": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-10-20"
+        },
+        "Passenger Fee / Tax (per departing pax)": {
+         "a": 1,
+         "d": "2026-10-20"
+        }
+       }
+      },
+      "GLEX": {
+       "disb": null,
+       "items": [
+        2520,
+        168,
+        51,
+        924.55,
+        {
+         "after": 19,
+         "bands": [],
+         "day24": 3284,
+         "every": 1,
+         "free": 0,
+         "pk": 1,
+         "price": 171
+        },
+        19.68,
+        635,
+        null,
+        662.96,
+        111.32,
+        21.06,
+        306.27,
+        804.56,
+        null,
+        168,
+        310,
+        null,
+        0.06,
+        null,
+        88,
+        546,
+        727,
+        null,
+        null
+       ],
+       "upd": {
+        "Border Force Immigration Clearance": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Handling Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Infrastructure / Other Airport Charge": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Landing Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "NATS London Approach": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "NOX Charges - Arrival": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "NOX Charges - Departure": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Navigation / ATC Charge": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Parking Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Peak difference (per direction; qty = peak directions)": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Security Screening (per service)": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Slot Booking Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Super Peak difference (per direction; qty = super peak directions)": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Toilet Service": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Trash / Waste Removal": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Water Service": {
+         "a": 1,
+         "d": "2026-10-20"
+        },
+        "Airport Surcharge / Levy (6%)": {
+         "d": "2026-10-20"
+        },
+        "Passenger Fee / Tax (per departing pax)": {
+         "a": 1,
+         "d": "2026-10-20"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": null,
+       "items": [
+        "Basic Ground Handling not provided",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "upd": {
+        "Handling Fee": {
+         "a": 1,
+         "d": "2026-10-20"
+        }
+       }
+      }
+     },
+     "type": "FBO",
+     "weekend": 0,
+     "pctOnBy": {
+      "Airport Surcharge / Levy (6%)": [
+       "Handling Fee",
+       "Peak difference (per direction; qty = peak directions)",
+       "Super Peak difference (per direction; qty = super peak directions)"
+      ]
+     }
+    }
+   },
+   "icao": "EGGW",
+   "notes": "Harrods: AFZ quote only. HARRODS (20 Oct 2026): invoice 4 Sep 2026 (T7-AFZ, EDDB–EGGW–LFMN, 19:34–22:05 UTC, 12,477.48 GBP) and two proformas for the same flight (9,875.24 and 11,145.05). Parking 310 per hour (every started hour, user decision; invoices used fractional hours and durations different from block: 1.83 / 1.88 h). Weekend surcharge 25% applied to a Friday evening flight; by user decision the weekend definition was not changed (Saturday + Sunday). Airport surcharge = (handling + weekend/night surcharge + parking) × 6% (solved from invoice: 3,642.30 × 6% = 218.54). Administration surcharge 'outside scope' = 5% of the whole invoice (incl. catering). Disbursement 15% on airport fees excl. parking and passenger & crew screening (629.31 = 4,195.39 × 15%). Navigation 576.49, NATS London approach 18.71, NOX departure 1,350.27, NOX arrival 276.98, passenger & crew screening 1,027; dep night operating charge 1,103.46 only for departures 23:00–07:00 local (window assumed; invoice 23:05 BST departure). B.F immigration clearance 425 and immigration support 160 in basket by user decision. Water 150 and waste 22 from the proforma, in basket. Catering, catering disbursement and unsealed catering screening 210 not entered. UK time: summer UTC+1. Earlier Excel note 'parking = 24 h equivalent of hourly rate' was wrong for Harrods; 310 is hourly. SIGNATURE (20 Oct 2026): invoices/proformas A6-AFC (GL6T, 24 Sep 2026: 7,386.05 and LT245731 10,437.59), T7-ELL (BD-700, 21–23 Jul, 13,742.75), T7-AFZ (24 Jul 13,001.14; LT242428 27–28 Jul 14,577.73; LT242552 29–30 Jul 16,431.17). Handling per direction by band (GL6T and GL7T same): Standard 1,260, Peak 1,806, Super Peak 1,987. Panel Handling Fee two directions Standard 2,520; peak/super peak difference as tick rows (per direction +546 / +727, qty = number of directions in that band). Band rule not derivable from invoices (day/time/season). Airport levy = 6% of handling (incl. band differences), automatic. Parking: 171 per hour (every started hour); stays over 19 h every started 24 h 3,284 (matches all six documents). Landing 924.55, navigation 662.96, GA infrastructure 55.66 + 55.66 (Infrastructure row 111.32), 19.68 per departing pax, screening 635 (absent on two invoices: T7-ELL and LT242552; untick 'in total' when not used), slot booking 88, UK Border Force 310 (in basket, Border Force row), London approach GL6T 21.06 / GL7T 23.07, night operating charge always 0. NOx: GL7T 1,552.19 each direction; ELL group (user decision, safe side) the higher value per direction: arrival 804.56 (T7-ELL, Jul), departure 306.27 (A6-AFC, Sep); A6-AFC September invoices arrival 306.27, T7-ELL July departure 268.19. Lav 168, water 168, waste 51 (lav and waste twice on the T7-ELL invoice). No disbursement and no weekend/night surcharge. Taxi, catering, dishwashing, laundry, wet ice 13 and crew drop-off 15 not entered. Only ELL group and AFZ entered. USER DECISION (26 Nov 2026): 'Airport Surcharge' (Harrods, 6% on handling + surcharge + parking) and 'Airport Levy' (Signature, 6% on handling incl. peak differences) merged into one row 'Airport Surcharge / Levy (6%)'; each handler keeps its own base (Signature via pctOnBy). HARRODS agreement H26-297 Issue 1 (14 Sep 2026, NOT signed) and Additional Price List 2026-27 Issue 5 (1 Feb 2026 – 31 Jan 2027), checked 26 Nov 2026. USER DECISIONS (26 Nov 2026): invoice prices have priority for all services and groups; the September invoice equals the agreement rates × 1.25 (handling 1,968 → 2,460, parking 248 → 310), so groups without invoice use agreement rates × 1.25: group C (GLEX, GL5T, GLF4) handling 2,280, parking 175 per hour, hangarage 261.25; group D (CL60, E35L) 2,040 / 145 / 217.50; C+ (GL7T) hangarage 465. Toilet 150, water 150, waste 22, Border Force 425 (0–10 pax), immigration 160, LLA levy 1.04, airport surcharge 6%, administration 5% (in basket), disbursement 15% in all groups; GLEX airport fees copied from Signature (common airport charges); slot booking included in handling; GPU 265 per hour (usage; provision 132 per hour not entered); hangarage per hour tick row. Weekend 25% Friday 00:00 – Monday 11:59 (panel: Fri, Sat, Sun); UK public holidays 100% (manual tick); no night surcharge (not charged on the invoice for a 23:05 departure; list: contracted 20%, ad-hoc 50%, 22:00–06:00). Screening 1,027 kept (invoice; list 790 for 0–7 pax + 30% 18:01–05:59; required only for private flights over 45.5 t). Not entered: parking peak season +25% (1 May – 31 Aug), ASU 750, extra staff, de-icing. Passenger fee rows merged into 'Passenger Fee / Tax (per departing pax)' (Signature 19.68; Harrods invoice 16.08 per flight, 19.68 per departing pax by common airport charge rule).",
+   "services": [
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Handling Fee",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Toilet Service",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Trash / Waste Removal",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Landing Fee",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Parking Fee",
+     "noDisb": true,
+     "unit": "day"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Passenger Fee / Tax (per departing pax)",
+     "unit": "pax"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Security Screening (per service)",
+     "noDisb": true,
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "LLA Passenger Security Levy",
+     "unit": "pax"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Navigation / ATC Charge",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Infrastructure / Other Airport Charge",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "NATS London Approach",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "NOX Charges - Departure",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "NOX Charges - Arrival",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Dep Night Operating Charge (Departure)",
+     "nightOnly": [
+      23,
+      7
+     ],
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Water Service",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Border Force Immigration Clearance",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Immigration Support Service",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Airport Surcharge / Levy (6%)",
+     "pctOn": [
+      "Handling Fee",
+      "Parking Fee",
+      "SC"
+     ],
+     "unit": "pct"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Credit Card Fee / Administration Surcharge (5% of whole invoice)",
+     "unit": "pct"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Slot Booking Fee",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Peak difference (per direction; qty = peak directions)",
+     "opt": true,
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Super Peak difference (per direction; qty = super peak directions)",
+     "opt": true,
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "GPU (per hour)",
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Hangarage (per hour)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    }
+   ],
+   "updatedAt": "2026-11-26T07:55:00.000Z",
+   "verified": "Signature: T7-AFZ invoices (24 Jul, LT242428, LT242552) exact excl. taxi/catering/dishwashing/laundry/ice; A6-AFC September invoices 498.29 higher because NOx is on the safe side (arrival 804.56), otherwise exact. Harrods: invoice 4 Sep 2026 (T7-AFZ) excl. catering, 58.65 difference because parking is rounded to every started hour; weekend Friday–Sunday automatic since 26 Nov 2026 (invoice charged weekend 25% on a Friday)."
+  },
   "EGSS": {
    "currency": "GBP",
    "handlers": {
@@ -2492,7 +3690,7 @@
          "d": "2026-11-26",
          "src": "Harrods Additional Price List 2026-27 Issue 5"
         },
-        "Administration Surcharge (5% of whole invoice)": {
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
          "d": "2026-11-26",
          "src": "Harrods agreement H26-297 (terms of payment)"
         }
@@ -2598,7 +3796,7 @@
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
         },
-        "Administration Surcharge (5% of whole invoice)": {
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
          "d": "2026-11-26",
          "src": "Harrods agreement H26-297 (terms of payment)"
         }
@@ -2704,7 +3902,7 @@
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
         },
-        "Administration Surcharge (5% of whole invoice)": {
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
          "d": "2026-11-26",
          "src": "Harrods agreement H26-297 (terms of payment)"
         }
@@ -2782,7 +3980,7 @@
          "d": "2026-11-26",
          "src": "Harrods Additional Price List 2026-27 Issue 5"
         },
-        "Administration Surcharge (5% of whole invoice)": {
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
          "d": "2026-11-26",
          "src": "Harrods agreement H26-297 (terms of payment)"
         }
@@ -2888,7 +4086,7 @@
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
         },
-        "Administration Surcharge (5% of whole invoice)": {
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
          "d": "2026-11-26",
          "src": "Harrods agreement H26-297 (terms of payment)"
         }
@@ -2994,7 +4192,7 @@
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
         },
-        "Administration Surcharge (5% of whole invoice)": {
+        "Credit Card Fee / Administration Surcharge (5% of whole invoice)": {
          "d": "2026-11-26",
          "src": "Harrods agreement H26-297 (terms of payment)"
         }
@@ -3228,18 +4426,22 @@
      "airport": false,
      "basket": true,
      "disb": false,
-     "name": "Administration Surcharge (5% of whole invoice)",
+     "name": "Credit Card Fee / Administration Surcharge (5% of whole invoice)",
      "unit": "pct"
     }
    ],
-   "updatedAt": "2026-11-26T07:50:00.000Z",
+   "updatedAt": "2026-11-26T07:55:00.000Z",
    "verified": "AVIANEX invoice V/26/00195 (Universal INVUK23764, A6-AFA, 30 Jun 2026): panel 6,074.48 GBP, invoice 5,837.01 (excl. ice), +237.47. JBS invoice 123727 (Harrods, A6-AFE, 19–20 Feb 2026): panel 6,625.18, invoice 6,016.21, +608.97. JBS invoice 124115 (Harrods, A6-AFE, 1–2 Mar 2026): panel 7,446.84, invoice 6,937.22, +509.62 (excl. dishes, laundry, oxygen, engineering; waste 1 bag). Handler items exact; differences from airport fees: by user decision on the safe side Stansted Ch4 tariff (landing/departure 337.46), departure minimum 425.25 and Border Force 368 (Universal). INFLITE, LJC and Universal entered from quotes; LONDON JET CENTRE invoice INV-7167 (A6-AFD, 1 Nov 2026, 50 min night turnaround; excl. catering, printing ticked) panel 7,193.32, invoice 6,601.42, +591.90 (parking and UKBF with 50% in panel, not on invoice; NATS, landing and departure higher in panel)."
   }
  },
  "base": {
+  "EGGW": [
+   "2026-11-26T07:35:00.000Z"
+  ],
   "EGSS": [
    "2026-11-26T07:35:00.000Z",
-   "2026-11-26T07:45:00.000Z"
+   "2026-11-26T07:45:00.000Z",
+   "2026-11-26T07:50:00.000Z"
   ]
  }
 }
