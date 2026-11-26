@@ -57,7 +57,8 @@
   "UAAA": 9,
   "UACC": 9,
   "OSDI": 14,
-  "HLLT": 10
+  "HLLT": 10,
+  "VTSP": 1
  },
  "_kural": "Panelde butun meydanlarda handlers NESNE bicimindedir (bakim islemi 19 Kas 2026'da calistirildi, updatedAt degerleri korundu). Tek alanlik merge guvenlidir. Yeni bir handler anahtari yazmadan once anahtarin var oldugunu dogrula: olmayan anahtara merge yapmak bos bir handler yaratir.",
  "objectForm": "ALL",
