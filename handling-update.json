@@ -1,5 +1,5 @@
 {
- "createdAt": "2026-11-26T07:40:00.000Z",
+ "createdAt": "2026-11-26T07:46:00.000Z",
  "airports": {
   "EGGW": {
    "currency": "GBP",
@@ -3652,7 +3652,8 @@
         null,
         null,
         null,
-        160
+        160,
+        0.05
        ],
        "upd": {
         "Handling Fee": {
@@ -3688,6 +3689,10 @@
         "Immigration Support Service": {
          "d": "2026-11-26",
          "src": "Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Administration Surcharge (5%, card / cash payment)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (terms of payment)"
         }
        }
       },
@@ -3725,7 +3730,8 @@
         null,
         null,
         null,
-        160
+        160,
+        0.05
        ],
        "upd": {
         "Handling Fee": {
@@ -3789,6 +3795,10 @@
         "Night Departure Fee Difference (23–06 L)": {
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
+        },
+        "Administration Surcharge (5%, card / cash payment)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (terms of payment)"
         }
        }
       },
@@ -3826,7 +3836,8 @@
         null,
         null,
         null,
-        160
+        160,
+        0.05
        ],
        "upd": {
         "Handling Fee": {
@@ -3890,6 +3901,10 @@
         "Night Departure Fee Difference (23–06 L)": {
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
+        },
+        "Administration Surcharge (5%, card / cash payment)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (terms of payment)"
         }
        }
       },
@@ -3927,7 +3942,8 @@
         null,
         null,
         null,
-        160
+        160,
+        0.05
        ],
        "upd": {
         "Handling Fee": {
@@ -3963,6 +3979,10 @@
         "Immigration Support Service": {
          "d": "2026-11-26",
          "src": "Harrods Additional Price List 2026-27 Issue 5"
+        },
+        "Administration Surcharge (5%, card / cash payment)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (terms of payment)"
         }
        }
       },
@@ -4000,7 +4020,8 @@
         null,
         null,
         null,
-        160
+        160,
+        0.05
        ],
        "upd": {
         "Handling Fee": {
@@ -4064,6 +4085,10 @@
         "Night Departure Fee Difference (23–06 L)": {
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
+        },
+        "Administration Surcharge (5%, card / cash payment)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (terms of payment)"
         }
        }
       },
@@ -4101,7 +4126,8 @@
         null,
         null,
         null,
-        160
+        160,
+        0.05
        ],
        "upd": {
         "Handling Fee": {
@@ -4165,6 +4191,10 @@
         "Night Departure Fee Difference (23–06 L)": {
          "d": "2026-11-26",
          "src": "Common airport charge (user decision 26 Nov 2026)"
+        },
+        "Administration Surcharge (5%, card / cash payment)": {
+         "d": "2026-11-26",
+         "src": "Harrods agreement H26-297 (terms of payment)"
         }
        }
       }
@@ -4172,7 +4202,7 @@
     }
    },
    "icao": "EGSS",
-   "notes": "INFLITE: night surcharge Out of Hours (2200–0600) E35L GBP 250, GLEX GBP 420; public holiday surcharge (Christmas Day/Boxing Day/New Year's Day) GBP 500. LONDON JET CENTRE (Diamond Hangar), GBP, e-mail quote (Nov 2026): handling GLEX 2,496 (ELL group), E35L 1,716 (OWN group); CL60 1,716 without document, at E35L price (kept by user decision). Water 156, toilet 156 per toilet, GPU 168 per hour (Excel 336 corrected). Cancellation 50% of handling (tick). Night 50% on handling only, 20:00–07:00 local. Airport fees paid to the airport from LJC's credit account, 20% disbursement on the invoice; 20% admin fee on third-party services (ground transport, catering, dry cleaning) (Excel 40% corrected). On request, no price: international waste, document printing, ice, dishes, dry cleaning, crew transport. Airport fees to be corrected with other handler documents / Stansted tariff. UNIVERSAL AVIATION, GBP, estimated quote: handling GLEX 1,190 (ELL), E35L 958 (OWN), CL60 958; parking per hour 34 / ELL 49 (handler specific); landing permit 358, communication 30, toilet 125, water 125, pushback / towing 178, GPU 144 (Excel 288 corrected; no unit in document, taken as 1 h), ASU 270 per hour (in basket), waste 22.48 per bag. Included: passenger handling, VIP terminal, baggage, permit revision, slot, stairs, headset, conveyor, crew shuttle. No disbursement in document. AIRPORT (from Universal quote, same for all handlers by user decision): landing and departure per movement, 06–23 local 279.94, 23–06 local 386.12 (night difference 106.18 in Surcharge, arrival and departure times checked separately); navigation 203.36; departure tax (over 5 t) 425.25; UK Border Force 368 per aircraft. INFLITE's Excel security 1,150, navigation 117.64 and 19.13 per pax deleted. INFLITE The Jet Centre quote (E35L 24.3 t; Stansted airport tariff from 1 Apr 2026, peak and off-peak same): landing/departure (per movement, 0–100 t) day Ch4 337.46 / Ch14 314.93 / Ch3 High 582.59, night 23–06 Ch4 501.69 / Ch3 High 873.94; NATS per movement 117.64 + 0.43 per ton; departing pax 19.13 + regulatory 0.72, min 236.35; Border Force 230 (+94 extra officer). INFLITE: handling 450 turnaround, apron parking 18.65 per hour, hangar 795 per 24 h, out of hours 22–06 flat 250, public holiday (25–26 Dec, 1 Jan) 500 per day, water 120, toilet 120, waste 20 per bag, disbursement 12.5% on third-party services. USER DECISIONS (3 Nov 2026): landing and departure per movement per Stansted tariff, Ch4 337.46 (FLH G-IV Ch3 High 582.59), night difference 164.23 (FLH 291.35) checked separately for arrival/departure (instead of Universal's 279.94 / 386.12); NATS per flight 2 × (117.64 + 0.43 × t): CL60 254.20, OWN 256.78, FLH 264.52, ALEX 271.40, ELL 274.84, AFZ 280.86 (instead of Universal 203.36); departure pax charge per flight 425.25 kept (higher than 19.85 × pax up to 21 pax); Border Force 368 kept. Flights are charter → passenger and baggage security screening (charter over 10 t MTOW, departing with pax) as airport fee in basket, A rate: 1–10 pax 780, 11–30 1,150, 31–70 1,800 (B rate +25% for 18:01–05:59 bookings, double on holidays; not in panel). INFLITE out of hours 250 (CL60, OWN), hangar and public holiday tick. INFLITE ELL values (handling 795, parking 25, out of hours 420) to be checked when GLEX quote arrives. INFLITE GLEX quote (MTOW 43,545 kg; airport tariff same as E35L quote): handling 795 turnaround, apron parking 25 per hour, hangar 1,100 per 24 h, out of hours 22–06 420, public holiday 500 per day; included: pushback, passenger handling, VIP lounge, baggage, slot, crew transfer to airport hotels, crew lounge; GPU 30 min free at start-up, then 110 per hour. USER DECISIONS: ELL and ALEX (41.95 t, per GLEX quote) handling 795, parking 25, out of hours 420, hangar 1,100 and public holiday tick; ALEX airport fees by its own tonnage (NATS 271.40). INFLITE GPU 110 in all groups (instead of Excel 220). AVIANEX (handler Universal Aviation): Avianex invoice V/26/00195 (2 Aug 2026, USD 7,820.29) = Universal invoice INVUK23764 (A6-AFA GLEX, 30 Jun 2026, LFPB–EGSS–OMDW, arrival 20:25 / departure 23:00 local, 3 departing pax; excl. VAT and ice 4,268.18 GBP, incl. VAT 5,141.82) × 1.4114 USD/GBP + supervision 200 USD + 5% disbursement (on handling row). USER DECISIONS (3 Nov 2026): separate handler; Universal prices incl. 20% VAT (exception to the rule, as invoiced), Avianex FX factor (1.4114 / panel 1.3347 = ×1.0575); 10% admin on Universal third-party items; combined factor Universal services ×1.2690, third party ×1.3959. Supervision 149.85 GBP (200 USD), no disbursement; 5% disbursement on all other items. From the Universal invoice: handling 1,394, after hours 50% handling, communication 30, customs & immigration 368, airport ramp parking 5.61 per 15 min + 0.345 per ton, NGS 0.56 + regulatory 0.72 per departing pax; landing and NATS from panel values (higher than invoice). Only ELL (invoiced group). After hours window not in document, 20:00–07:00 taken (to be checked). USER DECISIONS (3 Nov 2026): UNIVERSAL AVIATION = Universal's direct quote to us (not changed by the invoice); INVUK23764 is Universal's invoice to Avianex, affects only AVIANEX. Communication 30 in basket. NGS + regulatory 1.28 per departing pax at all handlers (×1.396 at Avianex). Security screening (780 / 1,150 / 1,800) not charged on the invoice → tick, 'Services outside the comparison'. LJC parking per airport ramp tariff: 5.61 per started 15 min + 0.345 per ton (CL60 13.20, OWN 14.24, ELL 21.48), with 20% disbursement. Avianex after hours 20:00–07:00 (to be checked with a second invoice). JBS (Jet Business Solutions; handler Harrods Aviation): JBS invoice 124115 (5 Mar 2026, USD 9,562.00) = Harrods Aviation invoice 80819 (A6-AFE, GLEX 40,370 kg on invoice; FBBA–EGSS–OOMS, arrival 1 Mar 17:02 local 9 pax, departure 2 Mar 23:00 local 4 pax; USD 7,561.70 + VAT 20% = 9,074.04) + JBS admin 4% + coordination 125 USD. Harrods: handling 2,550, out of hours 1,275 (50%), navigation 350, Border Force 327, landing 346, take-off 515 (night), departure charge 336, toilet 170, water 170, parking INFLITE ramp 35.50 per hour (30 h), pax regulatory 5 (4 pax), waste 30 per bag (7), dishes 130 and laundry 112.70 (not entered). USER DECISIONS (3 Nov 2026): separate handler, ALEX group only; USD converted to GBP at panel rate (1.3347), incl. 20% VAT (like Avianex); disbursement 4% on all items, coordination 93.66 GBP without disbursement; out of hours 50% handling, 20:00–07:00. Airport fees on the safe side: invoice values lower than the panel's Stansted tariff, so panel values × 1.2 (VAT) entered (landing and departure 404.96, night difference 197.08, NATS 325.68, departure tax 510.30, NGS 1.54, Border Force 441.60). JBS invoice 123727 (25 Feb 2026, USD 8,600.17) = Harrods (A6-AFE, arrival 19 Feb 21:29 5 pax, departure 20 Feb 18:14 4 pax; USD 6,791 + VAT = 8,149.20; legible lines 6,788, blurred scan) + 4% + 125: handling 2,550 (no out of hours), navigation 350, Border Force 327, landing 346, take-off 346 (day), departure 336, water 171, parking 20 h × 35.50, security screening 1–10 pax A rate 1,105, regulatory 4 × 1.25, waste 85; dishes, laundry, oxygen 171, engineering 78 not entered. USER DECISIONS: JBS out of hours 22:00–06:00 (consistent with both invoices); security screening back in basket as airport fee (charged on charter flight); JBS screening 1,105 USD from invoice (1–10 pax), upper bands same ratio; JBS water 171, waste unit 85; waste row with qty (default 1). LONDON JET CENTRE invoice INV-7167 (2 Nov 2026; A6-AFD GLEX, arrival 1 Nov 21:55 from LSZH, departure 22:45 to LMML; GBP): handling 2,496, out of hours 50% 1,248, international waste 52 (1 box), water 202.80, LJC ramp parking 120 per hour, catering 938.04 + 20% (not entered), UKBF 600, admin (flight paperwork printing) 52, airport fees NATS 117.64 × 2, runway 279.94 × 2, PFC 425.25 → 1,220.41 × VAT 20% × disbursement 25% = 1,830.62. USER DECISIONS (5 Nov 2026): LJC water 202.80; international waste 52 in trash row; LJC parking own ramp 120 per hour; LJC UKBF 600; 50% on LJC airport rows (VAT 20% × 25% disbursement); printing of flight paperwork 52 as tick (bottom). Handler \"JBS (Harrods Aviation)\" renamed \"JBS\" (Jet Business Solutions) on 13 Nov 2026. Handler \"AVIANEX (Universal)\" renamed \"AVIANEX\" on 13 Nov 2026. HARRODS AVIATION (FBO, user decision) added 26 Nov 2026 from agreement H26-297 Issue 1 (14 Sep 2026, not signed) and Additional Price List 2026-27 Issue 5: Stansted agreement rates × 1.25 (ad-hoc level as on the Harrods Luton invoice; user decision): C+ (GL7T) handling 2,103.75, parking 132.50 per hour; C (GLEX, GL5T, GLF4) 1,985 / 96.25; D (CL60, E35L) 1,743.75 / 60; hangarage per hour not entered. Pushback / towing included in handling. List: toilet 136, water 136, waste 25, GPU usage 265 per hour (provision 132 not entered), Border Force 355 per international arrival, immigration 160 (new row). Surcharges on handling: night 50% 22:00–06:00, Sundays 25%, UK public holidays 100% (manual tick); no Stansted airport surcharge. Disbursement 15% on airport fees. Airport charges as the other handlers (common, from Inflite values). Out-of-hours cancellation (50% within 4 h) not entered.",
+   "notes": "INFLITE: night surcharge Out of Hours (2200–0600) E35L GBP 250, GLEX GBP 420; public holiday surcharge (Christmas Day/Boxing Day/New Year's Day) GBP 500. LONDON JET CENTRE (Diamond Hangar), GBP, e-mail quote (Nov 2026): handling GLEX 2,496 (ELL group), E35L 1,716 (OWN group); CL60 1,716 without document, at E35L price (kept by user decision). Water 156, toilet 156 per toilet, GPU 168 per hour (Excel 336 corrected). Cancellation 50% of handling (tick). Night 50% on handling only, 20:00–07:00 local. Airport fees paid to the airport from LJC's credit account, 20% disbursement on the invoice; 20% admin fee on third-party services (ground transport, catering, dry cleaning) (Excel 40% corrected). On request, no price: international waste, document printing, ice, dishes, dry cleaning, crew transport. Airport fees to be corrected with other handler documents / Stansted tariff. UNIVERSAL AVIATION, GBP, estimated quote: handling GLEX 1,190 (ELL), E35L 958 (OWN), CL60 958; parking per hour 34 / ELL 49 (handler specific); landing permit 358, communication 30, toilet 125, water 125, pushback / towing 178, GPU 144 (Excel 288 corrected; no unit in document, taken as 1 h), ASU 270 per hour (in basket), waste 22.48 per bag. Included: passenger handling, VIP terminal, baggage, permit revision, slot, stairs, headset, conveyor, crew shuttle. No disbursement in document. AIRPORT (from Universal quote, same for all handlers by user decision): landing and departure per movement, 06–23 local 279.94, 23–06 local 386.12 (night difference 106.18 in Surcharge, arrival and departure times checked separately); navigation 203.36; departure tax (over 5 t) 425.25; UK Border Force 368 per aircraft. INFLITE's Excel security 1,150, navigation 117.64 and 19.13 per pax deleted. INFLITE The Jet Centre quote (E35L 24.3 t; Stansted airport tariff from 1 Apr 2026, peak and off-peak same): landing/departure (per movement, 0–100 t) day Ch4 337.46 / Ch14 314.93 / Ch3 High 582.59, night 23–06 Ch4 501.69 / Ch3 High 873.94; NATS per movement 117.64 + 0.43 per ton; departing pax 19.13 + regulatory 0.72, min 236.35; Border Force 230 (+94 extra officer). INFLITE: handling 450 turnaround, apron parking 18.65 per hour, hangar 795 per 24 h, out of hours 22–06 flat 250, public holiday (25–26 Dec, 1 Jan) 500 per day, water 120, toilet 120, waste 20 per bag, disbursement 12.5% on third-party services. USER DECISIONS (3 Nov 2026): landing and departure per movement per Stansted tariff, Ch4 337.46 (FLH G-IV Ch3 High 582.59), night difference 164.23 (FLH 291.35) checked separately for arrival/departure (instead of Universal's 279.94 / 386.12); NATS per flight 2 × (117.64 + 0.43 × t): CL60 254.20, OWN 256.78, FLH 264.52, ALEX 271.40, ELL 274.84, AFZ 280.86 (instead of Universal 203.36); departure pax charge per flight 425.25 kept (higher than 19.85 × pax up to 21 pax); Border Force 368 kept. Flights are charter → passenger and baggage security screening (charter over 10 t MTOW, departing with pax) as airport fee in basket, A rate: 1–10 pax 780, 11–30 1,150, 31–70 1,800 (B rate +25% for 18:01–05:59 bookings, double on holidays; not in panel). INFLITE out of hours 250 (CL60, OWN), hangar and public holiday tick. INFLITE ELL values (handling 795, parking 25, out of hours 420) to be checked when GLEX quote arrives. INFLITE GLEX quote (MTOW 43,545 kg; airport tariff same as E35L quote): handling 795 turnaround, apron parking 25 per hour, hangar 1,100 per 24 h, out of hours 22–06 420, public holiday 500 per day; included: pushback, passenger handling, VIP lounge, baggage, slot, crew transfer to airport hotels, crew lounge; GPU 30 min free at start-up, then 110 per hour. USER DECISIONS: ELL and ALEX (41.95 t, per GLEX quote) handling 795, parking 25, out of hours 420, hangar 1,100 and public holiday tick; ALEX airport fees by its own tonnage (NATS 271.40). INFLITE GPU 110 in all groups (instead of Excel 220). AVIANEX (handler Universal Aviation): Avianex invoice V/26/00195 (2 Aug 2026, USD 7,820.29) = Universal invoice INVUK23764 (A6-AFA GLEX, 30 Jun 2026, LFPB–EGSS–OMDW, arrival 20:25 / departure 23:00 local, 3 departing pax; excl. VAT and ice 4,268.18 GBP, incl. VAT 5,141.82) × 1.4114 USD/GBP + supervision 200 USD + 5% disbursement (on handling row). USER DECISIONS (3 Nov 2026): separate handler; Universal prices incl. 20% VAT (exception to the rule, as invoiced), Avianex FX factor (1.4114 / panel 1.3347 = ×1.0575); 10% admin on Universal third-party items; combined factor Universal services ×1.2690, third party ×1.3959. Supervision 149.85 GBP (200 USD), no disbursement; 5% disbursement on all other items. From the Universal invoice: handling 1,394, after hours 50% handling, communication 30, customs & immigration 368, airport ramp parking 5.61 per 15 min + 0.345 per ton, NGS 0.56 + regulatory 0.72 per departing pax; landing and NATS from panel values (higher than invoice). Only ELL (invoiced group). After hours window not in document, 20:00–07:00 taken (to be checked). USER DECISIONS (3 Nov 2026): UNIVERSAL AVIATION = Universal's direct quote to us (not changed by the invoice); INVUK23764 is Universal's invoice to Avianex, affects only AVIANEX. Communication 30 in basket. NGS + regulatory 1.28 per departing pax at all handlers (×1.396 at Avianex). Security screening (780 / 1,150 / 1,800) not charged on the invoice → tick, 'Services outside the comparison'. LJC parking per airport ramp tariff: 5.61 per started 15 min + 0.345 per ton (CL60 13.20, OWN 14.24, ELL 21.48), with 20% disbursement. Avianex after hours 20:00–07:00 (to be checked with a second invoice). JBS (Jet Business Solutions; handler Harrods Aviation): JBS invoice 124115 (5 Mar 2026, USD 9,562.00) = Harrods Aviation invoice 80819 (A6-AFE, GLEX 40,370 kg on invoice; FBBA–EGSS–OOMS, arrival 1 Mar 17:02 local 9 pax, departure 2 Mar 23:00 local 4 pax; USD 7,561.70 + VAT 20% = 9,074.04) + JBS admin 4% + coordination 125 USD. Harrods: handling 2,550, out of hours 1,275 (50%), navigation 350, Border Force 327, landing 346, take-off 515 (night), departure charge 336, toilet 170, water 170, parking INFLITE ramp 35.50 per hour (30 h), pax regulatory 5 (4 pax), waste 30 per bag (7), dishes 130 and laundry 112.70 (not entered). USER DECISIONS (3 Nov 2026): separate handler, ALEX group only; USD converted to GBP at panel rate (1.3347), incl. 20% VAT (like Avianex); disbursement 4% on all items, coordination 93.66 GBP without disbursement; out of hours 50% handling, 20:00–07:00. Airport fees on the safe side: invoice values lower than the panel's Stansted tariff, so panel values × 1.2 (VAT) entered (landing and departure 404.96, night difference 197.08, NATS 325.68, departure tax 510.30, NGS 1.54, Border Force 441.60). JBS invoice 123727 (25 Feb 2026, USD 8,600.17) = Harrods (A6-AFE, arrival 19 Feb 21:29 5 pax, departure 20 Feb 18:14 4 pax; USD 6,791 + VAT = 8,149.20; legible lines 6,788, blurred scan) + 4% + 125: handling 2,550 (no out of hours), navigation 350, Border Force 327, landing 346, take-off 346 (day), departure 336, water 171, parking 20 h × 35.50, security screening 1–10 pax A rate 1,105, regulatory 4 × 1.25, waste 85; dishes, laundry, oxygen 171, engineering 78 not entered. USER DECISIONS: JBS out of hours 22:00–06:00 (consistent with both invoices); security screening back in basket as airport fee (charged on charter flight); JBS screening 1,105 USD from invoice (1–10 pax), upper bands same ratio; JBS water 171, waste unit 85; waste row with qty (default 1). LONDON JET CENTRE invoice INV-7167 (2 Nov 2026; A6-AFD GLEX, arrival 1 Nov 21:55 from LSZH, departure 22:45 to LMML; GBP): handling 2,496, out of hours 50% 1,248, international waste 52 (1 box), water 202.80, LJC ramp parking 120 per hour, catering 938.04 + 20% (not entered), UKBF 600, admin (flight paperwork printing) 52, airport fees NATS 117.64 × 2, runway 279.94 × 2, PFC 425.25 → 1,220.41 × VAT 20% × disbursement 25% = 1,830.62. USER DECISIONS (5 Nov 2026): LJC water 202.80; international waste 52 in trash row; LJC parking own ramp 120 per hour; LJC UKBF 600; 50% on LJC airport rows (VAT 20% × 25% disbursement); printing of flight paperwork 52 as tick (bottom). Handler \"JBS (Harrods Aviation)\" renamed \"JBS\" (Jet Business Solutions) on 13 Nov 2026. Handler \"AVIANEX (Universal)\" renamed \"AVIANEX\" on 13 Nov 2026. HARRODS AVIATION (FBO, user decision) added 26 Nov 2026 from agreement H26-297 Issue 1 (14 Sep 2026, not signed) and Additional Price List 2026-27 Issue 5: Stansted agreement rates × 1.25 (ad-hoc level as on the Harrods Luton invoice; user decision): C+ (GL7T) handling 2,103.75, parking 132.50 per hour; C (GLEX, GL5T, GLF4) 1,985 / 96.25; D (CL60, E35L) 1,743.75 / 60; hangarage per hour not entered. Pushback / towing included in handling. List: toilet 136, water 136, waste 25, GPU usage 265 per hour (provision 132 not entered), Border Force 355 per international arrival, immigration 160 (new row). Surcharges on handling: night 50% 22:00–06:00, Sundays 25%, UK public holidays 100% (manual tick); no Stansted airport surcharge. Disbursement 15% on airport fees. Airport charges as the other handlers (common, from Inflite values). Out-of-hours cancellation (50% within 4 h) not entered. Administration fee 5% on the final invoice for cash or credit card payment (agreement terms of payment), in basket (user decision, as at EGGW).",
    "services": [
     {
      "airport": false,
@@ -4391,9 +4421,16 @@
      "qty": true,
      "qtyDef": 1,
      "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Administration Surcharge (5%, card / cash payment)",
+     "unit": "pct"
     }
    ],
-   "updatedAt": "2026-11-26T07:35:00.000Z",
+   "updatedAt": "2026-11-26T07:45:00.000Z",
    "verified": "AVIANEX invoice V/26/00195 (Universal INVUK23764, A6-AFA, 30 Jun 2026): panel 6,074.48 GBP, invoice 5,837.01 (excl. ice), +237.47. JBS invoice 123727 (Harrods, A6-AFE, 19–20 Feb 2026): panel 6,625.18, invoice 6,016.21, +608.97. JBS invoice 124115 (Harrods, A6-AFE, 1–2 Mar 2026): panel 7,446.84, invoice 6,937.22, +509.62 (excl. dishes, laundry, oxygen, engineering; waste 1 bag). Handler items exact; differences from airport fees: by user decision on the safe side Stansted Ch4 tariff (landing/departure 337.46), departure minimum 425.25 and Border Force 368 (Universal). INFLITE, LJC and Universal entered from quotes; LONDON JET CENTRE invoice INV-7167 (A6-AFD, 1 Nov 2026, 50 min night turnaround; excl. catering, printing ticked) panel 7,193.32, invoice 6,601.42, +591.90 (parking and UKBF with 50% in panel, not on invoice; NATS, landing and departure higher in panel)."
   }
  },
@@ -4402,7 +4439,8 @@
    "2026-10-20T08:00:00.000Z"
   ],
   "EGSS": [
-   "2026-11-13T11:14:46.000Z"
+   "2026-11-13T11:14:46.000Z",
+   "2026-11-26T07:35:00.000Z"
   ]
  }
 }
