@@ -1,5 +1,5 @@
 {
- "createdAt": "2026-11-25T11:55:00.000Z",
+ "createdAt": "2026-11-26T05:15:00.000Z",
  "airports": {
   "HECA": {
    "country": "Egypt",
@@ -26944,6 +26944,1264 @@
    ],
    "updatedAt": "2026-10-29T11:50:00.000Z",
    "verified": "K-Generation invoices 10247 + navigation 10255 (A6-AFA, Jul 2026) and 10409 (A6-FLH, Sep 2026) on the safe side: panel +747.73 and +380.99 EUR higher (excl. catering; safe side: KZT rate 444.88, parking every started 24 h, trash, transfer 225, started ton). FCG OPS quotes (CL60, E135, GLF4, GL5T, GL6T, GL7T; 24 Aug and Sep 2026) with actual Dubai route navigation in panel +1,445 to +1,951 higher (100 km placeholder on quotes; passenger stairs not entered by user decision). At K-Gen, ALX1·KBI, OWN, ALEX, AFZ handling and airport items awaiting invoice."
+  },
+  "HLLT": {
+   "country": "Libya",
+   "currency": "USD",
+   "handlers": {
+    "GALAXY_AVIATION_SERVICES": {
+     "disbBase": "airport",
+     "name": "GALAXY AVIATION SERVICES",
+     "night": 0,
+     "prices": {
+      "CL60": {
+       "disb": 0,
+       "items": [
+        850,
+        150,
+        150,
+        120,
+        35,
+        175,
+        50,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 45,
+         "bands": []
+        },
+        0.025
+       ],
+       "upd": {
+        "Dispatch with Headset": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Handling Fee": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Permit": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Pax Assistance": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Supervision": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Parking": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Credit Card Fee (2.5%)": {
+         "d": "2026-11-26",
+         "src": "GAS WhatsApp note (payment link via UAE partner)"
+        }
+       }
+      },
+      "E35L": {
+       "disb": 0,
+       "items": [
+        850,
+        150,
+        150,
+        120,
+        35,
+        175,
+        50,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 45,
+         "bands": []
+        },
+        0.025
+       ],
+       "upd": {
+        "Dispatch with Headset": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Handling Fee": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Permit": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Pax Assistance": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Supervision": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Parking": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Credit Card Fee (2.5%)": {
+         "d": "2026-11-26",
+         "src": "GAS WhatsApp note (payment link via UAE partner)"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": 0,
+       "items": [
+        850,
+        150,
+        150,
+        120,
+        35,
+        175,
+        50,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 45,
+         "bands": []
+        },
+        0.025
+       ],
+       "upd": {
+        "Dispatch with Headset": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Handling Fee": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Permit": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Pax Assistance": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Supervision": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Parking": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Credit Card Fee (2.5%)": {
+         "d": "2026-11-26",
+         "src": "GAS WhatsApp note (payment link via UAE partner)"
+        }
+       }
+      },
+      "GL7T": {
+       "disb": 0,
+       "items": [
+        850,
+        150,
+        150,
+        120,
+        35,
+        175,
+        50,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 45,
+         "bands": []
+        },
+        0.025
+       ],
+       "upd": {
+        "Dispatch with Headset": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Handling Fee": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Permit": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Pax Assistance": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Supervision": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Parking": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Credit Card Fee (2.5%)": {
+         "d": "2026-11-26",
+         "src": "GAS WhatsApp note (payment link via UAE partner)"
+        }
+       }
+      },
+      "GLEX": {
+       "disb": 0,
+       "items": [
+        850,
+        150,
+        150,
+        120,
+        35,
+        175,
+        50,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 45,
+         "bands": []
+        },
+        0.025
+       ],
+       "upd": {
+        "Dispatch with Headset": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Handling Fee": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Permit": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Pax Assistance": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Supervision": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Parking": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Credit Card Fee (2.5%)": {
+         "d": "2026-11-26",
+         "src": "GAS WhatsApp note (payment link via UAE partner)"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": 0,
+       "items": [
+        850,
+        150,
+        150,
+        120,
+        35,
+        175,
+        50,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 45,
+         "bands": []
+        },
+        0.025
+       ],
+       "upd": {
+        "Dispatch with Headset": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Handling Fee": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Landing Permit": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Pax Assistance": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Supervision": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Parking": {
+         "d": "2026-11-25",
+         "src": "GAS estimate GAS-26-144"
+        },
+        "Credit Card Fee (2.5%)": {
+         "d": "2026-11-26",
+         "src": "GAS WhatsApp note (payment link via UAE partner)"
+        }
+       }
+      }
+     },
+     "type": "SUPERVISING AGENT",
+     "weekend": 0
+    },
+    "GULF_PEARL": {
+     "name": "GULF PEARL",
+     "type": "HANDLER",
+     "disbBase": "airport",
+     "night": 0,
+     "nightFlat": 0,
+     "weekend": 0,
+     "weekendFlat": 0,
+     "prices": {
+      "GL7T": {
+       "disb": 0,
+       "items": [
+        null,
+        100,
+        90,
+        null,
+        70,
+        null,
+        30,
+        125,
+        250,
+        250,
+        90,
+        90,
+        150,
+        100,
+        1.75,
+        null,
+        null
+       ],
+       "upd": {
+        "Supervision": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Permit": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Dispatch with Headset": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ASU (per start)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Pushback": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Basic Cleaning": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Passenger Departure Fee (Departure)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        }
+       }
+      },
+      "GLEX": {
+       "disb": 0,
+       "items": [
+        800,
+        100,
+        90,
+        null,
+        70,
+        120,
+        30,
+        125,
+        250,
+        250,
+        90,
+        90,
+        150,
+        100,
+        1.75,
+        {
+         "pk": 1,
+         "free": 2,
+         "full24": false,
+         "every": 1,
+         "price": 22,
+         "bands": []
+        },
+        null
+       ],
+       "upd": {
+        "Supervision": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Permit": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Dispatch with Headset": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ASU (per start)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Pushback": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Basic Cleaning": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Passenger Departure Fee (Departure)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Parking": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": 0,
+       "items": [
+        null,
+        100,
+        90,
+        null,
+        70,
+        null,
+        30,
+        125,
+        250,
+        250,
+        90,
+        90,
+        150,
+        100,
+        1.75,
+        null,
+        null
+       ],
+       "upd": {
+        "Supervision": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Permit": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Dispatch with Headset": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ASU (per start)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Pushback": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Basic Cleaning": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Passenger Departure Fee (Departure)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": 0,
+       "items": [
+        null,
+        100,
+        90,
+        null,
+        70,
+        null,
+        30,
+        125,
+        250,
+        250,
+        90,
+        90,
+        150,
+        100,
+        1.75,
+        null,
+        null
+       ],
+       "upd": {
+        "Supervision": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Permit": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Dispatch with Headset": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ASU (per start)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Pushback": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Basic Cleaning": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Passenger Departure Fee (Departure)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        }
+       }
+      },
+      "E35L": {
+       "disb": 0,
+       "items": [
+        null,
+        100,
+        90,
+        null,
+        70,
+        null,
+        30,
+        125,
+        250,
+        250,
+        90,
+        90,
+        150,
+        100,
+        1.75,
+        null,
+        null
+       ],
+       "upd": {
+        "Supervision": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Permit": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Dispatch with Headset": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ASU (per start)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Pushback": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Basic Cleaning": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Passenger Departure Fee (Departure)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        }
+       }
+      },
+      "CL60": {
+       "disb": 0,
+       "items": [
+        null,
+        100,
+        90,
+        null,
+        70,
+        null,
+        30,
+        125,
+        250,
+        250,
+        90,
+        90,
+        150,
+        100,
+        1.75,
+        null,
+        null
+       ],
+       "upd": {
+        "Supervision": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Landing Permit": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Documentation (FPL Filing and NOTAM)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Dispatch with Headset": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "GPU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ASU (per start)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "ACU (per hour)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Pushback": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Basic Cleaning": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        },
+        "Passenger Departure Fee (Departure)": {
+         "d": "2026-11-26",
+         "src": "Gulf Pearl quote e-mail (T7-ELL)"
+        }
+       }
+      }
+     }
+    },
+    "ASEMAR": {
+     "name": "ASEMAR",
+     "type": "HANDLER",
+     "disbBase": "airport",
+     "night": 0,
+     "nightFlat": 0,
+     "weekend": 0,
+     "weekendFlat": 0,
+     "prices": {
+      "GL7T": {
+       "disb": 0,
+       "items": [
+        null,
+        null,
+        "Included",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84.12,
+        84.12,
+        null,
+        null,
+        "Included",
+        null,
+        null
+       ],
+       "upd": {
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        }
+       }
+      },
+      "GLEX": {
+       "disb": 0,
+       "items": [
+        841.13,
+        null,
+        "Included",
+        null,
+        null,
+        175,
+        null,
+        null,
+        null,
+        null,
+        84.12,
+        84.12,
+        null,
+        null,
+        "Included",
+        {
+         "pk": 1,
+         "free": 0,
+         "every": 24,
+         "price": 161.45,
+         "bands": []
+        },
+        null
+       ],
+       "upd": {
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Handling Fee": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "750 EUR × 1.1215"
+        },
+        "Landing Airport Fees (lump)": {
+         "d": "2026-11-26",
+         "src": "Common airport charge (user decision 26 Nov 2026, GAS-26-144)",
+         "calc": "own quote 300 EUR lump incl. parking per 24 h"
+        },
+        "Parking": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "300 EUR × 1.1215 − 175"
+        }
+       }
+      },
+      "GL5T": {
+       "disb": 0,
+       "items": [
+        null,
+        null,
+        "Included",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84.12,
+        84.12,
+        null,
+        null,
+        "Included",
+        null,
+        null
+       ],
+       "upd": {
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        }
+       }
+      },
+      "GLF4": {
+       "disb": 0,
+       "items": [
+        null,
+        null,
+        "Included",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84.12,
+        84.12,
+        null,
+        null,
+        "Included",
+        null,
+        null
+       ],
+       "upd": {
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        }
+       }
+      },
+      "E35L": {
+       "disb": 0,
+       "items": [
+        null,
+        null,
+        "Included",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84.12,
+        84.12,
+        null,
+        null,
+        "Included",
+        null,
+        null
+       ],
+       "upd": {
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        }
+       }
+      },
+      "CL60": {
+       "disb": 0,
+       "items": [
+        null,
+        null,
+        "Included",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84.12,
+        84.12,
+        null,
+        null,
+        "Included",
+        null,
+        null
+       ],
+       "upd": {
+        "Lavatory Service": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        },
+        "Potable Water": {
+         "d": "2026-11-26",
+         "src": "Asemar quote e-mail (T7-ELL)",
+         "calc": "75 EUR × 1.1215"
+        }
+       }
+      }
+     }
+    }
+   },
+   "holidays": [],
+   "icao": "HLLT",
+   "notes": "Tripoli (HLLT). GALAXY AVIATION SERVICES (GAS) invoice 26-512 (3 Nov 2026; T7-ALEX1, GL7T written on invoice; USD, no VAT or disbursement; no times or pax count): basic ground handling 850, landing airport fees 175 (lump, no breakdown), landing permit 150, pax assistance 120, documentation (FPL filing and NOTAM) 35, dispatch with headset 50, supervision MJI 150 = 1,530. USER DECISIONS (5 Nov 2026): opened as HLLT (MJI may be written because the supervision fee is the same as Mitiga); USD, Libya, Africa/Tripoli; ALEX group only; items in basket, landing airport fees airport row, supervision in basket; pax assistance per flight; dispatch with headset tick. GAS invoice 26-400 (16 Sep 2026; T7-AFZ GL7T, 15 Sep 2026): items and amounts identical to 26-512 (supervision without 'MJI'), total 1,530. USER DECISIONS: tariff independent of weight, same prices for all groups. Type from ops system (16 Nov 2026): Galaxy Aviation Services SUPERVISING AGENT at HLLT (FLIGHT SUPPORT at HLLB / HLLM by user decision). GULF PEARL (HANDLER) quote e-mail 26 Nov 2026 (T7-ELL GLEX, USD). ASEMAR (HANDLER) quote e-mail 26 Nov 2026 (T7-ELL GLEX, EUR converted at panel rate 1.1215). GAS estimate GAS-26-144 (25 Nov 2026, T7-ELL GLEX 44.4 t): all GAS prices confirmed; parking 45 per hour after 2 h (separate from landing airport fees); fuel not entered. GAS WhatsApp note: 2.5% credit card fee on invoices (payment link via UAE partner). ASEMAR 300 EUR lump split by user decision: landing airport fees 175 (as GAS), parking remainder 161.45 per started 24 h.",
+   "services": [
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Handling Fee",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Supervision",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Landing Permit",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Pax Assistance",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Documentation (FPL Filing and NOTAM)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Landing Airport Fees (lump)",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Dispatch with Headset",
+     "qty": true,
+     "qtyDef": 1,
+     "unit": "flight"
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "GPU (per hour)",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "ASU (per start)",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "ACU (per hour)",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Lavatory Service",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Potable Water",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "name": "Pushback",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": false,
+     "disb": false,
+     "info": true,
+     "name": "Basic Cleaning",
+     "unit": "flight",
+     "qty": true,
+     "qtyDef": 1
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Passenger Departure Fee (Departure)",
+     "unit": "pax"
+    },
+    {
+     "airport": true,
+     "disb": true,
+     "name": "Parking",
+     "unit": "day"
+    },
+    {
+     "airport": false,
+     "basket": true,
+     "disb": false,
+     "name": "Credit Card Fee (2.5%)",
+     "unit": "pct"
+    }
+   ],
+   "tz": "Africa/Tripoli",
+   "updatedAt": "2026-11-26T05:15:00.000Z",
+   "verified": "GALAXY AVIATION SERVICES estimate GAS-26-144 (T7-ELL GLEX, 25 Nov 2026), 3 h stay, headset ticked: panel 1,575.00 before the 2.5% card fee = estimate 1,575.95 excluding fuel 0.95 (card fee per GAS WhatsApp note, not on estimate). Earlier invoices 26-512 and 26-400 (1,530.00) exact. Tariff independent of weight, same for all groups."
   }
  },
  "base": {
@@ -26992,6 +28250,9 @@
   ],
   "UACC": [
    "2026-10-29T11:50:00.000Z"
+  ],
+  "HLLT": [
+   "2026-11-16T10:25:00.000Z"
   ]
  }
 }
