@@ -742,7 +742,8 @@ function scAmt(a,p,h){ const hf=handlingFee(a,p), f0=hFlags(h), off=ntMan(a)===f
   if(h&&h.night&&isNum(h.nightLegShare)){ if(!off) n+=hf*h.night*h.nightLegShare*((f.nA?1:0)+(f.nD?1:0)); }
   else if(h&&h.night&&isNum(h.nightDepShare)){ if(f.nD&&!off) n+=hf*h.night*h.nightDepShare; }
   /* nightBoth: iki hareket de gece penceresindeyse bu oran (ör. RJTT JAS: tek hareket %20, ikisi %30) */
-  else if(f.nt&&h&&h.night) n+=hf*(isNum(h.nightBoth)&&f.nA&&f.nD?h.nightBoth:h.night)*nl; const nfl=nFlat(p,h); if(f.nt&&nfl) n+=nfl*nl;
+  /* nightDiffDay: varış ve kalkış farklı yerel günlerdeyse bu oran (ör. LMML Medavia: aynı gün %50, farklı günler %33) */
+  else if(f.nt&&h&&h.night) n+=hf*(isNum(h.nightDiffDay)&&state.arrD!==state.depD?h.nightDiffDay:isNum(h.nightBoth)&&f.nA&&f.nD?h.nightBoth:h.night)*nl; const nfl=nFlat(p,h); if(f.nt&&nfl) n+=nfl*nl;
   w=wkAmt(a,p,h,n); return (h&&h.scOnce?Math.max(w,n):w+n)+holAmt(a,p,h)+ovAmt(a,p,h)+otAmt(a,p,h)+nsAmt(a,p,h)+xscAmt(a,p,h)-ferAmt(a,p,h); }
 /* yolcusuz uçuş (ferry) indirimi: handler'da ferryDisc (handling üzerinden oran); geliş ya da kalkış yolcusuz ise 'uygula' kutusu otomatik işaretli gelir, elle değiştirilebilir (aynı yolcu sayısı ve tarih/saat için geçerli). UDYZ CIS ve Euro Jet %30 */
 const ferKey=()=>state.arrPax+"|"+state.depPax+"|"+ntKey();
@@ -784,7 +785,7 @@ const isNtH=(h,T)=>{ const [nf,nto]=hNight(h), x=hhOf(T); if(x===null) return fa
 function wkLeg(h,D,T){ const d=new Date(D+"T"+(T||"00:00")); if(isNaN(d)||!hWk(h).includes(d.getDay())) return 0; if(h.wkSkipNight&&isNtH(h,T)) return 0; const s=h.wkSunPm, x=hhOf(T); if(s&&d.getDay()===0&&x!==null&&x>=s.from-1e-9) return s.flat||0; return h.weekendFlat||0; }
 /* hafta sonu kutusu: tarihlere göre otomatik; elle değiştirilen işaret aynı tarihler için geçerli (kapalı = hafta sonu ücreti yok, açık ama tarih hafta sonu değilse güvenli tarafta iki hareket) */
 const wkOv=a=>{ const o=state.wkov&&state.wkov[a.icao]; return o&&o.k===holKey()?!!o.v:null; };
-function wkAuto(a,p,h,n){ if(!h) return 0; const f=hFlags(h), hf=handlingFee(a,p); if(h.wkPerLeg) return wkLeg(h,state.arrD,state.arrT)+wkLeg(h,state.depD,state.depT); let w=0; if(f.wk&&h.weekend) w+=(h.wkOnNight?hf+(n||0):hf)*h.weekend; if(f.wk&&h.weekendFlat) w+=h.weekendFlat; return w; }
+function wkAuto(a,p,h,n){ if(!h) return 0; const f=hFlags(h), hf=handlingFee(a,p); if(h.wkPerLeg) return wkLeg(h,state.arrD,state.arrT)+wkLeg(h,state.depD,state.depT); let w=0; /* wkBoth: varış ve kalkış ikisi de hafta sonundaysa bu oran (ör. LMML Executive Aviation: biri %33, ikisi %50) */ if(f.wk&&h.weekend) w+=(h.wkOnNight?hf+(n||0):hf)*(isNum(h.wkBoth)&&f.wA&&f.wD?h.wkBoth:h.weekend); if(f.wk&&h.weekendFlat) w+=h.weekendFlat; return w; }
 function wkAmt(a,p,h,n){ if(!h) return 0; const ov=wkOv(a); if(ov===false) return 0; const x=wkAuto(a,p,h,n); if(ov===true&&!x){ const hf=handlingFee(a,p); return h.wkPerLeg?2*(h.weekendFlat||0):hf*(h.weekend||0)+(h.weekendFlat||0); } return x; }
 const wkOnA=(a,qs)=>{ const ov=wkOv(a); return ov!==null?ov:qs.some(c=>wkAuto(a,c.p,c.h,0)>0); };
 /* resmi tatil: surcharge bölümündeki 'uygula' kutusuyla (meydan bazında, kaydedilmez); oran handler'ın holiday alanı, taban holidayOn'daki kalemler (yoksa handling fee) */
