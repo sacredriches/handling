@@ -1835,6 +1835,16 @@ async function save(){
   const d=ed.draft;
   if(ed.isNew&&(!/^[A-Z]{4}$/.test(d.icao)||DATA.some(a=>a.icao===d.icao))) return;
   ed.saving=true; ed.msg="Kaydediliyor…"; ed.msgCls=""; renderEditor();
+  /* save guard: if the record was saved by someone else after this editor opened, do not overwrite it */
+  if(!ed.isNew){
+    let cur=DATA.find(x=>x.icao===d.icao)||null;
+    try{ const s=await DB.doc("airports/"+d.icao).get(); if(s&&typeof s.exists==="boolean") cur=s.exists?(s.data()||null):null; }catch(e){}
+    if(cur&&(cur.updatedAt||"")!==(ed.updatedAt||"")){
+      ed.saving=false; ed.stale=true;
+      ed.msg="Not saved: this airport was changed after you opened it"+(cur.updatedAt?" (saved "+fmtDate(cur.updatedAt)+")":"")+". Reload the page and make your edit again.";
+      ed.msgCls="err"; renderAdmin(); return;
+    }
+  }
   stampEdits(d, ed.orig);
   const body=cleanForSave(d);
   try{
@@ -1901,6 +1911,11 @@ setTab(state.tab);
     loaded=true; loadErr=null;
     state.tab==="admin"?renderAdminList():renderPanel();
     if(state.tab==="admin"&&!ed.draft) renderEditor();
+    /* open editor and the record changed elsewhere: refresh it if untouched, warn if it has unsaved edits */
+    if(ed.draft&&!ed.isNew&&!ed.saving){ const a=DATA.find(x=>x.icao===ed.icao); if(a&&(a.updatedAt||"")!==(ed.updatedAt||"")){
+      if(!dirty()){ ed={...ed,draft:normalize(a),orig:normalize(a),updatedAt:a.updatedAt,h:Math.min(ed.h,Math.max(0,a.handlers.length-1)),msg:"Loaded the latest saved version.",msgCls:"ok",stale:false}; }
+      else if(!ed.stale){ ed.stale=true; ed.msg="This airport was just changed elsewhere. Your unsaved edits cannot be saved; reload the page and make them again."; ed.msgCls="err"; }
+      if(state.tab==="admin") renderEditor(); } }
     if(state.tab==="admin"&&ed.isNew) refreshSavebar && document.getElementById("save") && refreshSavebar();
     if(state.tab==="admin") renderFx();
   },err=>{ loadErr="Database connection lost. Reload the page."; renderPanel(); });
