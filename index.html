@@ -262,7 +262,7 @@ tr.grp.g-x td{color:var(--muted)}
 tr.subt td{font-weight:600;color:var(--ink);border-bottom:1px solid var(--line)}
 tr.subt td:first-child{color:var(--ink-2);font-weight:500}
 tr.disb td{border-top:12px solid var(--panel)}
-.svc-row{grid-template-columns:minmax(0,1fr) auto auto auto auto auto}
+.svc-row{grid-template-columns:minmax(0,1fr) auto auto auto auto auto auto}
 .legend{margin-top:22px}
 #kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:640px){#kpis{grid-template-columns:minmax(0,1fr)}}
@@ -304,7 +304,7 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px sol
 .svc-list{display:flex;flex-direction:column;gap:6px}
 .cnt-in{width:62px;font:15px var(--f-mono);padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink);text-align:right}
 .unit-sel{font:13px var(--f-body);padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:var(--panel-2);color:var(--ink)}
-.svc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto auto;gap:8px;align-items:center}
+.svc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto auto auto;gap:8px;align-items:center}
 .svc-row .chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);white-space:nowrap}
 .svc-row .chk input{accent-color:var(--accent)}
 .h-tabs{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -1618,6 +1618,7 @@ function renderEditor(){
       <input class="svc-in" data-svc="${i}" id="svc-${i}" value="${esc(s.name)}" aria-label="Service name">
       <select class="unit-sel" data-sunit="${i}" id="su-${i}" aria-label="Unit">${Object.entries(UNITS).map(([k,l])=>`<option value="${k}" ${(UNITS[s.unit]?s.unit:"flight")===k?"selected":""}>${l}</option>`).join("")}</select>
       <label class="chk" title="Airport charge (landing, parking, navigation etc.). Disbursement applies to these items."><input type="checkbox" data-sap="${i}" id="sa-${i}" ${s.airport?"checked":""}> Airport fee</label>
+      <label class="chk" title="Counted in the turnaround total. Untick to make it an optional tick row at the bottom."><input type="checkbox" data-sin="${i}" id="si-${i}" ${inBasket(s)?"checked":""}> In total</label>
       <button type="button" class="btn ghost sm" data-sup="${i}" ${i===0?"disabled":""} title="Move up" aria-label="Move ${esc(s.name)} up">↑</button>
       <button type="button" class="btn ghost sm" data-sdn="${i}" ${i===d.services.length-1?"disabled":""} title="Move down" aria-label="Move ${esc(s.name)} down">↓</button>
       <button type="button" class="btn ghost sm" data-sdel="${i}" aria-label="Delete row ${esc(s.name)}">Delete</button></div>`).join("")}</div>
@@ -1743,6 +1744,7 @@ function bindEditor(){
   document.querySelectorAll("[data-svc]").forEach(i=>i.onchange=()=>renderEditor());
   document.querySelectorAll("[data-sunit]").forEach(i=>i.onchange=()=>{const k=+i.dataset.sunit; d.services[k].unit=i.value; if(i.value!=="day") d.handlers.forEach(h=>AC.forEach(c=>{const v=h.prices[c].items[k]; if(isPk(v)) h.prices[c].items[k]=isNum(v.price)?v.price:null;})); ed.pk=null; renderEditor();});
   document.querySelectorAll("[data-sap]").forEach(i=>i.onchange=()=>{d.services[+i.dataset.sap].airport=i.checked; d.services[+i.dataset.sap].disb=i.checked; renderEditor();});
+  document.querySelectorAll("[data-sin]").forEach(i=>i.onchange=()=>{const s=d.services[+i.dataset.sin]; if(i.checked){delete s.info; delete s.opt; s.basket=true;} else {s.info=true; delete s.basket;} renderEditor();});
   document.querySelectorAll("[data-sdel]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sdel; const nm=(d.services[i]&&d.services[i].name)||"(unnamed)"; askConfirm(`The service <b>${esc(nm)}</b> and its prices for all handlers will be deleted.<br>Do you confirm?`,()=>{ d.services.splice(i,1); d.handlers.forEach(h=>AC.forEach(c=>h.prices[c].items.splice(i,1))); renderEditor(); });});
   /* Satir tasima: servis listesiyle her handler'in her grubunun fiyat dizisi BIRLIKTE kaydirilir.
      Kisa kalmis diziler once services uzunluguna kadar null ile doldurulur, yoksa takas bozulur. */
